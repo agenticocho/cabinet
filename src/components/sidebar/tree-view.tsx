@@ -1,144 +1,95 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useTreeStore } from "@/stores/tree-store";
 import { useAppStore } from "@/stores/app-store";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { TreeNode } from "./tree-node";
 import {
-  Bot,
-  Clock,
   ChevronRight,
+  Plus,
+  BookOpen,
+  Users,
+  Bot,
+  Pencil,
+  Crown,
+  Megaphone,
+  Search,
+  ShieldCheck,
+  Code,
+  BarChart3,
+  Briefcase,
+  DollarSign,
+  Wrench,
+  Palette,
+  Smartphone,
+  Rocket,
+  Handshake,
+  PenTool,
+  UserCheck,
+  Scale,
+  type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-interface AgentPersonaSummary {
+interface AgentSummary {
   name: string;
   slug: string;
+  emoji: string;
   active: boolean;
-  emoji?: string;
+  runningCount?: number;
 }
 
-function SystemSections() {
-  const section = useAppStore((s) => s.section);
-  const setSection = useAppStore((s) => s.setSection);
-  const selectPage = useTreeStore((s) => s.selectPage);
-  const [agentsExpanded, setAgentsExpanded] = useState(true);
-  const [agents, setAgents] = useState<AgentPersonaSummary[]>([]);
-  const [mounted, setMounted] = useState(false);
+const AGENT_ICONS: Record<string, LucideIcon> = {
+  general: Bot,
+  editor: Pencil,
+  ceo: Crown,
+  coo: Briefcase,
+  cfo: DollarSign,
+  cto: Wrench,
+  "content-marketer": Megaphone,
+  seo: Search,
+  "seo-specialist": Search,
+  qa: ShieldCheck,
+  "qa-agent": ShieldCheck,
+  sales: BarChart3,
+  "sales-agent": BarChart3,
+  "product-manager": Briefcase,
+  "ux-designer": Palette,
+  "data-analyst": BarChart3,
+  "social-media": Smartphone,
+  "growth-marketer": Rocket,
+  "customer-success": Handshake,
+  copywriter: PenTool,
+  devops: Code,
+  developer: Code,
+  "people-ops": UserCheck,
+  legal: Scale,
+  researcher: Search,
+};
 
-  useEffect(() => { setMounted(true); }, []);
+function getAgentIcon(slug: string): LucideIcon {
+  return AGENT_ICONS[slug] || Bot;
+}
 
-  useEffect(() => {
-    fetch("/api/agents/personas")
-      .then((r) => r.json())
-      .then((data) => setAgents(data.personas || []))
-      .catch(() => {});
-  }, []);
+/* ── item style matching TreeNode exactly ──────────────────── */
 
-  // Refresh agents when navigating back to agents section
-  useEffect(() => {
-    if (section.type === "agents" || section.type === "agent") {
-      fetch("/api/agents/personas")
-        .then((r) => r.json())
-        .then((data) => setAgents(data.personas || []))
-        .catch(() => {});
-    }
-  }, [section]);
-
-  const handleSection = (type: "agents" | "jobs") => {
-    selectPage(null as unknown as string);
-    setSection({ type });
-  };
-
-  const handleAgent = (slug: string) => {
-    selectPage(null as unknown as string);
-    setSection({ type: "agent", slug });
-  };
-
-  const isSelected = (type: string, slug?: string) => {
-    if (!mounted) return false;
-    if (slug) return section.type === "agent" && section.slug === slug;
-    return section.type === type;
-  };
-
-  return (
-    <div className="py-1" suppressHydrationWarning>
-      {/* Agents (collapsible) */}
-      <button
-        suppressHydrationWarning
-        onClick={() => setAgentsExpanded(!agentsExpanded)}
-        className={cn(
-          "flex items-center gap-2 w-full px-3 py-1.5 text-[13px] rounded-md transition-colors",
-          "text-foreground/80 hover:bg-accent/50"
-        )}
-      >
-        <ChevronRight
-          className={cn(
-            "h-3.5 w-3.5 shrink-0 text-muted-foreground/70 transition-transform duration-150",
-            agentsExpanded && "rotate-90"
-          )}
-        />
-        <Bot className="h-4 w-4 shrink-0 text-purple-400" />
-        <span>Agents</span>
-      </button>
-
-      {agentsExpanded && (
-        <div className="ml-3">
-          {agents.map((agent) => (
-            <button
-              key={agent.slug}
-              suppressHydrationWarning
-              onClick={() => handleAgent(agent.slug)}
-              className={cn(
-                "flex items-center gap-2 w-full px-3 py-1 text-[12px] rounded-md transition-colors",
-                isSelected("agent", agent.slug)
-                  ? "bg-accent text-accent-foreground font-medium"
-                  : "text-muted-foreground hover:bg-accent/50 hover:text-foreground"
-              )}
-            >
-              {/* Status dot */}
-              <div className={cn(
-                "w-2 h-2 rounded-full shrink-0",
-                agent.active ? "bg-green-500" : "bg-muted-foreground/30"
-              )} />
-              {/* Emoji + name */}
-              {agent.emoji && (
-                <span className="text-[11px] shrink-0">{agent.emoji}</span>
-              )}
-              <span className="truncate">{agent.name}</span>
-            </button>
-          ))}
-          {agents.length === 0 && (
-            <p className="px-3 py-2 text-[11px] text-muted-foreground/50">No agents yet</p>
-          )}
-        </div>
-      )}
-
-      {/* Jobs */}
-      <button
-        suppressHydrationWarning
-        onClick={() => handleSection("jobs")}
-        className={cn(
-          "flex items-center gap-2 w-full pl-[22px] pr-3 py-1.5 text-[13px] rounded-md transition-colors",
-          isSelected("jobs")
-            ? "bg-accent text-accent-foreground font-medium"
-            : "text-foreground/80 hover:bg-accent/50"
-        )}
-      >
-        <Clock className="h-4 w-4 shrink-0 text-amber-400" />
-        <span>Jobs</span>
-      </button>
-
-      {/* Separator */}
-      <div className="mx-3 my-1.5 border-t border-border" />
-    </div>
+const itemClass = (active: boolean) =>
+  cn(
+    "flex items-center gap-1.5 w-full text-left py-1.5 px-2 text-[13px] rounded-md transition-colors",
+    "hover:bg-accent/50",
+    active && "bg-accent text-accent-foreground font-medium"
   );
-}
 
 export function TreeView() {
   const { nodes, loading } = useTreeStore();
+  const section = useAppStore((s) => s.section);
   const setSection = useAppStore((s) => s.setSection);
+
+  const [cabinetExpanded, setCabinetExpanded] = useState(true);
+  const [agentsExpanded, setAgentsExpanded] = useState(true);
+  const [kbExpanded, setKbExpanded] = useState(true);
+  const [agents, setAgents] = useState<AgentSummary[]>([]);
 
   // When a KB page is clicked (via TreeNode), switch section to "page"
   useEffect(() => {
@@ -150,6 +101,43 @@ export function TreeView() {
     return unsub;
   }, [setSection]);
 
+  /* ── agent polling ─────────────────────────────────────────── */
+
+  const loadAgents = useCallback(async () => {
+    try {
+      const res = await fetch("/api/agents/personas");
+      if (res.ok) {
+        const data = await res.json();
+        setAgents(
+          (data.personas || []).map((p: AgentSummary) => ({
+            name: p.name,
+            slug: p.slug,
+            emoji: p.emoji,
+            active: p.active,
+            runningCount: p.runningCount || 0,
+          }))
+        );
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  useEffect(() => {
+    const initialLoad = window.setTimeout(() => {
+      void loadAgents();
+    }, 0);
+    const interval = window.setInterval(() => {
+      void loadAgents();
+    }, 5000);
+    window.addEventListener("focus", loadAgents);
+    return () => {
+      window.clearTimeout(initialLoad);
+      window.clearInterval(interval);
+      window.removeEventListener("focus", loadAgents);
+    };
+  }, [loadAgents]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">
@@ -158,12 +146,143 @@ export function TreeView() {
     );
   }
 
+  const isAgentsSection =
+    section.type === "agents" || section.type === "agent";
+
+  // depth-based padding matching TreeNode: depth * 16 + 8
+  const pad = (depth: number) => ({ paddingLeft: `${depth * 16 + 8}px` });
+
   return (
     <ScrollArea className="flex-1 min-h-0">
       <div className="py-1">
-        {nodes.map((node) => (
-          <TreeNode key={node.path} node={node} depth={0} />
-        ))}
+        {/* ── Cabinet (depth 0) ───────────────────────────── */}
+        <button
+          onClick={() => setCabinetExpanded(!cabinetExpanded)}
+          className={itemClass(false)}
+          style={pad(0)}
+        >
+          <ChevronRight
+            className={cn(
+              "h-3.5 w-3.5 shrink-0 text-muted-foreground/70 transition-transform duration-150",
+              cabinetExpanded && "rotate-90"
+            )}
+          />
+          Cabinet
+        </button>
+
+        {cabinetExpanded && (
+          <>
+            {/* ── Agents (depth 1) ─────────────────────────── */}
+            <button
+              onClick={() => {
+                setAgentsExpanded(!agentsExpanded);
+                setSection({ type: "agents" });
+              }}
+              className={itemClass(isAgentsSection)}
+              style={pad(1)}
+            >
+              <ChevronRight
+                className={cn(
+                  "h-3.5 w-3.5 shrink-0 text-muted-foreground/70 transition-transform duration-150",
+                  agentsExpanded && "rotate-90"
+                )}
+              />
+              <Users className="h-4 w-4 shrink-0 text-muted-foreground" />
+              Agents
+            </button>
+
+            {agentsExpanded && (
+              <>
+                {/* General agent (depth 2) */}
+                <button
+                  onClick={() =>
+                    setSection({ type: "agent", slug: "general" })
+                  }
+                  className={itemClass(
+                    section.type === "agent" && section.slug === "general"
+                  )}
+                  style={pad(2)}
+                >
+                  <span className="w-3.5" />
+                  <Bot className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <span className="truncate">General</span>
+                </button>
+                {/* Editor first, then rest (depth 2) */}
+                {[
+                  ...agents.filter((a) => a.slug === "editor"),
+                  ...agents.filter((a) => a.slug !== "editor"),
+                ].map((agent) => (
+                  <button
+                    key={agent.slug}
+                    onClick={() =>
+                      setSection({ type: "agent", slug: agent.slug })
+                    }
+                    className={itemClass(
+                      section.type === "agent" && section.slug === agent.slug
+                    )}
+                    style={pad(2)}
+                  >
+                    <span className="w-3.5" />
+                    {(() => {
+                      const Icon = getAgentIcon(agent.slug);
+                      return <Icon className="h-4 w-4 shrink-0 text-muted-foreground" />;
+                    })()}
+                    <span className="truncate">{agent.name}</span>
+                    <span
+                      className={cn(
+                        "ml-auto w-1.5 h-1.5 rounded-full shrink-0",
+                        (agent.runningCount || 0) > 0
+                          ? "bg-green-500"
+                          : "bg-muted-foreground/30"
+                      )}
+                    />
+                  </button>
+                ))}
+              </>
+            )}
+
+            {/* ── Knowledge Base (depth 1) ─────────────────── */}
+            <button
+              onClick={() => setKbExpanded(!kbExpanded)}
+              className={itemClass(section.type === "page")}
+              style={pad(1)}
+            >
+              <ChevronRight
+                className={cn(
+                  "h-3.5 w-3.5 shrink-0 text-muted-foreground/70 transition-transform duration-150",
+                  kbExpanded && "rotate-90"
+                )}
+              />
+              <BookOpen className="h-4 w-4 shrink-0 text-muted-foreground" />
+              Knowledge Base
+            </button>
+
+            {kbExpanded && (
+              <>
+                {nodes.length === 0 ? (
+                  <button
+                    onClick={() => {
+                      const btn = document.querySelector<HTMLButtonElement>(
+                        "[data-new-page-trigger]"
+                      );
+                      btn?.click();
+                    }}
+                    className={itemClass(false)}
+                    style={pad(2)}
+                  >
+                    <span className="w-3.5" />
+                    <Plus className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    Add your first page
+                  </button>
+                ) : (
+                  nodes.map((node) => (
+                    <TreeNode key={node.path} node={node} depth={2} />
+                  ))
+                )}
+              </>
+            )}
+          </>
+        )}
       </div>
     </ScrollArea>
   );
