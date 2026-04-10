@@ -85,34 +85,50 @@ export function HomeScreen() {
         </h1>
 
         <form onSubmit={handleSubmit} className="relative">
-          <input
-            type="text"
+          <textarea
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.ctrlKey && !e.metaKey && !e.shiftKey) {
+                e.preventDefault();
+                submitPrompt(prompt);
+              } else if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+                e.preventDefault();
+                setPrompt((prev) => prev + "\n");
+              }
+            }}
             placeholder="I want to create..."
             disabled={submitting}
+            rows={1}
             className={cn(
-              "w-full rounded-xl border border-border bg-card px-4 py-3 pr-12",
+              "w-full rounded-xl border border-border bg-card px-4 py-3 pr-44 sm:pr-52",
               "text-sm text-foreground placeholder:text-muted-foreground",
               "focus:outline-none focus:ring-2 focus:ring-ring",
-              "shadow-sm"
+              "shadow-sm resize-none"
             )}
             autoFocus
           />
-          <button
-            type="submit"
-            disabled={!prompt.trim() || submitting}
-            className={cn(
-              "absolute right-2 top-1/2 -translate-y-1/2",
-              "h-8 w-8 rounded-lg flex items-center justify-center",
-              "transition-colors",
-              prompt.trim() && !submitting
-                ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                : "bg-muted text-muted-foreground"
-            )}
-          >
-            <Send className="h-4 w-4" />
-          </button>
+          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+            <kbd className="hidden sm:inline-flex items-center gap-0.5 text-[10px] text-muted-foreground/60 font-medium">
+              <span className="rounded border border-border/50 px-1 py-0.5">⌘</span>
+              <span>+</span>
+              <span className="rounded border border-border/50 px-1 py-0.5">↵</span>
+              <span className="ml-0.5">new line</span>
+            </kbd>
+            <button
+              type="submit"
+              disabled={!prompt.trim() || submitting}
+              className={cn(
+                "h-8 w-8 rounded-lg flex items-center justify-center",
+                "transition-colors",
+                prompt.trim() && !submitting
+                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                  : "bg-muted text-muted-foreground"
+              )}
+            >
+              <Send className="h-4 w-4" />
+            </button>
+          </div>
         </form>
 
         <div className="flex flex-wrap items-center justify-center gap-2">
