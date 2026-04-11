@@ -161,9 +161,9 @@ export function LinkRepoDialog({ open, onOpenChange, parentPath }: LinkRepoDialo
           </p>
 
           {parentHasContent && (
-            <div className="flex items-start gap-2 rounded-md border border-yellow-600/40 bg-yellow-500/10 px-3 py-2">
+            <div className="flex items-start gap-2 rounded-md border border-yellow-500/30 bg-yellow-500/10 px-3 py-2">
               <TriangleAlert className="h-4 w-4 shrink-0 text-yellow-500 mt-0.5" />
-              <p className="text-xs text-yellow-200">
+              <p className="text-xs text-yellow-500">
                 This page already has sub-pages. The loaded folder will be
                 added as a new child alongside the existing content.
               </p>
@@ -227,9 +227,8 @@ export function LinkRepoDialog({ open, onOpenChange, parentPath }: LinkRepoDialo
               <div className="flex flex-col gap-3 px-3 pb-3">
                 <p className="text-xs text-muted-foreground">
                   If the folder is a git repo, Cabinet auto-detects the branch
-                  and remote. A <code>.repo.yaml</code> config and
-                  a <code>source</code> symlink are created so agents can read
-                  the source code in context.
+                  and remote. A <code>.repo.yaml</code> is written into the
+                  folder so agents can read the source code in context.
                 </p>
 
                 <div className="flex flex-col gap-1">

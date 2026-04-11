@@ -61,16 +61,7 @@ We have 2 parts:
 
 ## Load Knowledge
 
-You can load any folder from your machine into Cabinet. Right-click any item in the sidebar and choose `Load Knowledge`.
-
-Cabinet will:
-
--   create a KB folder with a `source` symlink pointing to your local directory
-    
--   if it's a git repo, also create a `.repo.yaml` file so AI agents understand the code context
-    
-
-If the linked folder has an `index.html`, Cabinet will show it as an embedded website inside the Knowledge Base.
+Right-click any item in the sidebar and choose **Load Knowledge** to link any folder from your machine. Cabinet creates a direct symlink in the KB pointing to your folder — its contents appear as children in the sidebar tree. For git repos, a `.repo.yaml` is written so agents can read the code in context. See [[Symlinks and Load Knowledge]] for details.
 
 ## Supported Files and Views
 
@@ -90,7 +81,7 @@ Images, video, and other binary files can still live beside a page and be linked
 
 ## Sidebar Icons
 
-<table class="border-collapse w-full" style="min-width: 75px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p>Icon</p></th><th colspan="1" rowspan="1"><p>Color</p></th><th colspan="1" rowspan="1"><p>Meaning</p></th></tr><tr><td colspan="1" rowspan="1"><p>AppWindow</p></td><td colspan="1" rowspan="1"><p>Green</p></td><td colspan="1" rowspan="1"><p>Full-screen embedded app (<code>.app</code> marker)</p></td></tr><tr><td colspan="1" rowspan="1"><p>Globe</p></td><td colspan="1" rowspan="1"><p>Blue</p></td><td colspan="1" rowspan="1"><p>Embedded website (<code>index.html</code>)</p></td></tr><tr><td colspan="1" rowspan="1"><p>GitBranch</p></td><td colspan="1" rowspan="1"><p>Orange</p></td><td colspan="1" rowspan="1"><p>Directory linked to a Git repo (<code>.repo.yaml</code>)</p></td></tr><tr><td colspan="1" rowspan="1"><p>FileType</p></td><td colspan="1" rowspan="1"><p>Red</p></td><td colspan="1" rowspan="1"><p>PDF file</p></td></tr><tr><td colspan="1" rowspan="1"><p>Table</p></td><td colspan="1" rowspan="1"><p>Green</p></td><td colspan="1" rowspan="1"><p>CSV file</p></td></tr><tr><td colspan="1" rowspan="1"><p>Folder</p></td><td colspan="1" rowspan="1"><p>Gray</p></td><td colspan="1" rowspan="1"><p>Regular directory</p></td></tr><tr><td colspan="1" rowspan="1"><p>FileText</p></td><td colspan="1" rowspan="1"><p>Gray</p></td><td colspan="1" rowspan="1"><p>Markdown page</p></td></tr></tbody></table>
+<table class="border-collapse w-full" style="min-width: 75px;"><colgroup><col style="min-width: 25px;"><col style="min-width: 25px;"><col style="min-width: 25px;"></colgroup><tbody><tr><th colspan="1" rowspan="1"><p>Icon</p></th><th colspan="1" rowspan="1"><p>Color</p></th><th colspan="1" rowspan="1"><p>Meaning</p></th></tr><tr><td colspan="1" rowspan="1"><p>AppWindow</p></td><td colspan="1" rowspan="1"><p>Green</p></td><td colspan="1" rowspan="1"><p>Full-screen embedded app (<code>.app</code> marker)</p></td></tr><tr><td colspan="1" rowspan="1"><p>Globe</p></td><td colspan="1" rowspan="1"><p>Blue</p></td><td colspan="1" rowspan="1"><p>Embedded website (<code>index.html</code>)</p></td></tr><tr><td colspan="1" rowspan="1"><p>GitBranch</p></td><td colspan="1" rowspan="1"><p>Orange</p></td><td colspan="1" rowspan="1"><p>Linked Git repo (<code>.repo.yaml</code>)</p></td></tr><tr><td colspan="1" rowspan="1"><p>Link2</p></td><td colspan="1" rowspan="1"><p>Blue</p></td><td colspan="1" rowspan="1"><p>Linked directory (non-repo symlink)</p></td></tr><tr><td colspan="1" rowspan="1"><p>FileType</p></td><td colspan="1" rowspan="1"><p>Red</p></td><td colspan="1" rowspan="1"><p>PDF file</p></td></tr><tr><td colspan="1" rowspan="1"><p>Table</p></td><td colspan="1" rowspan="1"><p>Green</p></td><td colspan="1" rowspan="1"><p>CSV file</p></td></tr><tr><td colspan="1" rowspan="1"><p>Code</p></td><td colspan="1" rowspan="1"><p>Violet</p></td><td colspan="1" rowspan="1"><p>Source code file</p></td></tr><tr><td colspan="1" rowspan="1"><p>Image</p></td><td colspan="1" rowspan="1"><p>Pink</p></td><td colspan="1" rowspan="1"><p>Image file</p></td></tr><tr><td colspan="1" rowspan="1"><p>Video</p></td><td colspan="1" rowspan="1"><p>Cyan</p></td><td colspan="1" rowspan="1"><p>Video file</p></td></tr><tr><td colspan="1" rowspan="1"><p>Music</p></td><td colspan="1" rowspan="1"><p>Amber</p></td><td colspan="1" rowspan="1"><p>Audio file</p></td></tr><tr><td colspan="1" rowspan="1"><p>Folder</p></td><td colspan="1" rowspan="1"><p>Gray</p></td><td colspan="1" rowspan="1"><p>Regular directory</p></td></tr><tr><td colspan="1" rowspan="1"><p>FileText</p></td><td colspan="1" rowspan="1"><p>Gray</p></td><td colspan="1" rowspan="1"><p>Markdown page</p></td></tr></tbody></table>
 
 ## Keyboard Shortcuts
 
@@ -139,9 +130,11 @@ Each sub-page covers a specific feature area in detail:
     
 4.  [Version History](#page:version-history) — Git auto-save, the diff viewer, and restoring previous versions
     
-5.  [Apps and Repos](#page:apps-and-repos) — Embedded apps, full-screen mode, linked repos, and symlinks
+5.  [Apps and Repos](#page:apps-and-repos) — Embedded apps, full-screen mode, and linked repos
     
-6.  [Tasks and Jobs](#page:tasks-and-jobs) — Kanban boards, agent sessions, the web terminal, and scheduled jobs
+6.  [Symlinks and Load Knowledge](#page:symlinks-and-load-knowledge) — Direct symlinks, .cabinet.yaml, .repo.yaml, and CABINET\_DATA\_DIR
+    
+7.  [Tasks and Jobs](#page:tasks-and-jobs) — Kanban boards, agent sessions, the web terminal, and scheduled jobs
     
 
 ## The Example Workspace
