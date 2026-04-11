@@ -321,11 +321,155 @@ function TeamCarousel() {
   );
 }
 
+function IntroStep({ onNext }: { onNext: () => void }) {
+  const [phase, setPhase] = useState(0);
+  // 0: nothing  1: card border + "cabinet" title  2: pronunciation + noun
+  // 3: def 1  4: def 2  5: def 3  6: tagline line 1  7: tagline line 2  8: button
+
+  useEffect(() => {
+    const delays = [300, 600, 1100, 1700, 2300, 3100, 3700, 4200];
+    const timers = delays.map((ms, i) =>
+      setTimeout(() => setPhase(i + 1), ms)
+    );
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
+  const fade = (p: number): CSSProperties => ({
+    opacity: phase >= p ? 1 : 0,
+    transform: phase >= p ? "translateY(0)" : "translateY(14px)",
+    transition: "opacity 0.6s ease, transform 0.6s ease",
+  });
+
+  return (
+    <div className="mx-auto flex max-w-4xl flex-col items-center gap-8">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:gap-10 w-full">
+        {/* Dictionary Definition Card */}
+        <div
+          className="text-left rounded-2xl px-8 py-8 md:px-10 md:py-10 flex-1"
+          style={{
+            background: WEB.bgCard,
+            border: `1px solid ${phase >= 1 ? WEB.border : "transparent"}`,
+            boxShadow: phase >= 1
+              ? "0 1px 3px rgba(59, 47, 47, 0.04), 0 8px 30px rgba(59, 47, 47, 0.04)"
+              : "none",
+            transition: "border-color 0.5s ease, box-shadow 0.8s ease",
+          }}
+        >
+          <div className="flex items-baseline gap-3 mb-1" style={fade(1)}>
+            <h1
+              className="font-logo text-4xl sm:text-5xl tracking-tight italic"
+              style={{ color: WEB.text }}
+            >
+              cabinet
+            </h1>
+            <span
+              className="font-mono text-xs"
+              style={{ ...fade(2), color: WEB.textTertiary }}
+            >
+              /&#x2C8;kab.&#x26A;.n&#x259;t/
+            </span>
+          </div>
+          <p
+            className="font-mono text-xs italic mb-6"
+            style={{ ...fade(2), color: WEB.textTertiary }}
+          >
+            noun
+          </p>
+
+          <ol className="font-body-serif space-y-5 text-[15px] leading-relaxed">
+            <li className="flex gap-3" style={fade(3)}>
+              <span className="font-logo italic text-lg mt-[-2px] shrink-0" style={{ color: WEB.accent }}>1.</span>
+              <div>
+                <p style={{ color: WEB.textSecondary }}>
+                  A cupboard with shelves or drawers for storing or displaying items.
+                </p>
+                <p className="font-mono text-xs italic mt-1.5" style={{ color: WEB.textTertiary }}>
+                  &ldquo;a filing cabinet&rdquo;
+                </p>
+              </div>
+            </li>
+            <li className="flex gap-3" style={fade(4)}>
+              <span className="font-logo italic text-lg mt-[-2px] shrink-0" style={{ color: WEB.accent }}>2.</span>
+              <div>
+                <p style={{ color: WEB.textSecondary }}>
+                  <span
+                    className="font-mono text-[11px] uppercase tracking-wider mr-1.5 px-1.5 py-0.5 rounded"
+                    style={{ color: WEB.textTertiary, background: "#F5F0EB" }}
+                  >
+                    politics
+                  </span>
+                  The committee of senior ministers responsible for controlling government policy.
+                </p>
+                <p className="font-mono text-xs italic mt-1.5" style={{ color: WEB.textTertiary }}>
+                  &ldquo;a cabinet meeting&rdquo;
+                </p>
+              </div>
+            </li>
+            <li className="flex gap-3" style={fade(5)}>
+              <span className="font-logo italic text-lg mt-[-2px] shrink-0" style={{ color: WEB.accent }}>3.</span>
+              <div>
+                <p style={{ color: WEB.text }}>
+                  <span
+                    className="font-mono text-[11px] uppercase tracking-wider mr-1.5 px-1.5 py-0.5 rounded"
+                    style={{ color: WEB.accent, background: WEB.accentBg }}
+                  >
+                    software
+                  </span>
+                  An AI-first knowledge base where a team of AI agents work for you 24/7 (no salary needed).
+                </p>
+                <p className="font-mono text-xs italic mt-1.5" style={{ color: WEB.textTertiary }}>
+                  &ldquo;I asked my cabinet to research the market and draft the blog post&rdquo;
+                </p>
+              </div>
+            </li>
+          </ol>
+        </div>
+
+        {/* Tagline + CTA */}
+        <div className="flex flex-col items-center lg:items-start gap-6 py-6 lg:py-0 lg:max-w-xs shrink-0">
+          <h2 className="text-center lg:text-left text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-[1.1]">
+            <span className="font-logo italic" style={{ ...fade(6), color: WEB.text, display: "inline-block" }}>
+              Your knowledge base.
+            </span>
+            <br />
+            <span
+              className="font-logo italic"
+              style={{
+                ...fade(7),
+                display: "inline-block",
+                background: "linear-gradient(135deg, #3B2F2F 0%, #8B5E3C 50%, #A0714D 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              Your AI team.
+            </span>
+          </h2>
+
+          <div style={fade(8)}>
+            <button
+              onClick={onNext}
+              className="inline-flex items-center justify-center gap-2.5 rounded-full px-10 py-4 text-base font-medium text-white transition-all hover:-translate-y-0.5 shadow-sm w-full lg:w-auto"
+              style={{ background: WEB.accent }}
+            >
+              Get started
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TeamBuildStep({
   agentsLoading,
   suggestedAgents,
   libraryTemplates,
   launchDisabled,
+  selectedCount,
+  maxAgents,
   toggleAgent,
   onBack,
   onNext,
@@ -334,6 +478,8 @@ function TeamBuildStep({
   suggestedAgents: SuggestedAgent[];
   libraryTemplates: LibraryTemplate[];
   launchDisabled: boolean;
+  selectedCount: number;
+  maxAgents: number;
   toggleAgent: (slug: string) => void;
   onBack: () => void;
   onNext: () => void;
@@ -428,7 +574,10 @@ function TeamBuildStep({
           className="text-[11px] font-semibold uppercase tracking-wider text-center mb-2"
           style={{ color: WEB.textTertiary }}
         >
-          Or pick your agents
+          Or pick your agents{" "}
+          <span style={{ color: selectedCount >= maxAgents ? WEB.accent : WEB.textTertiary }}>
+            ({selectedCount}/{maxAgents})
+          </span>
         </p>
         {agentsLoading ? (
           <div className="flex items-center justify-center py-8">
@@ -449,33 +598,48 @@ function TeamBuildStep({
                   {label}
                 </p>
                 <div className="flex flex-col gap-1.5">
-                  {agents.map((agent) => (
-                    <button
-                      key={agent.slug}
-                      onClick={() => toggleAgent(agent.slug)}
-                      className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-all"
-                      style={{
-                        border: `1px solid ${agent.checked ? WEB.accent : WEB.border}`,
-                        background: agent.checked ? WEB.accentBg : WEB.bgCard,
-                      }}
-                    >
-                      <div
-                        className="flex size-3.5 shrink-0 items-center justify-center rounded"
+                  {agents.map((agent) => {
+                    const isMandatory = ALWAYS_CHECKED.has(agent.slug);
+                    const atLimit = selectedCount >= maxAgents && !agent.checked;
+                    return (
+                      <button
+                        key={agent.slug}
+                        onClick={() => toggleAgent(agent.slug)}
+                        disabled={isMandatory || atLimit}
+                        className="flex items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-all"
                         style={{
-                          border: `1.5px solid ${agent.checked ? WEB.accent : WEB.borderDark}`,
-                          background: agent.checked ? WEB.accent : "transparent",
+                          border: `1px solid ${agent.checked ? WEB.accent : WEB.border}`,
+                          background: agent.checked ? WEB.accentBg : WEB.bgCard,
+                          opacity: atLimit ? 0.45 : 1,
+                          cursor: isMandatory ? "default" : atLimit ? "not-allowed" : "pointer",
                         }}
                       >
-                        {agent.checked && (
-                          <Check className="size-2 text-white" />
+                        <div
+                          className="flex size-3.5 shrink-0 items-center justify-center rounded"
+                          style={{
+                            border: `1.5px solid ${agent.checked ? WEB.accent : WEB.borderDark}`,
+                            background: agent.checked ? WEB.accent : "transparent",
+                          }}
+                        >
+                          {agent.checked && (
+                            <Check className="size-2 text-white" />
+                          )}
+                        </div>
+                        <span className="text-xs">{agent.emoji}</span>
+                        <p className="text-[11px] font-medium truncate" style={{ color: WEB.text }}>
+                          {agent.name}
+                        </p>
+                        {isMandatory && (
+                          <span
+                            className="ml-auto text-[9px] font-medium uppercase tracking-wide shrink-0"
+                            style={{ color: WEB.textTertiary }}
+                          >
+                            Required
+                          </span>
                         )}
-                      </div>
-                      <span className="text-xs">{agent.emoji}</span>
-                      <p className="text-[11px] font-medium truncate" style={{ color: WEB.text }}>
-                        {agent.name}
-                      </p>
-                    </button>
-                  ))}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             ))}
@@ -674,10 +838,25 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
     }
   };
 
+  const MAX_AGENTS = 5;
+
   const toggleAgent = (slug: string) => {
-    setSuggestedAgents((prev) =>
-      prev.map((a) => (a.slug === slug ? { ...a, checked: !a.checked } : a))
-    );
+    // CEO and Editor are mandatory — cannot be unchecked
+    if (ALWAYS_CHECKED.has(slug)) return;
+
+    setSuggestedAgents((prev) => {
+      const target = prev.find((a) => a.slug === slug);
+      if (!target) return prev;
+
+      // If trying to check and already at limit, block it
+      if (!target.checked && prev.filter((a) => a.checked).length >= MAX_AGENTS) {
+        return prev;
+      }
+
+      return prev.map((a) =>
+        a.slug === slug ? { ...a, checked: !a.checked } : a
+      );
+    });
   };
 
   const launch = useCallback(async () => {
@@ -817,113 +996,7 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
 
           {/* Step 0: Welcome — Dictionary card + tagline side-by-side */}
           {step === 0 && (
-            <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 animate-in fade-in duration-300">
-              <div className="flex flex-col lg:flex-row lg:items-center lg:gap-10 w-full">
-                {/* Dictionary Definition Card (compact) */}
-                <div
-                  className="text-left rounded-2xl px-8 py-8 md:px-10 md:py-10 flex-1"
-                  style={{
-                    background: WEB.bgCard,
-                    border: `1px solid ${WEB.border}`,
-                    boxShadow: "0 1px 3px rgba(59, 47, 47, 0.04), 0 8px 30px rgba(59, 47, 47, 0.04)",
-                  }}
-                >
-                  <div className="flex items-baseline gap-3 mb-1">
-                    <h1
-                      className="font-logo text-4xl sm:text-5xl tracking-tight italic"
-                      style={{ color: WEB.text }}
-                    >
-                      cabinet
-                    </h1>
-                    <span className="font-mono text-xs" style={{ color: WEB.textTertiary }}>
-                      /&#x2C8;kab.&#x26A;.n&#x259;t/
-                    </span>
-                  </div>
-                  <p className="font-mono text-xs italic mb-6" style={{ color: WEB.textTertiary }}>
-                    noun
-                  </p>
-
-                  <ol className="font-body-serif space-y-5 text-[15px] leading-relaxed">
-                    <li className="flex gap-3">
-                      <span className="font-logo italic text-lg mt-[-2px] shrink-0" style={{ color: WEB.accent }}>1.</span>
-                      <div>
-                        <p style={{ color: WEB.textSecondary }}>
-                          A cupboard with shelves or drawers for storing or displaying items.
-                        </p>
-                        <p className="font-mono text-xs italic mt-1.5" style={{ color: WEB.textTertiary }}>
-                          &ldquo;a filing cabinet&rdquo;
-                        </p>
-                      </div>
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="font-logo italic text-lg mt-[-2px] shrink-0" style={{ color: WEB.accent }}>2.</span>
-                      <div>
-                        <p style={{ color: WEB.textSecondary }}>
-                          <span
-                            className="font-mono text-[11px] uppercase tracking-wider mr-1.5 px-1.5 py-0.5 rounded"
-                            style={{ color: WEB.textTertiary, background: "#F5F0EB" }}
-                          >
-                            politics
-                          </span>
-                          The committee of senior ministers responsible for controlling government policy.
-                        </p>
-                        <p className="font-mono text-xs italic mt-1.5" style={{ color: WEB.textTertiary }}>
-                          &ldquo;a cabinet meeting&rdquo;
-                        </p>
-                      </div>
-                    </li>
-                    <li className="flex gap-3">
-                      <span className="font-logo italic text-lg mt-[-2px] shrink-0" style={{ color: WEB.accent }}>3.</span>
-                      <div>
-                        <p style={{ color: WEB.text }}>
-                          <span
-                            className="font-mono text-[11px] uppercase tracking-wider mr-1.5 px-1.5 py-0.5 rounded"
-                            style={{ color: WEB.accent, background: WEB.accentBg }}
-                          >
-                            software
-                          </span>
-                          An AI-first knowledge base where a team of AI agents work for you 24/7 (no salary needed).
-                        </p>
-                        <p className="font-mono text-xs italic mt-1.5" style={{ color: WEB.textTertiary }}>
-                          &ldquo;I asked my cabinet to research the market and draft the blog post&rdquo;
-                        </p>
-                      </div>
-                    </li>
-                  </ol>
-
-                </div>
-
-                {/* Tagline + CTA */}
-                <div className="flex flex-col items-center lg:items-start gap-6 py-6 lg:py-0 lg:max-w-xs shrink-0">
-                  <h2 className="text-center lg:text-left text-3xl sm:text-4xl lg:text-5xl tracking-tight leading-[1.1]">
-                    <span className="font-logo italic" style={{ color: WEB.text }}>
-                      Your knowledge base.
-                    </span>
-                    <br />
-                    <span
-                      className="font-logo italic"
-                      style={{
-                        background: "linear-gradient(135deg, #3B2F2F 0%, #8B5E3C 50%, #A0714D 100%)",
-                        WebkitBackgroundClip: "text",
-                        WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
-                      }}
-                    >
-                      Your AI team.
-                    </span>
-                  </h2>
-
-                  <button
-                    onClick={() => setStep(1)}
-                    className="inline-flex items-center justify-center gap-2.5 rounded-full px-10 py-4 text-base font-medium text-white transition-all hover:-translate-y-0.5 shadow-sm w-full lg:w-auto"
-                    style={{ background: WEB.accent }}
-                  >
-                    Get started
-                    <ArrowRight className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
+            <IntroStep onNext={() => setStep(1)} />
           )}
 
           {/* Step 1: Welcome — About you */}
@@ -1001,6 +1074,24 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
                       </button>
                     ))}
                   </div>
+                  <div className="flex items-center gap-2 mt-1.5">
+                    <span
+                      className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-0.5 rounded-full"
+                      style={{
+                        color: WEB.textSecondary,
+                        background: `${WEB.bg}`,
+                        border: `1px solid ${WEB.border}`,
+                      }}
+                    >
+                      Coming soon
+                    </span>
+                    <span
+                      className="text-[11px] font-semibold uppercase tracking-wider"
+                      style={{ color: WEB.textTertiary }}
+                    >
+                      Pre-made multi-human multi-agent teams
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -1033,6 +1124,8 @@ export function OnboardingWizard({ onComplete }: { onComplete: () => void }) {
               suggestedAgents={suggestedAgents}
               libraryTemplates={libraryTemplates}
               launchDisabled={launchDisabled}
+              selectedCount={selectedAgentCount}
+              maxAgents={MAX_AGENTS}
               toggleAgent={toggleAgent}
               onBack={() => setStep(1)}
               onNext={() => setStep(3)}
