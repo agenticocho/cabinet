@@ -31,6 +31,8 @@ import {
   FilePlus,
   FolderOpen,
   GitBranch,
+  Copy,
+  ClipboardCopy,
   Archive,
   Crown,
   Megaphone,
@@ -51,6 +53,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getDataDir } from "@/lib/data-dir-cache";
 
 interface AgentSummary {
   name: string;
@@ -334,6 +337,13 @@ export function TreeView() {
                 <ContextMenuItem onClick={() => setLinkRepoOpen(true)}>
                   <GitBranch className="h-4 w-4 mr-2" />
                   Load Knowledge
+                </ContextMenuItem>
+                <ContextMenuItem onClick={async () => {
+                  const dir = await getDataDir();
+                  navigator.clipboard.writeText(dir);
+                }}>
+                  <ClipboardCopy className="h-4 w-4 mr-2" />
+                  Copy Full Path
                 </ContextMenuItem>
                 <ContextMenuItem onClick={() => {
                   fetch("/api/system/open-data-dir", {

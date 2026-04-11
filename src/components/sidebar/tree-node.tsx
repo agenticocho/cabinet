@@ -14,6 +14,10 @@ import {
   GitBranch,
   FileType,
   Table,
+  Copy,
+  ClipboardCopy,
+  Link2,
+  Link2Off,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { TreeNode as TreeNodeType } from "@/types";
@@ -35,6 +39,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LinkRepoDialog } from "./link-repo-dialog";
+import { getDataDir } from "@/lib/data-dir-cache";
 
 interface TreeNodeProps {
   node: TreeNodeType;
@@ -79,7 +84,10 @@ export function TreeNode({ node, depth }: TreeNodeProps) {
   };
 
   const handleDelete = () => {
-    if (confirm(`Delete "${title}"?`)) {
+    const message = node.isLinked
+      ? `Unlink "${title}"? This removes the link but does not delete the original folder.`
+      : `Delete "${title}"?`;
+    if (confirm(message)) {
       deletePage(node.path);
     }
   };
@@ -196,6 +204,8 @@ export function TreeNode({ node, depth }: TreeNodeProps) {
               <Globe className="h-4 w-4 shrink-0 text-blue-400" />
             ) : node.hasRepo ? (
               <GitBranch className="h-4 w-4 shrink-0 text-orange-400" />
+            ) : node.isLinked ? (
+              <Link2 className="h-4 w-4 shrink-0 text-blue-400" />
             ) : hasChildren ? (
               isExpanded ? (
                 <FolderOpen className="h-4 w-4 shrink-0 text-muted-foreground" />
@@ -221,6 +231,17 @@ export function TreeNode({ node, depth }: TreeNodeProps) {
             <Pencil className="h-4 w-4 mr-2" />
             Rename
           </ContextMenuItem>
+          <ContextMenuItem onClick={() => navigator.clipboard.writeText(node.path)}>
+            <Copy className="h-4 w-4 mr-2" />
+            Copy Relative Path
+          </ContextMenuItem>
+          <ContextMenuItem onClick={async () => {
+            const dir = await getDataDir();
+            navigator.clipboard.writeText(`${dir}/${node.path}`);
+          }}>
+            <ClipboardCopy className="h-4 w-4 mr-2" />
+            Copy Full Path
+          </ContextMenuItem>
           <ContextMenuItem onClick={() => {
             fetch("/api/system/open-data-dir", {
               method: "POST",
@@ -233,8 +254,12 @@ export function TreeNode({ node, depth }: TreeNodeProps) {
           </ContextMenuItem>
           <ContextMenuSeparator />
           <ContextMenuItem onClick={handleDelete} className="text-destructive">
-            <Trash2 className="h-4 w-4 mr-2" />
-            Delete
+            {node.isLinked ? (
+              <Link2Off className="h-4 w-4 mr-2" />
+            ) : (
+              <Trash2 className="h-4 w-4 mr-2" />
+            )}
+            {node.isLinked ? "Unlink" : "Delete"}
           </ContextMenuItem>
         </ContextMenuContent>
       </ContextMenu>
