@@ -1384,10 +1384,64 @@ export function TasksBoard({
               </>
             )}
 
-            <Button variant="outline" size="sm" className="ml-auto h-7" onClick={() => void refreshBoard()} disabled={refreshing}>
-              <RefreshCw data-icon="inline-start" className={cn(refreshing && "animate-spin")} />
-              Refresh
-            </Button>
+            <div className="ml-auto flex items-center gap-2">
+              <Select
+                items={filterAgentItems}
+                value={selectedFilterAgentId}
+                onValueChange={(value) =>
+                  setSelectedFilterAgentId(typeof value === "string" ? value : "all")
+                }
+              >
+                <SelectTrigger size="sm" className="bg-background">
+                  <SelectValue placeholder="All visible agents" />
+                </SelectTrigger>
+                <SelectContent align="end" className="min-w-[280px]">
+                  <SelectGroup>
+                    <SelectItem value="all">All visible agents</SelectItem>
+                    {visibleAgents.map((agent) => (
+                      <SelectItem key={agent.scopedId} value={agent.scopedId}>
+                        <span className="text-sm leading-none">{agent.emoji || "🤖"}</span>
+                        <span className="truncate">
+                          {agent.name}
+                          {agent.cabinetName ? ` · ${agent.cabinetName}` : ""}
+                        </span>
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+
+              {resolvedWorkspaceMode === "cabinet" ? (
+                <Select
+                  items={scopeItems}
+                  value={effectiveVisibilityMode}
+                  onValueChange={(value) =>
+                    setCabinetVisibilityMode(
+                      effectiveCabinetPath,
+                      value as CabinetVisibilityMode
+                    )
+                  }
+                >
+                  <SelectTrigger size="sm" className="bg-background">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent align="end">
+                    <SelectGroup>
+                      {CABINET_VISIBILITY_OPTIONS.map((option) => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              ) : null}
+
+              <Button variant="outline" size="sm" className="h-7" onClick={() => void refreshBoard()} disabled={refreshing}>
+                <RefreshCw data-icon="inline-start" className={cn(refreshing && "animate-spin")} />
+                Refresh
+              </Button>
+            </div>
           </div>
         </div>
 
