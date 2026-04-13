@@ -609,12 +609,12 @@ function ConversationRow({
               onClick={(e) => { e.stopPropagation(); onStop(); }}
               disabled={busy}
               title="Stop"
-              className="rounded p-1 text-muted-foreground bg-background hover:bg-destructive/15 hover:text-destructive disabled:opacity-50"
+              className="rounded-md p-1.5 text-muted-foreground bg-muted hover:bg-destructive/20 hover:text-destructive disabled:opacity-50 transition-colors"
             >
               {busy ? (
-                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
-                <Square className="h-3.5 w-3.5" />
+                <Square className="h-4 w-4" />
               )}
             </button>
           )}
@@ -623,9 +623,9 @@ function ConversationRow({
               onClick={(e) => { e.stopPropagation(); onRestart(); }}
               disabled={busy}
               title="Restart"
-              className="rounded p-1 text-muted-foreground bg-background hover:bg-primary/15 hover:text-primary disabled:opacity-50"
+              className="rounded-md p-1.5 text-muted-foreground bg-muted hover:bg-primary/20 hover:text-primary disabled:opacity-50 transition-colors"
             >
-              <RotateCcw className="h-3.5 w-3.5" />
+              <RotateCcw className="h-4 w-4" />
             </button>
           )}
         </div>
