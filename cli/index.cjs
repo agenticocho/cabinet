@@ -10,7 +10,7 @@
  *   npx create-cabinet upgrade [opts]  → cabinetai update (legacy compat)
  */
 
-const { execSync, spawnSync } = require("child_process");
+const { spawnSync } = require("child_process");
 const path = require("path");
 const fs = require("fs");
 
@@ -38,16 +38,13 @@ function runCabinetAI(cmdArgs) {
     return result.status || 0;
   }
 
-  // Fall back to npx
-  try {
-    execSync(`npx cabinetai@latest ${cmdArgs.join(" ")}`, {
-      stdio: "inherit",
-      cwd: process.cwd(),
-    });
-    return 0;
-  } catch {
-    return 1;
-  }
+  // Fall back to npx — use spawnSync with args array to prevent shell injection
+  const npxBin = process.platform === "win32" ? "npx.cmd" : "npx";
+  const result = spawnSync(npxBin, ["cabinetai@latest", ...cmdArgs], {
+    stdio: "inherit",
+    cwd: process.cwd(),
+  });
+  return result.status || 0;
 }
 
 if (command === "help" || command === "--help") {

@@ -4,7 +4,10 @@ import path from "path";
 
 export function parsePort(value: string | undefined, fallback: number): number {
   const parsed = Number.parseInt(String(value || ""), 10);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+  if (!Number.isFinite(parsed) || parsed <= 0) return fallback;
+  // Clamp to non-privileged port range
+  if (parsed < 1024 || parsed > 65535) return fallback;
+  return parsed;
 }
 
 export function isPortFree(port: number): Promise<boolean> {
@@ -117,6 +120,9 @@ export function isProcessAlive(pid: number): boolean {
 export async function originResponds(origin: string): Promise<boolean> {
   const normalized = String(origin || "").replace(/\/+$/, "");
   if (!normalized) return false;
+
+  // Only allow requests to localhost origins to prevent SSRF
+  if (!/^https?:\/\/(127\.0\.0\.1|localhost)(:\d+)?$/i.test(normalized)) return false;
   try {
     const response = await fetch(`${normalized}/api/health`, {
       signal: AbortSignal.timeout(1500),

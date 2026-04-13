@@ -2,14 +2,15 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 import { spawnSync } from "child_process";
-import { CABINET_HOME, appVersionDir, ensureCabinetHome, ensureDir } from "./paths.js";
+import { CABINET_HOME, appVersionDir, ensureCabinetHome, ensureDir, validateVersion } from "./paths.js";
 import { log, success, warning } from "./log.js";
 import { npmCommand } from "./process.js";
 
 const REPO_URL = "https://github.com/hilash/cabinet";
 
 function releaseTagFor(version: string): string {
-  return version.startsWith("v") ? version : `v${version}`;
+  const clean = validateVersion(version);
+  return `v${clean}`;
 }
 
 function defaultTarballUrl(version: string): string {
@@ -92,6 +93,7 @@ async function downloadAndExtract(version: string, appDir: string): Promise<void
     log(`Downloading Cabinet v${version}...`);
     const response = await fetch(tarballUrl, {
       headers: { "user-agent": "cabinetai" },
+      signal: AbortSignal.timeout(120_000), // 2 minute timeout
     });
 
     if (!response.ok) {
@@ -101,12 +103,18 @@ async function downloadAndExtract(version: string, appDir: string): Promise<void
       return;
     }
 
+    // Reject suspiciously large tarballs (> 500MB)
+    const contentLength = parseInt(response.headers.get("content-length") || "0", 10);
+    if (contentLength > 500 * 1024 * 1024) {
+      throw new Error(`Release tarball too large: ${contentLength} bytes`);
+    }
+
     const bytes = Buffer.from(await response.arrayBuffer());
     fs.writeFileSync(archivePath, bytes);
 
     // Extract
     log("Extracting...");
-    spawnSync("tar", ["-xzf", archivePath, "-C", tempDir], { stdio: "inherit" });
+    spawnSync("tar", ["-xzf", archivePath, "-C", tempDir, "--no-same-owner"], { stdio: "inherit" });
 
     // Find extracted root (GitHub tarballs have a single root dir like "cabinet-0.2.12/")
     const entries = fs
@@ -143,14 +151,14 @@ async function cloneFallback(version: string, appDir: string, tempDir: string): 
   const cloneDir = path.join(tempDir, "cabinet-clone");
   const tag = releaseTagFor(version);
 
-  const result = spawnSync("git", ["clone", "--depth", "1", "--branch", tag, `${REPO_URL}.git`, cloneDir], {
+  const result = spawnSync("git", ["clone", "--depth", "1", "--branch", tag, "--", `${REPO_URL}.git`, cloneDir], {
     stdio: "inherit",
   });
 
   if (result.status !== 0) {
     // Try without tag (HEAD)
     warning("Tagged release not found, cloning HEAD...");
-    const headResult = spawnSync("git", ["clone", "--depth", "1", `${REPO_URL}.git`, cloneDir], {
+    const headResult = spawnSync("git", ["clone", "--depth", "1", "--", `${REPO_URL}.git`, cloneDir], {
       stdio: "inherit",
     });
     if (headResult.status !== 0) {

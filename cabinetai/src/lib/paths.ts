@@ -7,7 +7,8 @@ export const CABINET_HOME = path.join(os.homedir(), ".cabinet");
 
 /** Directory where version-pinned app installs live */
 export function appVersionDir(version: string): string {
-  return path.join(CABINET_HOME, "app", `v${version}`);
+  const clean = validateVersion(version);
+  return path.join(CABINET_HOME, "app", `v${clean}`);
 }
 
 /** Global state directory */
@@ -22,6 +23,21 @@ export function globalConfigPath(): string {
 
 /** The .cabinet manifest filename */
 export const CABINET_MANIFEST = ".cabinet";
+
+/** Strict semver pattern for version strings. */
+const SEMVER_RE = /^\d+\.\d+\.\d+(-[\w.]+)?$/;
+
+/**
+ * Validate a version string is strict semver (no path traversal, no flags).
+ * Strips leading "v" before checking.
+ */
+export function validateVersion(version: string): string {
+  const cleaned = version.replace(/^v/, "");
+  if (!SEMVER_RE.test(cleaned)) {
+    throw new Error(`Invalid version: "${version}". Expected format: X.Y.Z`);
+  }
+  return cleaned;
+}
 
 /**
  * Walk up from startDir looking for a .cabinet file.

@@ -27,6 +27,9 @@ export function spawnChild(
 }
 
 export function openBrowser(url: string): void {
+  // Only allow http/https URLs to prevent opening arbitrary file:// or other schemes
+  if (!/^https?:\/\//i.test(url)) return;
+
   const cmd =
     process.platform === "darwin"
       ? "open"

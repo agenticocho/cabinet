@@ -23,6 +23,9 @@ export function registerImport(program: Command): void {
 
 async function importTemplate(template: string): Promise<void> {
   const slug = template.toLowerCase().replace(/[^a-z0-9-]/g, "");
+  if (!slug) {
+    error(`Invalid template name: "${template}"`);
+  }
   const targetDir = path.resolve(process.cwd(), slug);
 
   if (fs.existsSync(targetDir)) {
