@@ -778,8 +778,9 @@ export function AgentsWorkspace({
     if (slugs.length === 0) return;
     void Promise.all(
       slugs.map((a) => {
-        const query = effectiveCabinetPath
-          ? `?cabinetPath=${encodeURIComponent(effectiveCabinetPath)}`
+        const jobCabinetPath = a.cabinetPath || effectiveCabinetPath;
+        const query = jobCabinetPath
+          ? `?cabinetPath=${encodeURIComponent(jobCabinetPath)}`
           : "";
         return fetch(`/api/agents/${a.slug}/jobs${query}`)
           .then((r) => (r.ok ? r.json() : { jobs: [] }))
