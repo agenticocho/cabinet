@@ -19,6 +19,7 @@ import {
   Plus,
   RefreshCw,
   Send,
+  X,
   XCircle,
 } from "lucide-react";
 import { buildConversationInstanceKey } from "@/lib/agents/conversation-identity";
@@ -33,10 +34,13 @@ import { useComposer, type MentionableItem } from "@/hooks/use-composer";
 import type { HumanInboxDraft, AgentListItem } from "@/types/agents";
 import type { CabinetOverview, CabinetVisibilityMode } from "@/types/cabinets";
 import type {
+  ConversationDetail,
   ConversationMeta,
   ConversationStatus,
   ConversationTrigger,
 } from "@/types/conversations";
+import { WebTerminal } from "@/components/terminal/web-terminal";
+import { ConversationResultView } from "@/components/agents/conversation-result-view";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -677,6 +681,9 @@ export function TasksBoard({
   const [selectedAssignAgentId, setSelectedAssignAgentId] = useState<string | null>(null);
   const [selectedFilterAgentId, setSelectedFilterAgentId] = useState<string>("all");
   const [triggerFilter, setTriggerFilter] = useState<TriggerFilter>("all");
+  const [panelConversation, setPanelConversation] = useState<ConversationMeta | null>(null);
+  const [panelDetail, setPanelDetail] = useState<ConversationDetail | null>(null);
+  const [panelLoading, setPanelLoading] = useState(false);
 
   const refreshOverview = useCallback(async () => {
     const params = new URLSearchParams({
@@ -773,6 +780,46 @@ export function TasksBoard({
       setSelectedFilterAgentId("all");
     }
   }, [selectedFilterAgentId, visibleAgents]);
+
+  // Keep panelConversation in sync with refreshed conversations list
+  useEffect(() => {
+    if (!panelConversation) return;
+    const fresh = conversations.find((c) => c.id === panelConversation.id);
+    if (fresh) {
+      setPanelConversation(fresh);
+    }
+  }, [conversations, panelConversation?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Fetch full detail when a completed/failed conversation is selected
+  useEffect(() => {
+    if (!panelConversation) {
+      setPanelDetail(null);
+      return;
+    }
+    if (panelConversation.status === "running") {
+      setPanelDetail(null);
+      return;
+    }
+    let cancelled = false;
+    setPanelLoading(true);
+    const params = new URLSearchParams();
+    if (panelConversation.cabinetPath) {
+      params.set("cabinetPath", panelConversation.cabinetPath);
+    }
+    fetch(`/api/agents/conversations/${panelConversation.id}?${params.toString()}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!cancelled && data) {
+          setPanelDetail(data as ConversationDetail);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setPanelLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [panelConversation?.id, panelConversation?.status]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const activeAssignDraft = useMemo(
     () => drafts.find((draft) => draft.id === assignDraftId) || null,
@@ -982,15 +1029,12 @@ export function TasksBoard({
   }
 
   function openConversation(conversation: ConversationMeta) {
-    const targetCabinetPath = conversation.cabinetPath || effectiveCabinetPath;
-    setSection({
-      type: "agent",
-      mode: "cabinet",
-      slug: conversation.agentSlug,
-      cabinetPath: targetCabinetPath,
-      agentScopedId: `${targetCabinetPath}::agent::${conversation.agentSlug}`,
-      conversationId: conversation.id,
-    });
+    setPanelConversation(conversation);
+  }
+
+  function closePanel() {
+    setPanelConversation(null);
+    setPanelDetail(null);
   }
 
   const cabinetName =
@@ -1150,121 +1194,196 @@ export function TasksBoard({
         onStartNow={() => void handleStartFromDialog()}
       />
 
-      <div className="min-h-0 flex-1 overflow-x-auto">
-        {loading ? (
-          <div className="flex h-full items-center justify-center gap-3 text-sm text-muted-foreground">
-            <Loader2 className="size-4 animate-spin" />
-            Loading the task board...
-          </div>
-        ) : (
-          <div className="flex h-full min-w-max">
-            <BoardLane
-              lane="inbox"
-              count={drafts.length}
-              emptyState="No inbox tasks yet. Click Add to queue the next thing you want to execute."
-              headerAction={
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="h-7 px-2 text-[10px]"
-                  onClick={() => setCreateDialogOpen(true)}
-                >
-                  <Plus data-icon="inline-start" />
-                  Add
-                </Button>
-              }
-            >
-              {drafts.map((draft) => {
-                const assignedAgent = resolveAgentForDraft(draft);
-                const fallbackAssignedName = draft.assignedAgentSlug
-                  ? startCase(draft.assignedAgentSlug)
-                  : null;
-                const assignedCabinetName = visibleAgentCabinetLabel(
-                  assignedAgent,
-                  draft.assignedAgentCabinetPath || draft.cabinetPath
-                );
+      <div className="flex min-h-0 flex-1 overflow-hidden">
+        {/* Board lanes */}
+        <div className={cn("min-h-0 flex-1 overflow-x-auto", panelConversation && "max-w-[55%]")}>
+          {loading ? (
+            <div className="flex h-full items-center justify-center gap-3 text-sm text-muted-foreground">
+              <Loader2 className="size-4 animate-spin" />
+              Loading the task board...
+            </div>
+          ) : (
+            <div className="flex h-full min-w-max">
+              <BoardLane
+                lane="inbox"
+                count={drafts.length}
+                emptyState="No inbox tasks yet. Click Add to queue the next thing you want to execute."
+                headerAction={
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-7 px-2 text-[10px]"
+                    onClick={() => setCreateDialogOpen(true)}
+                  >
+                    <Plus data-icon="inline-start" />
+                    Add
+                  </Button>
+                }
+              >
+                {drafts.map((draft) => {
+                  const assignedAgent = resolveAgentForDraft(draft);
+                  const fallbackAssignedName = draft.assignedAgentSlug
+                    ? startCase(draft.assignedAgentSlug)
+                    : null;
+                  const assignedCabinetName = visibleAgentCabinetLabel(
+                    assignedAgent,
+                    draft.assignedAgentCabinetPath || draft.cabinetPath
+                  );
 
-                return (
-                  <DraftRow
-                    key={`${draft.cabinetPath || ROOT_CABINET_PATH}::draft::${draft.id}`}
-                    draft={draft}
-                    assignedAgentLabel={assignedAgent?.name || fallbackAssignedName}
-                    assignedCabinetLabel={assignedCabinetName}
-                    canStartNow={Boolean(assignedAgent)}
-                    busy={busyDraftId === draft.id}
-                    onAssign={() => setAssignDraftId(draft.id)}
-                    onChangeAssignment={() => setAssignDraftId(draft.id)}
-                    onStartNow={() => void handleStartAssignedDraft(draft)}
-                  />
-                );
-              })}
-            </BoardLane>
+                  return (
+                    <DraftRow
+                      key={`${draft.cabinetPath || ROOT_CABINET_PATH}::draft::${draft.id}`}
+                      draft={draft}
+                      assignedAgentLabel={assignedAgent?.name || fallbackAssignedName}
+                      assignedCabinetLabel={assignedCabinetName}
+                      canStartNow={Boolean(assignedAgent)}
+                      busy={busyDraftId === draft.id}
+                      onAssign={() => setAssignDraftId(draft.id)}
+                      onChangeAssignment={() => setAssignDraftId(draft.id)}
+                      onStartNow={() => void handleStartAssignedDraft(draft)}
+                    />
+                  );
+                })}
+              </BoardLane>
 
-            <BoardLane
-              lane="running"
-              count={groupedConversations.running.length}
-              emptyState="Nothing is running right now."
-            >
-              {groupedConversations.running.map((conversation) => {
-                const agent =
-                  agentByKey.get(scopedAgentKey(conversation.cabinetPath, conversation.agentSlug)) ||
-                  null;
+              <BoardLane
+                lane="running"
+                count={groupedConversations.running.length}
+                emptyState="Nothing is running right now."
+              >
+                {groupedConversations.running.map((conversation) => {
+                  const agent =
+                    agentByKey.get(scopedAgentKey(conversation.cabinetPath, conversation.agentSlug)) ||
+                    null;
 
-                return (
-                  <ConversationRow
-                    key={buildConversationInstanceKey(conversation)}
-                    conversation={conversation}
-                    agentLabel={agent?.name || startCase(conversation.agentSlug)}
-                    cabinetName={visibleAgentCabinetLabel(agent, conversation.cabinetPath)}
-                    onOpen={() => openConversation(conversation)}
-                  />
-                );
-              })}
-            </BoardLane>
+                  return (
+                    <ConversationRow
+                      key={buildConversationInstanceKey(conversation)}
+                      conversation={conversation}
+                      agentLabel={agent?.name || startCase(conversation.agentSlug)}
+                      cabinetName={visibleAgentCabinetLabel(agent, conversation.cabinetPath)}
+                      onOpen={() => openConversation(conversation)}
+                    />
+                  );
+                })}
+              </BoardLane>
 
-            <BoardLane
-              lane="completed"
-              count={groupedConversations.completed.length}
-              emptyState="Completed runs will collect here as they finish."
-            >
-              {groupedConversations.completed.map((conversation) => {
-                const agent =
-                  agentByKey.get(scopedAgentKey(conversation.cabinetPath, conversation.agentSlug)) ||
-                  null;
+              <BoardLane
+                lane="completed"
+                count={groupedConversations.completed.length}
+                emptyState="Completed runs will collect here as they finish."
+              >
+                {groupedConversations.completed.map((conversation) => {
+                  const agent =
+                    agentByKey.get(scopedAgentKey(conversation.cabinetPath, conversation.agentSlug)) ||
+                    null;
 
-                return (
-                  <ConversationRow
-                    key={buildConversationInstanceKey(conversation)}
-                    conversation={conversation}
-                    agentLabel={agent?.name || startCase(conversation.agentSlug)}
-                    cabinetName={visibleAgentCabinetLabel(agent, conversation.cabinetPath)}
-                    onOpen={() => openConversation(conversation)}
-                  />
-                );
-              })}
-            </BoardLane>
+                  return (
+                    <ConversationRow
+                      key={buildConversationInstanceKey(conversation)}
+                      conversation={conversation}
+                      agentLabel={agent?.name || startCase(conversation.agentSlug)}
+                      cabinetName={visibleAgentCabinetLabel(agent, conversation.cabinetPath)}
+                      onOpen={() => openConversation(conversation)}
+                    />
+                  );
+                })}
+              </BoardLane>
 
-            <BoardLane
-              lane="failed"
-              count={groupedConversations.failed.length}
-              emptyState="Failed runs will surface here so they are easy to retry."
-            >
-              {groupedConversations.failed.map((conversation) => {
-                const agent =
-                  agentByKey.get(scopedAgentKey(conversation.cabinetPath, conversation.agentSlug)) ||
-                  null;
+              <BoardLane
+                lane="failed"
+                count={groupedConversations.failed.length}
+                emptyState="Failed runs will surface here so they are easy to retry."
+              >
+                {groupedConversations.failed.map((conversation) => {
+                  const agent =
+                    agentByKey.get(scopedAgentKey(conversation.cabinetPath, conversation.agentSlug)) ||
+                    null;
 
-                return (
-                  <ConversationRow
-                    key={buildConversationInstanceKey(conversation)}
-                    conversation={conversation}
-                    agentLabel={agent?.name || startCase(conversation.agentSlug)}
-                    cabinetName={visibleAgentCabinetLabel(agent, conversation.cabinetPath)}
-                    onOpen={() => openConversation(conversation)}
-                  />
-                );
-              })}
-            </BoardLane>
+                  return (
+                    <ConversationRow
+                      key={buildConversationInstanceKey(conversation)}
+                      conversation={conversation}
+                      agentLabel={agent?.name || startCase(conversation.agentSlug)}
+                      cabinetName={visibleAgentCabinetLabel(agent, conversation.cabinetPath)}
+                      onOpen={() => openConversation(conversation)}
+                    />
+                  );
+                })}
+              </BoardLane>
+            </div>
+          )}
+        </div>
+
+        {/* Task detail panel */}
+        {panelConversation && (
+          <div className="flex min-w-[380px] flex-1 flex-col border-l border-border/70 bg-background">
+            <div className="flex items-center gap-2 border-b border-border/70 px-4 py-3">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <ConversationStatusIcon status={panelConversation.status} />
+                  <p className="truncate text-[13px] font-medium text-foreground">
+                    {panelConversation.title}
+                  </p>
+                </div>
+                <p className="mt-0.5 truncate pl-6 text-[11px] text-muted-foreground">
+                  {startCase(panelConversation.agentSlug)}
+                  {cabinetLabel(panelConversation.cabinetPath)
+                    ? ` · ${cabinetLabel(panelConversation.cabinetPath)}`
+                    : ""}
+                  {" · "}
+                  {formatRelative(panelConversation.startedAt)}
+                </p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-7 w-7 shrink-0 p-0"
+                onClick={closePanel}
+              >
+                <X className="size-4" />
+              </Button>
+            </div>
+
+            <div className="flex-1 overflow-hidden">
+              {panelConversation.status === "running" ? (
+                <WebTerminal
+                  sessionId={panelConversation.id}
+                  displayPrompt={panelConversation.title}
+                  reconnect
+                  themeSurface="page"
+                  onClose={() => {
+                    void refreshBoard();
+                  }}
+                />
+              ) : panelLoading ? (
+                <div className="flex h-full items-center justify-center gap-2 text-sm text-muted-foreground">
+                  <Loader2 className="size-4 animate-spin" />
+                  Loading...
+                </div>
+              ) : panelDetail ? (
+                <ConversationResultView
+                  detail={panelDetail}
+                  onOpenArtifact={(artifactPath) => {
+                    const { selectPage } = useTreeStore.getState();
+                    selectPage(artifactPath);
+                    setSection(
+                      effectiveCabinetPath
+                        ? {
+                            type: "page",
+                            mode: "cabinet",
+                            cabinetPath: effectiveCabinetPath,
+                          }
+                        : { type: "page" }
+                    );
+                  }}
+                />
+              ) : (
+                <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                  Could not load conversation detail.
+                </div>
+              )}
+            </div>
           </div>
         )}
       </div>
