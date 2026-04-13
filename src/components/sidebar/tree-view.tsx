@@ -693,10 +693,14 @@ export function TreeView() {
                 {visibleTreeNodes.length === 0 ? (
                   <button
                     onClick={() => {
-                      const btn = document.querySelector<HTMLButtonElement>(
-                        "[data-new-page-trigger]"
-                      );
-                      btn?.click();
+                      if (activeCabinet) {
+                        setKbSubPageOpen(true);
+                      } else {
+                        const btn = document.querySelector<HTMLButtonElement>(
+                          "[data-new-page-trigger]"
+                        );
+                        btn?.click();
+                      }
                     }}
                     className={itemClass(false)}
                     style={pad(2)}
