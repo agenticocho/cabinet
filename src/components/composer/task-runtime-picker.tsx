@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -259,14 +260,16 @@ export function TaskRuntimePicker({
         <BrainCircuit className="h-4 w-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align={align} className="w-72 min-w-[18rem]">
-        <DropdownMenuLabel>Task Model</DropdownMenuLabel>
-        <div className="px-1.5 pb-2 text-[11px] text-muted-foreground">
-          {selectedProvider
-            ? `${selectedProvider.name}${selectedModel ? ` · ${selectedModel.name}` : ""}`
-            : loading
-              ? "Loading providers..."
-              : "No providers available"}
-        </div>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>Task Model</DropdownMenuLabel>
+          <div className="px-1.5 pb-2 text-[11px] text-muted-foreground">
+            {selectedProvider
+              ? `${selectedProvider.name}${selectedModel ? ` · ${selectedModel.name}` : ""}`
+              : loading
+                ? "Loading providers..."
+                : "No providers available"}
+          </div>
+        </DropdownMenuGroup>
         <DropdownMenuItem onClick={resetToDefault} disabled={providers.length === 0}>
           Use app default
         </DropdownMenuItem>
@@ -300,7 +303,9 @@ export function TaskRuntimePicker({
                   </DropdownMenuShortcut>
                 </DropdownMenuSubTrigger>
                 <DropdownMenuSubContent className="w-72 min-w-[18rem]">
-                  <DropdownMenuLabel>{provider.name}</DropdownMenuLabel>
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel>{provider.name}</DropdownMenuLabel>
+                  </DropdownMenuGroup>
                   <DropdownMenuItem
                     onClick={() =>
                       applySelection(provider.id, providerSelection.model)
