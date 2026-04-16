@@ -831,7 +831,7 @@ export function TaskRuntimePicker({
                   <TabsList
                     variant="line"
                     aria-label="Task providers"
-                    className="h-auto w-full justify-start gap-1.5 rounded-none bg-transparent p-0"
+                    className="h-auto w-full justify-start gap-1.5 rounded-none bg-transparent p-0 !border-b-0"
                   >
                     {selectableProviders.map((provider) => (
                       <TabsTrigger
