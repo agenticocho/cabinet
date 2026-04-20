@@ -1,0 +1,31 @@
+[
+  {
+    "slug": "general",
+    "name": "General",
+    "members": [
+      "ceo",
+      "editor",
+      "qa",
+      "script-writer"
+    ],
+    "description": "Company-wide announcements and discussion"
+  },
+  {
+    "slug": "leadership",
+    "name": "Leadership",
+    "members": [
+      "ceo"
+    ],
+    "description": "Strategic planning and goal setting"
+  },
+  {
+    "slug": "content",
+    "name": "Content",
+    "members": [
+      "editor",
+      "qa",
+      "script-writer"
+    ],
+    "description": "Content creation, editing, and review"
+  }
+]

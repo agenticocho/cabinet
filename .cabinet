@@ -1,0 +1,7 @@
+schemaVersion: 1
+id: ocho-root
+name: Ocho
+kind: root
+version: 0.1.0
+description: We study non-holomorphic fractals
+entry: index.md
