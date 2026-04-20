@@ -9,6 +9,7 @@ import { claudeLocalAdapter } from "./claude-local";
 import { codexLocalAdapter } from "./codex-local";
 import { providerStatusToEnvironmentTest } from "./environment";
 import { geminiLocalAdapter } from "./gemini-local";
+import { llamaLocalAdapter } from "./llama-local";
 
 export const LEGACY_ADAPTER_BY_PROVIDER_ID: Record<string, string> = {
   "claude-code": "claude_code_legacy",
@@ -19,6 +20,7 @@ export const DEFAULT_ADAPTER_BY_PROVIDER_ID: Record<string, string> = {
   "claude-code": claudeLocalAdapter.type,
   "codex-cli": codexLocalAdapter.type,
   "gemini-cli": geminiLocalAdapter.type,
+  "llama-local": llamaLocalAdapter.type,
 };
 
 export const LEGACY_PROVIDER_ID_BY_ADAPTER: Record<string, string> = Object.fromEntries(
@@ -104,6 +106,7 @@ agentAdapterRegistry.register(codexLocalAdapter);
 agentAdapterRegistry.register(geminiLocalAdapter);
 agentAdapterRegistry.register(legacyClaudeCodeAdapter);
 agentAdapterRegistry.register(legacyCodexCliAdapter);
+agentAdapterRegistry.register(llamaLocalAdapter);
 
 export function defaultAdapterTypeForProvider(
   providerId?: string | null
