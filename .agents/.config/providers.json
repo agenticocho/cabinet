@@ -1,0 +1,8 @@
+{
+  "defaultProvider": "llama-local",
+  "disabledProviderIds": [
+    "claude-code",
+    "codex-cli",
+    "gemini-cli"
+  ]
+}

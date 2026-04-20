@@ -4,9 +4,9 @@ slug: qa
 emoji: "\U0001F9EA"
 type: specialist
 department: engineering
-role: Review, proofread, fact-check content
-provider: claude-code
-heartbeat: "0 14 * * 1-5"
+role: 'Review, proofread, fact-check content'
+provider: llama-local
+heartbeat: 0 14 * * 1-5
 budget: 50
 active: true
 workdir: /data

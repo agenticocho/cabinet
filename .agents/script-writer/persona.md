@@ -1,12 +1,12 @@
 ---
 name: Script Writer
 slug: script-writer
-emoji: "\U0000270D\U0000FE0F"
+emoji: ✍️
 type: specialist
 department: content
-role: Carousel copy, slide-by-slide scripts, hooks, CTAs, captions
-provider: claude-code
-heartbeat: "0 9 * * 1-5"
+role: 'Carousel copy, slide-by-slide scripts, hooks, CTAs, captions'
+provider: llama-local
+heartbeat: 0 9 * * 1-5
 budget: 120
 active: true
 workdir: /data

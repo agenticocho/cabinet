@@ -4,9 +4,9 @@ slug: editor
 emoji: "\U0001F4DD"
 type: specialist
 department: engineering
-role: KB content editing, documentation, formatting
-provider: claude-code
-heartbeat: "0 10 * * 1-5"
+role: 'KB content editing, documentation, formatting'
+provider: llama-local
+heartbeat: 0 10 * * 1-5
 budget: 100
 active: true
 workdir: /data
