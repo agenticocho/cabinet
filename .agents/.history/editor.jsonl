@@ -27,3 +27,4 @@
 {"agentSlug":"editor","timestamp":"2026-04-20T23:24:08.009Z","duration":3037,"status":"failed","summary":"execvp(3) failed.: No such file or directory\n"}
 {"agentSlug":"editor","timestamp":"2026-04-21T01:26:58.584Z","duration":17,"status":"failed","summary":"No model configured. Set model in agent adapter config."}
 {"agentSlug":"editor","timestamp":"2026-04-21T01:31:00.886Z","duration":10,"status":"failed","summary":"No model configured. Set model in agent adapter config."}
+{"agentSlug":"editor","timestamp":"2026-04-21T01:47:48.478Z","duration":11,"status":"failed","summary":"No model configured. Set model in agent adapter config."}
