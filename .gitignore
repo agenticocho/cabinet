@@ -1,0 +1,12 @@
+# Runtime noise
+.agents/tmpcabinet-*.log
+.cabinet-state/runtime-ports.json
+*.db-shm
+*.db-wal
+
+# Optionally ignore conversation history (it grows fast)
+.agents/.conversations/
+
+# Optionally ignore stats (changes every heartbeat)
+# .agents/.memory/*/stats.json
+# .agents/*/memory/stats.json
