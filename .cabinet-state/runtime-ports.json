@@ -1,1 +1,17 @@
-{}
+{
+  "app": {
+    "port": 4000,
+    "origin": "http://127.0.0.1:4000",
+    "pid": 1884364,
+    "updatedAt": "2026-04-21T17:07:45.457Z",
+    "cabinetDir": "/home/chilly1/cabinet"
+  },
+  "daemon": {
+    "port": 4101,
+    "origin": "http://127.0.0.1:4101",
+    "wsOrigin": "ws://127.0.0.1:4101",
+    "pid": 1884365,
+    "updatedAt": "2026-04-21T17:07:45.458Z",
+    "cabinetDir": "/home/chilly1/cabinet"
+  }
+}
