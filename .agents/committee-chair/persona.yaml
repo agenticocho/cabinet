@@ -1,0 +1,21 @@
+name: Committee Chair
+slug: committee-chair
+active: true
+provider: llama-local
+adapterType: llama_local
+model: qwen2.5:14b-instruct-q4_K_M
+budget: 100
+heartbeatMinutes: 60
+workdir: /
+tags:
+  - oversight
+  - governance
+  - synthesis
+  - verdicts
+focus:
+  - oversight-committee/kb
+goals:
+  - metric: committee_rulings
+    target: 10
+    current: 0
+    unit: rulings
