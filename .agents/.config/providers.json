@@ -1,5 +1,7 @@
 {
   "defaultProvider": "llama-local",
+  "defaultModel": "Qwen3.5-4B-UD-Q4_K_XL.gguf",
+  "defaultEffort": "high",
   "disabledProviderIds": [
     "claude-code",
     "codex-cli",

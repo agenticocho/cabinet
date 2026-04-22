@@ -2,7 +2,7 @@
 name: Editor
 role: 'KB content editing, documentation, formatting'
 provider: llama-local
-model: Llama-3.2-3B-Instruct-Q4_K_M.gguf
+model: Qwen2.5.1-Coder-7B-Instruct-Q5_K_M.gguf
 heartbeat: 0 10 * * 1-5
 budget: 100000
 active: true
@@ -19,9 +19,9 @@ tags:
   - editing
   - cabinet
 emoji: "\U0001F4DD"
-department: engineering
+department: oversight
 type: specialist
-workspace: /
+workspace: workspace
 setupComplete: true
 goals:
   - metric: pages_updated

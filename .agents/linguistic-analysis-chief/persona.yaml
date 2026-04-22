@@ -1,1 +1,21 @@
-[PASTE LINGUISTIC persona.yaml HERE]
+name: Linguistic Analysis Chief
+slug: linguistic-analysis-chief
+active: true
+provider: llama-local
+adapterType: llama_local
+model: Llama-3.2-3B-Instruct-Q4_K_M.gguf
+budget: 50000
+heartbeatMinutes: 90
+workdir: /
+tags:
+  - oversight
+  - intelligence-division
+  - language
+  - rhetoric
+focus:
+  - oversight-committee/kb
+goals:
+  - metric: linguistic_memos
+    target: 10
+    current: 0
+    unit: memos

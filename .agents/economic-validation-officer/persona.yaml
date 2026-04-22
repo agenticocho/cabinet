@@ -1,1 +1,21 @@
-[PASTE ECONOMIC persona.yaml HERE]
+name: Economic Validation Officer
+slug: economic-validation-officer
+active: true
+provider: llama-local
+adapterType: llama_local
+model: Llama-3.2-3B-Instruct-Q4_K_M.gguf
+budget: 50000
+heartbeatMinutes: 90
+workdir: /
+tags:
+  - oversight
+  - verification-taskforce
+  - economics
+  - finance
+focus:
+  - oversight-committee/kb
+goals:
+  - metric: economic_memos
+    target: 10
+    current: 0
+    unit: memos
