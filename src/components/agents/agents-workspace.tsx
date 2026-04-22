@@ -537,7 +537,7 @@ export function AgentsWorkspace({
     },
   });
 
-  const enabledProviders = providers.filter((provider) => provider.enabled);
+  const enabledProviders = providers.filter((provider) => provider.enabled !== false)
   const selectableProviders = enabledProviders.length > 0
     ? enabledProviders
     : providers.length > 0

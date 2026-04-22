@@ -67,20 +67,47 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
   const body = await req.json();
   const cabinetPath = typeof body.cabinetPath === "string" ? body.cabinetPath : undefined;
 
-  // Handle different update types
   if (body.action === "toggle") {
     const persona = await readPersona(slug, cabinetPath);
-    if (!persona) return NextResponse.json({ error: "Not found" }, { status: 404 });
+    if (!persona) {
+      return NextResponse.json({ error: "Not found" }, { status: 404 });
+    }
     await writePersona(slug, { active: !persona.active }, cabinetPath);
     await reloadDaemonSchedules().catch(() => {});
     return NextResponse.json({ ok: true, active: !persona.active });
   }
 
   if (body.action === "run") {
-    const sessionId = await startManualHeartbeat(slug, cabinetPath);
-    if (!sessionId) {
-      return NextResponse.json({ ok: false, message: "Agent inactive or over budget" }, { status: 400 });
+    const persona = await readPersona(slug, cabinetPath);
+
+    if (!persona) {
+      return NextResponse.json(
+        { ok: false, message: "Agent not found" },
+        { status: 404 },
+      );
     }
+
+    const source = body.source ?? "manual";
+
+    if (
+      source !== "manual" &&
+      (!persona.active || persona.heartbeatsUsed >= persona.budget)
+    ) {
+      return NextResponse.json(
+        { ok: false, message: "Agent inactive or over budget" },
+        { status: 400 },
+      );
+    }
+
+    const sessionId = await startManualHeartbeat(slug, cabinetPath);
+
+    if (!sessionId) {
+      return NextResponse.json(
+        { ok: false, message: "Failed to start heartbeat" },
+        { status: 500 },
+      );
+    }
+
     return NextResponse.json({ ok: true, sessionId });
   }
 
@@ -99,16 +126,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     return NextResponse.json({ ok: true, goal: result });
   }
 
-  // Default: update persona
   await writePersona(slug, body, cabinetPath);
-  await reloadDaemonSchedules().catch(() => {});
-  return NextResponse.json({ ok: true });
-}
-
-export async function DELETE(req: NextRequest, { params }: RouteParams) {
-  const { slug } = await params;
-  const cabinetPath = req.nextUrl.searchParams.get("cabinetPath") || undefined;
-  await deletePersona(slug, cabinetPath);
   await reloadDaemonSchedules().catch(() => {});
   return NextResponse.json({ ok: true });
 }

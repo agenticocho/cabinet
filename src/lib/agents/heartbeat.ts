@@ -348,19 +348,24 @@ async function processHeartbeatOutput(
  * Returns the sessionId (cron ignores it; frontend connects WebTerminal to it).
  * Returns null if the agent is inactive or over budget.
  */
-export async function runHeartbeat(slug: string, cabinetPath?: string): Promise<string | null> {
+export async function runHeartbeat(
+  slug: string,
+  cabinetPath?: string,
+  source: "manual" | "heartbeat" = "heartbeat",
+): Promise<string | null> {
   const ctx = await buildHeartbeatContext(slug, cabinetPath);
   if (!ctx) return null;
-  try {
-    // existing code that calls startConversationRun, recordHeartbeat, etc.
-  } catch (error) {
-    console.error('runHeartbeat error', { slug, cabinetPath, error });
-    return null;
-  }
+
   const { prompt, persona, inbox, startTime, cwd } = ctx;
 
-  if (persona.heartbeatsUsed !== undefined && persona.heartbeatsUsed >= persona.budget) {
-    console.log(`Agent ${slug} has exceeded budget (${persona.heartbeatsUsed}/${persona.budget}). Skipping.`);
+  if (
+    source !== "manual" &&
+    persona.heartbeatsUsed !== undefined &&
+    persona.heartbeatsUsed >= persona.budget
+  ) {
+    console.log(
+      `Agent ${slug} has exceeded budget (${persona.heartbeatsUsed}/${persona.budget}). Skipping.`,
+    );
     return null;
   }
 
@@ -378,7 +383,7 @@ export async function runHeartbeat(slug: string, cabinetPath?: string): Promise<
           resolveExecutionProviderId({
             adapterType: persona.adapterType,
             providerId: persona.provider,
-          })
+          }),
         ),
       adapterConfig: persona.adapterConfig,
       providerId: resolveExecutionProviderId({
@@ -391,10 +396,14 @@ export async function runHeartbeat(slug: string, cabinetPath?: string): Promise<
       onComplete: async (completion) => {
         if (completion.status === "failed" && !completion.output) {
           await postMessage({
-            channel: "alerts", agent: slug, emoji: persona.emoji, displayName: persona.name,
+            channel: "alerts",
+            agent: slug,
+            emoji: persona.emoji,
+            displayName: persona.name,
             type: "alert",
             content: `Heartbeat timed out or failed for ${slug}. @human`,
-            mentions: ["human"], kbRefs: [],
+            mentions: ["human"],
+            kbRefs: [],
           });
         }
 
@@ -422,8 +431,11 @@ export async function runHeartbeat(slug: string, cabinetPath?: string): Promise<
  * Start a manual heartbeat — thin wrapper over runHeartbeat.
  * Returns sessionId for the frontend to connect a WebTerminal to.
  */
-export async function startManualHeartbeat(slug: string, cabinetPath?: string): Promise<string | null> {
-  return runHeartbeat(slug, cabinetPath);
+export async function startManualHeartbeat(
+  slug: string,
+  cabinetPath?: string,
+): Promise<string | null> {
+  return runHeartbeat(slug, cabinetPath, "manual");
 }
 
 /**

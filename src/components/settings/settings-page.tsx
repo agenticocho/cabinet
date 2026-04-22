@@ -932,16 +932,24 @@ export function SettingsPage() {
                         {providers
                           .filter((p) => p.type === 'cli' || p.type === 'local')
                           .map((provider) => {
-                            const isReady = !!(provider.available && provider.authenticated);
-                            const isInstalled = !!provider.available;
-                            const isExpanded = expandedProvider === provider.id;
+                            const isReady = !!provider.available && provider.authenticated
+                            const isEnabled = provider.enabled !== false
+                            const isLocal = provider.type === 'local'
+                            const isInstalled = isEnabled && !isReady;
                             const setupSteps = PROVIDER_SETUP_STEPS[provider.id] || [];
-                            const statusColor = isReady ? "text-green-500" : isInstalled ? "text-amber-500" : "text-muted-foreground";
+                            const isExpanded = expandedProvider === provider.id;
+                            const statusColor = isReady
+                              ? 'text-green-500'
+                              : isEnabled
+                                ? 'text-amber-500'
+                                : 'text-muted-foreground'
                             const statusText = isReady
-                              ? provider.version || "Ready"
-                              : isInstalled
-                                ? "Installed but not logged in"
-                                : "Not installed";
+                              ? provider.version || 'Ready'
+                              : isLocal
+                                ? 'Configured but currently unavailable'
+                                : isEnabled
+                                  ? 'Installed but not logged in'
+                                  : 'Disabled'
                             return (
                               <div
                                 key={provider.id}
@@ -1010,7 +1018,7 @@ export function SettingsPage() {
                                               .filter((entry) => !entry.enabled && entry.id !== provider.id)
                                               .map((entry) => entry.id);
                                         const enabledAfterToggle = providers.filter(
-                                          (entry) => !nextDisabled.includes(entry.id) && (entry.type === 'cli' || entry.type === 'local'
+                                          (entry) => !nextDisabled.includes(entry.id) && (entry.type === "cli" || entry.type === "local")
                                         );
                                         const nextDefault =
                                           provider.id === defaultProvider && nextDisabled.includes(provider.id)
