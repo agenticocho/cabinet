@@ -747,7 +747,7 @@ export function SettingsPage() {
                         </label>
                         <div className="mt-2 space-y-1">
                           {providers
-                            .filter((p) => p.type === "cli" && p.available && p.authenticated)
+                            .filter((p) => p.enabled !== false)
                             .map((provider) => {
                               const isDefault = provider.id === defaultProvider;
                               return (
@@ -785,9 +785,9 @@ export function SettingsPage() {
                                 </button>
                               );
                             })}
-                          {providers.filter((p) => p.available && p.authenticated).length === 0 && (
-                            <p className="text-[12px] text-muted-foreground py-2">
-                              No providers are installed and logged in. Follow the setup guides below.
+                          {providers.filter((p) => p.enabled !== false).length === 0 && (
+                            <p className="text-12px text-muted-foreground py-2">
+                              No providers are enabled. Follow the setup guides below.
                             </p>
                           )}
                         </div>
@@ -926,11 +926,11 @@ export function SettingsPage() {
                       })()}
 
                       <h4 className="text-xs font-medium text-muted-foreground mb-2 uppercase tracking-wide">
-                        CLI Agents
+                        Providers
                       </h4>
                       <div className="space-y-2">
                         {providers
-                          .filter((p) => p.type === "cli")
+                          .filter((p) => p.type === 'cli' || p.type === 'local')
                           .map((provider) => {
                             const isReady = !!(provider.available && provider.authenticated);
                             const isInstalled = !!provider.available;
@@ -1010,7 +1010,7 @@ export function SettingsPage() {
                                               .filter((entry) => !entry.enabled && entry.id !== provider.id)
                                               .map((entry) => entry.id);
                                         const enabledAfterToggle = providers.filter(
-                                          (entry) => !nextDisabled.includes(entry.id) && entry.type === "cli"
+                                          (entry) => !nextDisabled.includes(entry.id) && (entry.type === 'cli' || entry.type === 'local'
                                         );
                                         const nextDefault =
                                           provider.id === defaultProvider && nextDisabled.includes(provider.id)
@@ -1030,7 +1030,7 @@ export function SettingsPage() {
 
                                         await saveProviderSettings(nextDefault, nextDisabled, migrations);
                                       }}
-                                      disabled={savingProviders || (provider.id === defaultProvider && providers.filter((entry) => entry.enabled).length <= 1)}
+                                      disabled={savingProviders || (provider.id === defaultProvider && providers.filter((entry) => entry.enabled && (entry.type === 'cli' || entry.type === 'local')).length === 1)}
                                       className="rounded-md border border-border px-2 py-1 text-[11px] text-muted-foreground transition-colors hover:text-foreground disabled:opacity-50"
                                     >
                                       {provider.enabled ? "Disable" : "Enable"}

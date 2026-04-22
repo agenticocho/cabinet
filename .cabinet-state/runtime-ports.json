@@ -1,17 +1,17 @@
 {
   "app": {
-    "port": 4000,
-    "origin": "http://127.0.0.1:4000",
-    "pid": 65576,
-    "updatedAt": "2026-04-22T20:18:09.390Z",
+    "port": 4001,
+    "origin": "http://127.0.0.1:4001",
+    "pid": 70771,
+    "updatedAt": "2026-04-22T20:53:39.552Z",
     "cabinetDir": "/Users/mikebird/cabinet"
   },
   "daemon": {
     "port": 4100,
     "origin": "http://127.0.0.1:4100",
     "wsOrigin": "ws://127.0.0.1:4100",
-    "pid": 65577,
-    "updatedAt": "2026-04-22T20:18:09.391Z",
+    "pid": 70772,
+    "updatedAt": "2026-04-22T20:53:39.553Z",
     "cabinetDir": "/Users/mikebird/cabinet"
   }
 }
