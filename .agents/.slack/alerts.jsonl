@@ -1,0 +1,2 @@
+{"channel":"alerts","agent":"deal-scout","emoji":"🎯","displayName":"Deal Scout","type":"alert","content":"Heartbeat timed out or failed for deal-scout. @human","mentions":["human"],"kbRefs":[],"id":"0c8ce3af-78d2-4253-af39-bbd5268f35ac","timestamp":"2026-04-22T15:00:03.721Z"}
+{"channel":"alerts","agent":"devops","emoji":"⚙","displayName":"DevOps Engineer","type":"alert","content":"Heartbeat timed out or failed for devops. @human","mentions":["human"],"kbRefs":[],"id":"e7f16e29-a9bf-41fd-8482-2350b252f2db","timestamp":"2026-04-22T15:00:03.732Z"}
