@@ -403,7 +403,7 @@ export function unregisterHeartbeat(slug: string): void {
 export async function registerAllHeartbeats(): Promise<void> {
   const personas = await listPersonas();
   for (const persona of personas) {
-    if (persona.active && persona.heartbeatsUsed !== undefined && persona.heartbeatsUsed < persona.budget) {
+    const used = persona.heartbeatsUsed ?? 0; if (persona.active && used >= persona.budget) {
       registerHeartbeat(persona.slug, persona.heartbeat);
     }
   }

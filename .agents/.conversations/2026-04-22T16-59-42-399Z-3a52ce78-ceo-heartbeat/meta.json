@@ -1,0 +1,18 @@
+{
+  "id": "2026-04-22T16-59-42-399Z-3a52ce78-ceo-heartbeat",
+  "agentSlug": "ceo",
+  "cabinetPath": ".",
+  "title": "CEO heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-22T16:59:42.399Z",
+  "providerId": "claude-code",
+  "adapterType": "claude_local",
+  "promptPath": ".agents/.conversations/2026-04-22T16-59-42-399Z-3a52ce78-ceo-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-22T16-59-42-399Z-3a52ce78-ceo-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-22T16:59:42.455Z",
+  "exitCode": 1,
+  "summary": "fetch failed"
+}

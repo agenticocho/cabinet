@@ -2,7 +2,7 @@ id: monthly-lp-update
 name: Monthly LP Flash Update Draft
 enabled: true
 schedule: 0 9 * * 1
-provider: claude-code
+provider: codex-cli
 ownerAgent: managing-partner
 agentSlug: managing-partner
 timeout: 600

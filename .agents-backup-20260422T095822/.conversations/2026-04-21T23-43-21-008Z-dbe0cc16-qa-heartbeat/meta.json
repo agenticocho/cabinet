@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-21T23-43-21-008Z-dbe0cc16-qa-heartbeat",
+  "agentSlug": "qa",
+  "title": "QA Agent heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-21T23:43:21.008Z",
+  "promptPath": ".agents/.conversations/2026-04-21T23-43-21-008Z-dbe0cc16-qa-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-21T23-43-21-008Z-dbe0cc16-qa-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "cabinetPath": ".",
+  "completedAt": "2026-04-21T23:43:21.038Z",
+  "exitCode": 1,
+  "summary": "daemonFetch timeout after 180000ms"
+}

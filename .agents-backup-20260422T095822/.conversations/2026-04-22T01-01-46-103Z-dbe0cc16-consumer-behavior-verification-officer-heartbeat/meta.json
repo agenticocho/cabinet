@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-22T01-01-46-103Z-dbe0cc16-consumer-behavior-verification-officer-heartbeat",
+  "agentSlug": "consumer-behavior-verification-officer",
+  "title": "Consumer Behavior Verification Officer heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-22T01:01:46.103Z",
+  "promptPath": ".agents/.conversations/2026-04-22T01-01-46-103Z-dbe0cc16-consumer-behavior-verification-officer-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-22T01-01-46-103Z-dbe0cc16-consumer-behavior-verification-officer-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "cabinetPath": ".",
+  "completedAt": "2026-04-22T01:01:46.175Z",
+  "exitCode": 1,
+  "summary": "connect ECONNREFUSED 127.0.0.1:4101"
+}

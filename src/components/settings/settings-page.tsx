@@ -785,7 +785,7 @@ export function SettingsPage() {
                                 </button>
                               );
                             })}
-                          {providers.filter((p) => p.type === "cli" && p.available && p.authenticated).length === 0 && (
+                          {providers.filter((p) => p.available && p.authenticated).length === 0 && (
                             <p className="text-[12px] text-muted-foreground py-2">
                               No providers are installed and logged in. Follow the setup guides below.
                             </p>
@@ -1030,7 +1030,7 @@ export function SettingsPage() {
 
                                         await saveProviderSettings(nextDefault, nextDisabled, migrations);
                                       }}
-                                      disabled={savingProviders || (provider.id === defaultProvider && providers.filter((entry) => entry.type === "cli" && entry.enabled).length <= 1)}
+                                      disabled={savingProviders || (provider.id === defaultProvider && providers.filter((entry) => entry.enabled).length <= 1)}
                                       className="rounded-md border border-border px-2 py-1 text-[11px] text-muted-foreground transition-colors hover:text-foreground disabled:opacity-50"
                                     >
                                       {provider.enabled ? "Disable" : "Enable"}

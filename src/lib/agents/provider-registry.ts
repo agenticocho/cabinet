@@ -1,11 +1,12 @@
-import type { AgentProvider, ProviderRegistry } from "./provider-interface";
+import type { AgentProvider, ProviderRegistry } from "../provider-interface";
 import { claudeCodeProvider } from "./providers/claude-code";
 import { codexCliProvider } from "./providers/codex-cli";
 import { geminiCliProvider } from "./providers/gemini-cli";
+import { llamaLocalProvider } from "./providers/llama-local";
 
 class ProviderRegistryImpl implements ProviderRegistry {
   providers = new Map<string, AgentProvider>();
-  defaultProvider = "claude-code";
+  defaultProvider = "llama-local";
 
   register(provider: AgentProvider): void {
     this.providers.set(provider.id, provider);
@@ -34,13 +35,9 @@ class ProviderRegistryImpl implements ProviderRegistry {
   }
 }
 
-// Singleton registry
 export const providerRegistry = new ProviderRegistryImpl();
 
-// Register built-in providers
 providerRegistry.register(claudeCodeProvider);
 providerRegistry.register(codexCliProvider);
 providerRegistry.register(geminiCliProvider);
-
-// Future providers will be registered here:
-// providerRegistry.register(anthropicApiProvider);
+providerRegistry.register(llamaLocalProvider);

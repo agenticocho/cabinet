@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-21T19-21-53-193Z-3a52ce78-editor-heartbeat",
+  "agentSlug": "editor",
+  "cabinetPath": ".",
+  "title": "Editor heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-21T19:21:53.193Z",
+  "promptPath": ".agents/.conversations/2026-04-21T19-21-53-193Z-3a52ce78-editor-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-21T19-21-53-193Z-3a52ce78-editor-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-21T19:26:54.925Z",
+  "exitCode": 1,
+  "summary": "fetch failed"
+}

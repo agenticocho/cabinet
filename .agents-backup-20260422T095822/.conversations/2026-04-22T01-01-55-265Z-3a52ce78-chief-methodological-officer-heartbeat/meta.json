@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-22T01-01-55-265Z-3a52ce78-chief-methodological-officer-heartbeat",
+  "agentSlug": "chief-methodological-officer",
+  "cabinetPath": ".",
+  "title": "Chief Methodological Officer heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-22T01:01:55.265Z",
+  "promptPath": ".agents/.conversations/2026-04-22T01-01-55-265Z-3a52ce78-chief-methodological-officer-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-22T01-01-55-265Z-3a52ce78-chief-methodological-officer-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-22T01:01:55.336Z",
+  "exitCode": 1,
+  "summary": "connect ECONNREFUSED 127.0.0.1:4101"
+}

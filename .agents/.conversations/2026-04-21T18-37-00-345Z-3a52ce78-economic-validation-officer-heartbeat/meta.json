@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-21T18-37-00-345Z-3a52ce78-economic-validation-officer-heartbeat",
+  "agentSlug": "economic-validation-officer",
+  "cabinetPath": ".",
+  "title": "Economic Validation Officer heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-21T18:37:00.345Z",
+  "promptPath": ".agents/.conversations/2026-04-21T18-37-00-345Z-3a52ce78-economic-validation-officer-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-21T18-37-00-345Z-3a52ce78-economic-validation-officer-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-21T18:37:00.370Z",
+  "exitCode": 1,
+  "summary": "fetch failed"
+}

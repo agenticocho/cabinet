@@ -2,7 +2,7 @@ id: portfolio-news-scout
 name: Portfolio Company News Scout
 enabled: true
 schedule: 0 8 * * 1-5
-provider: claude-code
+provider: codex-cli
 ownerAgent: portfolio-manager
 agentSlug: portfolio-manager
 timeout: 600

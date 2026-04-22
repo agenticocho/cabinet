@@ -1,0 +1,13 @@
+{
+  "id": "2026-04-22T04-00-00-140Z-3a52ce78-linguistic-analysis-chief-heartbeat",
+  "agentSlug": "linguistic-analysis-chief",
+  "cabinetPath": ".",
+  "title": "Linguistic Analysis Chief heartbeat",
+  "trigger": "heartbeat",
+  "status": "running",
+  "startedAt": "2026-04-22T04:00:00.140Z",
+  "promptPath": ".agents/.conversations/2026-04-22T04-00-00-140Z-3a52ce78-linguistic-analysis-chief-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-22T04-00-00-140Z-3a52ce78-linguistic-analysis-chief-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": []
+}

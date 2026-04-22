@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-22T00-18-21-886Z-3a52ce78-committee-chair-heartbeat",
+  "agentSlug": "committee-chair",
+  "cabinetPath": ".",
+  "title": "committee-chair heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-22T00:18:21.886Z",
+  "promptPath": ".agents/.conversations/2026-04-22T00-18-21-886Z-3a52ce78-committee-chair-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-22T00-18-21-886Z-3a52ce78-committee-chair-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-22T00:21:22.300Z",
+  "exitCode": 1,
+  "summary": "daemonFetch timeout after 180000ms"
+}

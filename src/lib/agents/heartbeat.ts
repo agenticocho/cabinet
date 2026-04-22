@@ -351,6 +351,12 @@ async function processHeartbeatOutput(
 export async function runHeartbeat(slug: string, cabinetPath?: string): Promise<string | null> {
   const ctx = await buildHeartbeatContext(slug, cabinetPath);
   if (!ctx) return null;
+  try {
+    // existing code that calls startConversationRun, recordHeartbeat, etc.
+  } catch (error) {
+    console.error('runHeartbeat error', { slug, cabinetPath, error });
+    return null;
+  }
   const { prompt, persona, inbox, startTime, cwd } = ctx;
 
   if (persona.heartbeatsUsed !== undefined && persona.heartbeatsUsed >= persona.budget) {

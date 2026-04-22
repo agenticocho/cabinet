@@ -2,7 +2,7 @@ id: comment-opportunity-scan
 name: Comment Opportunity Scan
 enabled: true
 schedule: 0 11 * * 1-5
-provider: claude-code
+provider: codex-cli
 ownerAgent: researcher
 agentSlug: researcher
 timeout: 600

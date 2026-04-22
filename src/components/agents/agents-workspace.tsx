@@ -537,19 +537,16 @@ export function AgentsWorkspace({
     },
   });
 
-  const enabledCliProviders = providers.filter(
-    (provider) => provider.type === "cli" && provider.enabled
-  );
-  const cliProviders = providers.filter((provider) => provider.type === "cli");
-  const selectableCliProviders = enabledCliProviders.length > 0
-    ? enabledCliProviders
-    : cliProviders.length > 0
-      ? cliProviders
+  const enabledProviders = providers.filter((provider) => provider.enabled);
+  const selectableProviders = enabledProviders.length > 0
+    ? enabledProviders
+    : providers.length > 0
+      ? providers
       : [
           {
-            id: defaultProvider || "claude-code",
-            name: defaultProvider || "claude-code",
-            type: "cli",
+            id: defaultProvider || "llama-local",
+            name: defaultProvider || "llama-local",
+            type: "local",
             enabled: true,
             available: true,
           } as ProviderInfo,
@@ -2614,7 +2611,7 @@ export function AgentsWorkspace({
                         }
                         className="w-full rounded-lg border border-border bg-background px-3 py-2 text-[13px] text-foreground"
                       >
-                        {selectableCliProviders.map((provider) => (
+                        {selectableProviders.map((provider) => (
                           <option key={provider.id} value={provider.id}>
                             {provider.name}{provider.available ? "" : " (not installed)"}
                           </option>
@@ -2950,7 +2947,7 @@ export function AgentsWorkspace({
                               }
                               className="w-full rounded-lg bg-muted/60 px-3 py-2 text-[13px] text-foreground outline-none transition-colors focus:bg-muted"
                             >
-                              {selectableCliProviders.map((provider) => (
+                              {selectableProviders.map((provider) => (
                                 <option key={provider.id} value={provider.id}>
                                   {provider.name}{provider.available ? "" : " (not installed)"}
                                 </option>
@@ -3180,7 +3177,7 @@ export function AgentsWorkspace({
                                 }
                                 className="w-full rounded-lg bg-muted/60 px-3 py-2 text-[13px] text-foreground outline-none transition-colors focus:bg-muted"
                               >
-                                {selectableCliProviders.map((provider) => (
+                                {selectableProviders.map((provider) => (
                                   <option key={provider.id} value={provider.id}>
                                     {provider.name}{provider.available ? "" : " (not installed)"}
                                   </option>

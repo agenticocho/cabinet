@@ -2,7 +2,7 @@ id: daily-morning-brief
 name: Daily Morning Intelligence Brief
 enabled: true
 schedule: 0 7 * * 1-5
-provider: claude-code
+provider: codex-cli
 ownerAgent: analyst
 agentSlug: analyst
 timeout: 600

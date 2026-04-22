@@ -2,7 +2,7 @@ id: weekly-reddit-learnings-digest
 name: Weekly Reddit Learnings Digest
 enabled: true
 schedule: 0 9 * * 1
-provider: claude-code
+provider: codex-cli
 ownerAgent: researcher
 agentSlug: researcher
 timeout: 600

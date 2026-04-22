@@ -2,7 +2,7 @@ id: daily-trend-scan
 name: Daily Trend Scan
 enabled: true
 schedule: 0 8 * * 1-5
-provider: claude-code
+provider: codex-cli
 ownerAgent: image-creator
 agentSlug: image-creator
 timeout: 600

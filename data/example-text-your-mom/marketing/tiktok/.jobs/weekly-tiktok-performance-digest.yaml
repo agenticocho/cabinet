@@ -2,7 +2,7 @@ id: weekly-tiktok-performance-digest
 name: Weekly TikTok Performance Digest
 enabled: true
 schedule: 0 9 * * 1
-provider: claude-code
+provider: codex-cli
 ownerAgent: image-creator
 agentSlug: image-creator
 timeout: 600

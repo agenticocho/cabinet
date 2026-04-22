@@ -2,7 +2,7 @@ id: daily-creative-queue
 name: Daily Creative Queue
 enabled: true
 schedule: 0 10 * * 1-5
-provider: claude-code
+provider: codex-cli
 ownerAgent: image-creator
 agentSlug: image-creator
 timeout: 600

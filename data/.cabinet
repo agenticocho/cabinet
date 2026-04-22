@@ -1,7 +1,7 @@
 schemaVersion: 1
-id: apple-root
-name: Apple
+id: cows-colluding-root
+name: Cows Colluding
 kind: root
 version: 0.1.0
-description: Fun
+description: Self-Governance research
 entry: index.md

@@ -2,8 +2,7 @@ id: weekly-operating-review
 name: Weekly Operating Review
 enabled: true
 schedule: 0 11 * * 1
-provider: claude-code
-adapterType: claude_local
+provider: codex-cli
 ownerAgent: ceo
 agentSlug: ceo
 timeout: 600
@@ -16,6 +15,6 @@ prompt: |-
   - overdue items
   - one process fix to make this week
   Save the review to a company operations page.
-cabinetPath: example-text-your-mom
+cabinetPath: data/example-text-your-mom
 createdAt: '2026-04-11T00:00:00.000Z'
 updatedAt: '2026-04-11T00:00:00.000Z'

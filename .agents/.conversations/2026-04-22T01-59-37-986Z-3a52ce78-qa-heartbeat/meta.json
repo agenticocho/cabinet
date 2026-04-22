@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-22T01-59-37-986Z-3a52ce78-qa-heartbeat",
+  "agentSlug": "qa",
+  "cabinetPath": ".",
+  "title": "QA Agent heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-22T01:59:37.986Z",
+  "promptPath": ".agents/.conversations/2026-04-22T01-59-37-986Z-3a52ce78-qa-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-22T01-59-37-986Z-3a52ce78-qa-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-22T01:59:38.065Z",
+  "exitCode": 1,
+  "summary": "connect ECONNREFUSED 127.0.0.1:4101"
+}
