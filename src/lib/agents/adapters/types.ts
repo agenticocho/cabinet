@@ -5,7 +5,7 @@ export interface AdapterUsageSummary {
 }
 
 export type AdapterBillingType =
-  | "api"
+  | "api" | "local"
   | "subscription"
   | "metered_api"
   | "credits"
@@ -97,7 +97,7 @@ export interface AgentAdapterEffortLevel {
 export type AgentAdapterExecutionEngine =
   | "legacy_pty_cli"
   | "structured_cli"
-  | "api"
+  | "api" | "local"
   | "http"
   | "process";
 

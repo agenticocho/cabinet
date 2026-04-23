@@ -1,0 +1,18 @@
+{
+  "id": "2026-04-23T17-58-01-117Z-1990ca68-committee-chair-heartbeat",
+  "agentSlug": "committee-chair",
+  "cabinetPath": "/Users/mikebird/cabinet",
+  "title": "committee-chair heartbeat",
+  "trigger": "heartbeat",
+  "status": "running",
+  "startedAt": "2026-04-23T17:58:01.117Z",
+  "providerId": "llama-local",
+  "adapterType": "llama_local",
+  "adapterConfig": {
+    "model": "Qwen3.5-9B-UD-Q4_K_XL.gguf"
+  },
+  "promptPath": "Users/mikebird/cabinet/.agents/.conversations/2026-04-23T17-58-01-117Z-1990ca68-committee-chair-heartbeat/prompt.md",
+  "transcriptPath": "Users/mikebird/cabinet/.agents/.conversations/2026-04-23T17-58-01-117Z-1990ca68-committee-chair-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": []
+}

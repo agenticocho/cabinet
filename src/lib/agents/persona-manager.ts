@@ -23,7 +23,7 @@ const MESSAGES_DIR = path.join(AGENTS_DIR, ".messages");
 const HISTORY_DIR = path.join(AGENTS_DIR, ".history");
 
 function resolveAgentsDir(cabinetPath?: string): string {
-  if (cabinetPath) return path.join(DATA_DIR, cabinetPath, ".agents");
+  if (cabinetPath) return path.join(cabinetPath, ".agents");
   return AGENTS_DIR;
 }
 

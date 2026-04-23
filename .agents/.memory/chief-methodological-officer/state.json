@@ -1,7 +1,7 @@
 {
   "goals": {
     "methodology_audit_coverage": {
-      "current": 1,
+      "current": 2,
       "target": 0,
       "period_start": "2026-04-21",
       "period_end": "2026-04-27",
