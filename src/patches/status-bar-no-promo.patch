@@ -1,0 +1,35 @@
+--- a/src/components/layout/status-bar.tsx
++++ b/src/components/layout/status-bar.tsx
+@@ -1,7 +1,7 @@
+ // Upstream: hilash/cabinet src/components/layout/status-bar.tsx (SHA: 2391ed5961174201e56fce900255235beb2a9b35)
+-// Patch: remove promo strip (Discord Chat, GitHub Contribute, GitHub Stars)
++// Patch: remove promo strip (Discord Chat, GitHub Contribute, GitHub Stars); keep Sync button
+ // Apply: patch -p1 < src/patches/status-bar-no-promo.patch
+-// Or use the apply-patches.sh script in src/patches/
++// Or cp the full replacement file: src/patches/status-bar.tsx → src/components/layout/status-bar.tsx
+
+ // ─── WHAT THIS REMOVES ────────────────────────────────────────────────────────
+ //
+@@ -15,22 +15,9 @@
+ //       </a>
+ //     </div>
+ //
+-// The entire <div className="flex items-center gap-1.5"> block at the end of
+-// the StatusBar return statement is deleted. The Sync button remains in the
+-// left <div className="flex min-w-0 items-center gap-3"> block — untouched.
++// The entire right-side <div className="flex items-center gap-1.5"> block is deleted.
++// The Sync button (left side, flex min-w-0 items-center gap-3) is untouched.
+ //
+ // ─── ALSO REMOVES (now-dead code) ─────────────────────────────────────────────
+ //
+-// - DISCORD_SUPPORT_URL constant
+-// - GITHUB_REPO_URL constant
+-// - GITHUB_STARS_FALLBACK constant
+-// - fetchGitHubStats callback + its useEffect
+-// - githubStars / displayStars / starsExploding state
+-// - starsAnimRef / starsAnimated refs
+-// - Star, DiscordIcon, GitHubIcon imports (from lucide-react and inline SVGs)
+-// - StarExplosion component
+-// - formatGithubStars helper
+-// - The stars counter animation useEffect
++// See status-bar.tsx in this patches directory for the full replacement file.
