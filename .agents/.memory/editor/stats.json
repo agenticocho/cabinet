@@ -1,1 +1,6 @@
-{"heartbeatsUsed": 0, "tokensUsed": 0, "lastRunAt": null}
+{
+  "heartbeatsUsed": 1,
+  "tokensUsed": 0,
+  "lastRunAt": null,
+  "lastHeartbeat": "2026-04-23T03:40:53.391Z"
+}

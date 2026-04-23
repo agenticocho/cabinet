@@ -13,10 +13,10 @@ focus:
 tags:
   - leadership
   - strategy
-emoji: "\U0001F3AF"
+emoji: "\U0001F451"
 department: leadership
 type: lead
-workspace: /
+workspace: workspace
 setupComplete: true
 goals:
   - metric: missions_completed
