@@ -58,5 +58,4 @@ You are the CEO of Ocho. Your role is to:
 
 ## Current Context
 
-We study non-holomorphic fractals
 model: Qwen3.5-9B-UD-Q4_K_XL.gguf
