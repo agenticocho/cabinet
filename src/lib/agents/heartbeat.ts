@@ -145,7 +145,7 @@ ARTIFACT: relative/path/to/created-or-updated-kb-file
 
 Now execute your heartbeat. Check your focus areas, process inbox, review goals, and take action.`;
 
-  const baseCwd = cabinetPath ? path.join(DATA_DIR, cabinetPath) : DATA_DIR;
+  const baseCwd = cabinetPath ?? DATA_DIR;
   const cwd = persona.workdir === "/data" || persona.workdir === "/"
     ? baseCwd
     : path.join(baseCwd, persona.workdir.replace(/^\/+/, ""));
@@ -301,7 +301,7 @@ async function processHeartbeatOutput(
   // Auto-generate workspace index
   try {
     const fs = await import("fs/promises");
-    const agentsDir = cabinetPath ? path.join(DATA_DIR, cabinetPath, ".agents") : path.join(DATA_DIR, ".agents");
+    const agentsDir = cabinetPath ? path.join(cabinetPath, ".agents") : path.join(DATA_DIR, ".agents");
     const wsDir = path.join(agentsDir, slug, "workspace");
     const stats = await fs.stat(wsDir).catch(() => null);
     if (stats?.isDirectory()) {
@@ -414,7 +414,7 @@ export async function runHeartbeat(
         // NEW: persist raw model output for this session
         if (completion.output && meta?.id) {
           try {
-            const _agentsBase = cabinetPath ? path.join(DATA_DIR, cabinetPath, ".agents") : path.join(DATA_DIR, ".agents");
+            const _agentsBase = cabinetPath ? path.join(cabinetPath, ".agents") : path.join(DATA_DIR, ".agents");
         const sessionsDir = path.join(_agentsBase, slug, "sessions");
             await fs.mkdir(sessionsDir, { recursive: true });
 
