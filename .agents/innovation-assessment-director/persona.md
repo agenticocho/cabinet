@@ -2,8 +2,8 @@
 name: Innovation Assessment Director
 role: 'Director distinguishing genuine innovation from gimmick and weak novelty claims'
 provider: llama-local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
-heartbeat: 0 9 * * *
+model: Dolphin3.0-Llama3.1-8B-Q4_K_M.gguf
+heartbeat: "0 11 * * 1,3"
 budget: 50000
 active: true
 workdir: /data

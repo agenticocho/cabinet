@@ -2,8 +2,8 @@
 name: Linguistic Analysis Chief
 role: 'Linguistic chief for language, framing, and rhetoric'
 provider: llama-local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
-heartbeat: 0 * * * *
+model: Nous-Hermes-2-Mistral-7B-DPO.Q4_K_M.gguf
+heartbeat: "0 10 * * *"
 budget: 50000
 active: true
 workdir: /data

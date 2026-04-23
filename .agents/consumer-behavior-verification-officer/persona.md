@@ -2,8 +2,8 @@
 name: Consumer Behavior Verification Officer
 role: 'Officer checking whether claims about user or customer behavior are actually plausible'
 provider: llama-local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
-heartbeat: 0 */6 * * *
+model: mistral-7b-instruct-v0.3.gguf
+heartbeat: "30 11 * * *"
 budget: 50000
 active: true
 workdir: /data

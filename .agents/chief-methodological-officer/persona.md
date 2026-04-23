@@ -4,8 +4,8 @@ role: >-
   Method specialist checking research design, sampling, bias, and evidence
   strength
 provider: llama-local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
-heartbeat: 0 */4 * * *
+model: DeepSeek-R1-Distill-Qwen-14B-Q4_K_M.gguf
+heartbeat: "0 8,14,20 * * *"
 budget: 50000
 active: true
 workdir: /data

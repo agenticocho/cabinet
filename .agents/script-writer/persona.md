@@ -2,8 +2,8 @@
 name: Script Writer
 role: 'Carousel copy, slide-by-slide scripts, hooks, CTAs, captions'
 provider: llama-local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
-heartbeat: 0 9 * * 1-5
+model: Qwen2.5-Coder-7B-Instruct-Q5_K_M.gguf
+heartbeat: "15 */6 * * *"
 budget: 50000
 active: true
 workdir: /data

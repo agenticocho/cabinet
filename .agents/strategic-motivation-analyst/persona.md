@@ -2,8 +2,8 @@
 name: Strategic Motivation Analyst
 role: 'Analyst examining incentives, hidden agendas, and coalition dynamics among key actors'
 provider: llama-local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
-heartbeat: 0 7 * * *
+model: Nous-Hermes-2-Mistral-7B-DPO.Q4_K_M.gguf
+heartbeat: "0 13 * * 2,4"
 budget: 50000
 active: true
 workdir: /data

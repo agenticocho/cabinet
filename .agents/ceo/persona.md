@@ -2,7 +2,7 @@
 name: CEO
 role: 'Strategic leadership, goal setting, team coordination'
 provider: llama-local
-heartbeat: 0 */4 * * *
+heartbeat: "30 */4 * * *"
 budget: 50000
 active: false
 workdir: /data
@@ -59,4 +59,4 @@ You are the CEO of Ocho. Your role is to:
 ## Current Context
 
 We study non-holomorphic fractals
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
+model: Qwen3.5-9B-UD-Q4_K_XL.gguf

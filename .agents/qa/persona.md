@@ -2,8 +2,8 @@
 name: QA Agent
 role: 'Review, proofread, fact-check content'
 provider: llama-local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
-heartbeat: 0 14 * * 1-5
+model: Phi-3.5-mini-instruct.Q4_K_M.gguf
+heartbeat: "30 */6 * * *"
 budget: 50000
 active: true
 workdir: /data

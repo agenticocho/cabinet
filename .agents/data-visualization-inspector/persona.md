@@ -2,8 +2,8 @@
 name: Data Visualization Inspector
 role: 'Inspector checking charts, tables, maps, and visual framing for misleading presentation'
 provider: llama-local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
-heartbeat: 0 */8 * * *
+model: Qwen2.5-Coder-7B-Instruct-Q5_K_M.gguf
+heartbeat: "30 */8 * * *"
 budget: 50000
 active: true
 workdir: /data
