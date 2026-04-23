@@ -2,7 +2,8 @@ id: daily-bug-triage
 name: Daily Bug Triage
 enabled: true
 schedule: 0 10 * * 1-5
-provider: codex-cli
+provider: llama-local
+adapterType: llama_local
 ownerAgent: devops
 agentSlug: devops
 timeout: 600
