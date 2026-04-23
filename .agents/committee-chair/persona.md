@@ -2,10 +2,9 @@
 name: committee-chair
 role: 'Committee chair for governance, verdicts, and synthesis of complex cases'
 provider: llama-local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
 heartbeat: 0 */4 * * *
 budget: 50000
-active: true
+active: false
 workdir: /data
 focus: []
 tags:
