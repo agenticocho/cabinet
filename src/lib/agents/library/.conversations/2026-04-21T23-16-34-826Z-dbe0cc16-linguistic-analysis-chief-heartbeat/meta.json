@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-21T23-16-34-826Z-dbe0cc16-linguistic-analysis-chief-heartbeat",
+  "agentSlug": "linguistic-analysis-chief",
+  "title": "Linguistic Analysis Chief heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-21T23:16:34.826Z",
+  "promptPath": ".agents/.conversations/2026-04-21T23-16-34-826Z-dbe0cc16-linguistic-analysis-chief-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-21T23-16-34-826Z-dbe0cc16-linguistic-analysis-chief-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "cabinetPath": ".",
+  "completedAt": "2026-04-21T23:16:34.854Z",
+  "exitCode": 1,
+  "summary": "daemonFetch timeout after 180000ms"
+}

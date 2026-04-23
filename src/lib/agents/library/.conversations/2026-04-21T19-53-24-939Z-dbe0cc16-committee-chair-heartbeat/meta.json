@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-21T19-53-24-939Z-dbe0cc16-committee-chair-heartbeat",
+  "agentSlug": "committee-chair",
+  "title": "Committee Chair heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-21T19:53:24.939Z",
+  "promptPath": ".agents/.conversations/2026-04-21T19-53-24-939Z-dbe0cc16-committee-chair-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-21T19-53-24-939Z-dbe0cc16-committee-chair-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "cabinetPath": ".",
+  "completedAt": "2026-04-21T19:53:24.967Z",
+  "exitCode": 1,
+  "summary": "fetch failed"
+}

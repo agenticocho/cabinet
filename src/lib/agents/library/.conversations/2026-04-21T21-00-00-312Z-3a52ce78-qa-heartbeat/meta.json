@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-21T21-00-00-312Z-3a52ce78-qa-heartbeat",
+  "agentSlug": "qa",
+  "cabinetPath": ".",
+  "title": "QA Agent heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-21T21:00:00.312Z",
+  "promptPath": ".agents/.conversations/2026-04-21T21-00-00-312Z-3a52ce78-qa-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-21T21-00-00-312Z-3a52ce78-qa-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-21T21:00:00.409Z",
+  "exitCode": 1,
+  "summary": "fetch failed"
+}

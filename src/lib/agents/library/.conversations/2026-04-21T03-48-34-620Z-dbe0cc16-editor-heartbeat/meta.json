@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-21T03-48-34-620Z-dbe0cc16-editor-heartbeat",
+  "agentSlug": "editor",
+  "title": "Editor heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-21T03:48:34.620Z",
+  "promptPath": ".agents/.conversations/2026-04-21T03-48-34-620Z-dbe0cc16-editor-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-21T03-48-34-620Z-dbe0cc16-editor-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "cabinetPath": ".",
+  "completedAt": "2026-04-21T03:48:34.630Z",
+  "exitCode": 1,
+  "summary": "Failed to create daemon session (500)"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-22T01-01-29-898Z-dbe0cc16-strategic-intelligence-officer-heartbeat",
+  "agentSlug": "strategic-intelligence-officer",
+  "title": "Strategic Intelligence Officer heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-22T01:01:29.898Z",
+  "promptPath": ".agents/.conversations/2026-04-22T01-01-29-898Z-dbe0cc16-strategic-intelligence-officer-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-22T01-01-29-898Z-dbe0cc16-strategic-intelligence-officer-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "cabinetPath": ".",
+  "completedAt": "2026-04-22T01:01:30.121Z",
+  "exitCode": 1,
+  "summary": "connect ECONNREFUSED 127.0.0.1:4101"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-22T00-14-01-443Z-3a52ce78-historical-accuracy-monitor-heartbeat",
+  "agentSlug": "historical-accuracy-monitor",
+  "cabinetPath": ".",
+  "title": "Historical Accuracy Monitor heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-22T00:14:01.443Z",
+  "promptPath": ".agents/.conversations/2026-04-22T00-14-01-443Z-3a52ce78-historical-accuracy-monitor-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-22T00-14-01-443Z-3a52ce78-historical-accuracy-monitor-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-22T00:14:01.468Z",
+  "exitCode": 1,
+  "summary": "daemonFetch timeout after 180000ms"
+}

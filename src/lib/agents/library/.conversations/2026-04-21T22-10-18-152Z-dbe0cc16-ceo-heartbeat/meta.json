@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-21T22-10-18-152Z-dbe0cc16-ceo-heartbeat",
+  "agentSlug": "ceo",
+  "title": "CEO heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-21T22:10:18.152Z",
+  "promptPath": ".agents/.conversations/2026-04-21T22-10-18-152Z-dbe0cc16-ceo-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-21T22-10-18-152Z-dbe0cc16-ceo-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "cabinetPath": ".",
+  "completedAt": "2026-04-21T22:13:18.627Z",
+  "exitCode": 1,
+  "summary": "daemonFetch timeout after 180000ms"
+}

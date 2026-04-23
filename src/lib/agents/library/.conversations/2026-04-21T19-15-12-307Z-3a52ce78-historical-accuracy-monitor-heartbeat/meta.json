@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-21T19-15-12-307Z-3a52ce78-historical-accuracy-monitor-heartbeat",
+  "agentSlug": "historical-accuracy-monitor",
+  "cabinetPath": ".",
+  "title": "Historical Accuracy Monitor heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-21T19:15:12.307Z",
+  "promptPath": ".agents/.conversations/2026-04-21T19-15-12-307Z-3a52ce78-historical-accuracy-monitor-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-21T19-15-12-307Z-3a52ce78-historical-accuracy-monitor-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-21T19:15:12.334Z",
+  "exitCode": 1,
+  "summary": "fetch failed"
+}

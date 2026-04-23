@@ -1,0 +1,16 @@
+{
+  "id": "2026-04-21T22-14-50-065Z-dbe0cc16-script-writer-heartbeat",
+  "agentSlug": "script-writer",
+  "title": "Script Writer heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-21T22:14:50.065Z",
+  "promptPath": ".agents/.conversations/2026-04-21T22-14-50-065Z-dbe0cc16-script-writer-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-21T22-14-50-065Z-dbe0cc16-script-writer-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "cabinetPath": ".",
+  "completedAt": "2026-04-21T22:14:50.096Z",
+  "exitCode": 1,
+  "summary": "daemonFetch timeout after 180000ms"
+}
