@@ -20,12 +20,12 @@ export function CopyButton({ text }: { text: string }) {
     >
       {copied ? (
         <>
-          <Check className="h-3 w-3" />
+          <span suppressHydrationWarning><Check className="h-3 w-3" /></span>
           Copied
         </>
       ) : (
         <>
-          <Copy className="h-3 w-3" />
+          <span suppressHydrationWarning><Copy className="h-3 w-3" /></span>
           Copy
         </>
       )}
