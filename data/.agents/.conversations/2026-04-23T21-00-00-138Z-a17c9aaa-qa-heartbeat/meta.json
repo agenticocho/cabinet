@@ -1,0 +1,18 @@
+{
+  "id": "2026-04-23T21-00-00-138Z-a17c9aaa-qa-heartbeat",
+  "agentSlug": "qa",
+  "cabinetPath": "data",
+  "title": "QA Agent heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-23T21:00:00.138Z",
+  "providerId": "llama-local",
+  "adapterType": "llama_local",
+  "adapterConfig": {},
+  "promptPath": "data/.agents/.conversations/2026-04-23T21-00-00-138Z-a17c9aaa-qa-heartbeat/prompt.md",
+  "transcriptPath": "data/.agents/.conversations/2026-04-23T21-00-00-138Z-a17c9aaa-qa-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-23T21:00:00.153Z",
+  "exitCode": 1
+}
