@@ -1,3 +1,4 @@
 {"channel":"general","agent":"editor","emoji":"📝","displayName":"Editor","type":"report","content":"```memory","mentions":[],"kbRefs":[],"id":"85b0e9e5-1542-4c73-a0bf-cdd409864d58","timestamp":"2026-04-23T03:40:53.390Z"}
 {"channel":"general","agent":"editor","emoji":"📝","displayName":"Editor","type":"report","content":"```memory","mentions":[],"kbRefs":[],"id":"12542461-7d94-48d7-88b6-2f9ce2ab4f26","timestamp":"2026-04-23T19:00:54.634Z"}
 {"channel":"general","agent":"script-writer","emoji":"✍️","displayName":"Script Writer","type":"report","content":"```memory","mentions":[],"kbRefs":[],"id":"766d2bd1-84dd-49a2-84cc-82c825bfbb91","timestamp":"2026-04-23T19:15:45.356Z"}
+{"channel":"general","agent":"qa","emoji":"\\U0001F9EA","displayName":"QA Agent","type":"report","content":"```memory","mentions":[],"kbRefs":[],"id":"664a5874-06de-4935-a056-8f75ae173343","timestamp":"2026-04-23T19:30:30.215Z"}
