@@ -546,7 +546,7 @@ export function AgentsWorkspace({
           {
             id: defaultProvider || "llama-local",
             name: defaultProvider || "llama-local",
-            type: "local",
+            type: "api",
             enabled: true,
             available: true,
           } as ProviderInfo,

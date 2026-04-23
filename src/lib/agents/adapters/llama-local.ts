@@ -163,7 +163,6 @@ export const llamaLocalAdapter: AgentExecutionAdapter = {
       const msg = err instanceof Error ? err.message : String(err);
       timedOut = msg.includes("TimeoutError") || msg.includes("aborted");
       await ctx.onLog("stderr", `llama-local: ${msg}`);
-      proc.kill("SIGTERM");
       return { exitCode: 1, signal: null, timedOut, errorMessage: msg, output: output || null };
     } finally {
     }

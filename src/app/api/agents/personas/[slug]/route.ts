@@ -91,7 +91,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
     if (
       source !== "manual" &&
-      (!persona.active || persona.heartbeatsUsed >= persona.budget)
+      (!persona.active || (persona.heartbeatsUsed ?? 0) >= persona.budget)
     ) {
       return NextResponse.json(
         { ok: false, message: "Agent inactive or over budget" },

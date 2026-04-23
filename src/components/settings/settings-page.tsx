@@ -930,11 +930,11 @@ export function SettingsPage() {
                       </h4>
                       <div className="space-y-2">
                         {providers
-                          .filter((p) => p.type === 'cli' || p.type === 'local')
+                          .filter((p) => p.type === 'cli' || p.id === 'llama-local')
                           .map((provider) => {
                             const isReady = !!provider.available && provider.authenticated
                             const isEnabled = provider.enabled !== false
-                            const isLocal = provider.type === 'local'
+                            const isLocal = provider.id === 'llama-local'
                             const isInstalled = isEnabled && !isReady;
                             const setupSteps = PROVIDER_SETUP_STEPS[provider.id] || [];
                             const isExpanded = expandedProvider === provider.id;
@@ -1018,7 +1018,7 @@ export function SettingsPage() {
                                               .filter((entry) => !entry.enabled && entry.id !== provider.id)
                                               .map((entry) => entry.id);
                                         const enabledAfterToggle = providers.filter(
-                                          (entry) => !nextDisabled.includes(entry.id) && (entry.type === "cli" || entry.type === "local")
+                                          (entry) => !nextDisabled.includes(entry.id) && (entry.type === "cli" || entry.id === "llama-local")
                                         );
                                         const nextDefault =
                                           provider.id === defaultProvider && nextDisabled.includes(provider.id)
@@ -1038,7 +1038,7 @@ export function SettingsPage() {
 
                                         await saveProviderSettings(nextDefault, nextDisabled, migrations);
                                       }}
-                                      disabled={savingProviders || (provider.id === defaultProvider && providers.filter((entry) => entry.enabled && (entry.type === 'cli' || entry.type === 'local')).length === 1)}
+                                      disabled={savingProviders || (provider.id === defaultProvider && providers.filter((entry) => entry.enabled && (entry.type === 'cli' || entry.id === 'llama-local')).length === 1)}
                                       className="rounded-md border border-border px-2 py-1 text-[11px] text-muted-foreground transition-colors hover:text-foreground disabled:opacity-50"
                                     >
                                       {provider.enabled ? "Disable" : "Enable"}

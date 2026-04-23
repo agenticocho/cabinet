@@ -1,3 +1,4 @@
+import fs from "fs/promises"; 
 import path from "path";
 import { DATA_DIR } from "@/lib/storage/path-utils";
 import {
@@ -405,6 +406,23 @@ export async function runHeartbeat(
             mentions: ["human"],
             kbRefs: [],
           });
+        }
+
+        // NEW: persist raw model output for this session
+        if (completion.output && meta?.id) {
+          try {
+            const sessionsDir = path.join(DATA_DIR, ".agents", slug, "sessions");
+            await fs.mkdir(sessionsDir, { recursive: true });
+
+            const sessionFile = path.join(
+              sessionsDir,
+              `${meta.id.replace(/[:.]/g, "-")}.txt`,
+            );
+
+            await fs.writeFile(sessionFile, completion.output, "utf-8");
+          } catch {
+            // best-effort: ignore transcript write errors
+          }
         }
 
         await processHeartbeatOutput(

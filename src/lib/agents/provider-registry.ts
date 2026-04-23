@@ -1,4 +1,4 @@
-import type { AgentProvider, ProviderRegistry } from "../provider-interface";
+import type { AgentProvider, ProviderRegistry } from "./provider-interface";
 import { claudeCodeProvider } from "./providers/claude-code";
 import { codexCliProvider } from "./providers/codex-cli";
 import { geminiCliProvider } from "./providers/gemini-cli";
