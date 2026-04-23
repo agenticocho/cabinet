@@ -4,7 +4,7 @@ role: 'Strategic leadership, goal setting, team coordination'
 provider: llama-local
 heartbeat: 0 */4 * * *
 budget: 50000
-active: false
+active: true
 workdir: /data
 focus:
   - strategy
