@@ -31,6 +31,12 @@ export async function createDaemonSession(
   });
 
   if (!response.ok) {
+    const body = await response.text().catch(() => "");
+    console.error("createDaemonSession failed", {
+      status: response.status,
+      body,
+      input,
+    });
     throw new Error(`Failed to create daemon session (${response.status})`);
   }
 }

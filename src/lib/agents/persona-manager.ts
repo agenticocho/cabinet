@@ -60,6 +60,7 @@ export interface AgentPersona {
   provider: string;
   adapterType?: string;
   adapterConfig?: Record<string, unknown>;
+  model?: string;
   heartbeat: string; // cron expression
   budget: number; // max heartbeats per month
   active: boolean;
@@ -164,6 +165,10 @@ export async function readPersona(slug: string, cabinetPath?: string): Promise<A
         ? data.adapterType.trim()
         : undefined,
     adapterConfig: normalizeAdapterConfig(data.adapterConfig),
+    model:
+      typeof data.model === "string" && data.model.trim()
+        ? data.model.trim()
+        : undefined,
     heartbeat: (data.heartbeat as string) || "0 8 * * *",
     budget: (data.budget as number) || 100,
     active: data.active !== false,
@@ -233,6 +238,9 @@ export async function writePersona(slug: string, persona: Partial<AgentPersona> 
     role: merged.role,
     provider: resolveEnabledProviderId(merged.provider),
     heartbeat: merged.heartbeat,
+    ...(typeof merged.model === "string" && merged.model.trim()
+      ? { model: merged.model.trim() }
+      : {}),
     budget: merged.budget,
     active: merged.active,
     workdir: merged.workdir,

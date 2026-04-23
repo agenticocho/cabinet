@@ -540,56 +540,87 @@ ${humanMessage}
 
 Respond naturally as ${persona.name}. Be concise (1-3 short paragraphs max). Reference specific data, KB pages, or workspace files when relevant. If asked about status or progress, reference your actual goal numbers.`;
 
-  let response = "";
-  try {
-    const sessionId = `slack-${slug}-${Date.now()}`;
-    const token = await getOrCreateDaemonToken();
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      "Content-Type": "application/json",
-    };
+let response = "";
+try {
+  const sessionId = `slack-${slug}-${Date.now()}`;
+  const token = await getOrCreateDaemonToken();
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    "Content-Type": "application/json",
+  };
 
-    await fetch(`${getDaemonUrl()}/sessions`, {
-      method: "POST",
-      headers,
-      body: JSON.stringify({
-        id: sessionId,
-        args: ["--dangerously-skip-permissions", "-p", prompt, "--output-format", "text"],
-      }),
-    });
+  const providerId = resolveExecutionProviderId({
+    adapterType: persona.adapterType,
+    providerId: persona.provider,
+  });
 
-    const deadline = Date.now() + 120_000; // 2 min timeout
-    while (Date.now() < deadline) {
-      await new Promise((r) => setTimeout(r, 2000));
-      try {
-        const res = await fetch(`${getDaemonUrl()}/session/${sessionId}/output`, {
-          headers,
-        });
-        if (res.ok) {
-          const data = await res.json() as { status: string; output: string };
-          if (data.status === "completed") { response = data.output; break; }
+  const adapterType =
+    persona.adapterType || defaultAdapterTypeForProvider(providerId);
+
+  const adapterConfig = {
+    ...(persona.adapterConfig ?? {}),
+    ...(persona.model ? { model: persona.model } : {}),
+  };
+
+  await fetch(`${getDaemonUrl()}/sessions`, {
+    method: "POST",
+    headers,
+    body: JSON.stringify({
+      id: sessionId,
+      providerId,
+      adapterType,
+      adapterConfig,
+      prompt,
+      cwd: DATA_DIR,
+      timeoutSeconds: 120,
+    }),
+  });
+
+  const deadline = Date.now() + 120_000; // 2 min timeout
+  while (Date.now() < deadline) {
+    await new Promise((r) => setTimeout(r, 2000));
+    try {
+      const res = await fetch(`${getDaemonUrl()}/session/${sessionId}/output`, {
+        headers,
+      });
+      if (res.ok) {
+        const data = await res.json() as { status: string; output: string };
+        if (data.status === "completed") {
+          response = data.output;
+          break;
         }
-      } catch { /* retry */ }
+        if (data.status === "failed") {
+          response = data.output || "Sorry, I encountered an error processing your request.";
+          break;
+        }
+      }
+    } catch {
+      /* retry */
     }
-  } catch (err) {
-    response = err instanceof Error
-      ? `Sorry, I encountered an error: ${err.message}`
-      : "Sorry, I encountered an error processing your request.";
   }
 
-  // Post the response to Slack
-  if (response) {
-    await postMessage({
-      channel,
-      agent: slug,
-      emoji: persona.emoji,
-      displayName: persona.name,
-      type: "message",
-      content: response,
-      mentions: [],
-      kbRefs: [],
-    });
+  if (!response) {
+    response = "Sorry, I didn't get a response in time.";
   }
+} catch (err) {
+  response = err instanceof Error
+    ? `Sorry, I encountered an error: ${err.message}`
+    : "Sorry, I encountered an error processing your request.";
+}
 
-  return response;
+// Post the response to Slack
+if (response) {
+  await postMessage({
+    channel,
+    agent: slug,
+    emoji: persona.emoji,
+    displayName: persona.name,
+    type: "message",
+    content: response,
+    mentions: [],
+    kbRefs: [],
+  });
+}
+
+return response;
 }

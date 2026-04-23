@@ -1,0 +1,24 @@
+{
+  "id": "2026-04-23T03-33-03-503Z-dbe0cc16-committee-chair-heartbeat",
+  "agentSlug": "committee-chair",
+  "title": "committee-chair heartbeat",
+  "trigger": "heartbeat",
+  "status": "completed",
+  "startedAt": "2026-04-23T03:33:03.503Z",
+  "providerId": "llama-local",
+  "adapterType": "llama_local",
+  "adapterConfig": {
+    "model": "Qwen3.5-4B-UD-Q4_K_XL.gguf"
+  },
+  "promptPath": ".agents/.conversations/2026-04-23T03-33-03-503Z-dbe0cc16-committee-chair-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-23T03-33-03-503Z-dbe0cc16-committee-chair-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [
+    "none"
+  ],
+  "cabinetPath": ".",
+  "completedAt": "2026-04-23T03:33:31.394Z",
+  "exitCode": 0,
+  "summary": "First heartbeat completed - initial state assessment with no prior context to process.",
+  "contextSummary": "Fresh Cabinet session with no focus areas, inbox messages, goals, or pending tasks."
+}
