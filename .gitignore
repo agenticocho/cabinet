@@ -10,3 +10,10 @@
 # Optionally ignore stats (changes every heartbeat)
 # .agents/.memory/*/stats.json
 # .agents/*/memory/stats.json
+.next/
+node_modules/
+.agents/.runtime/
+.agents/.slack/
+.agents/.history/
+.agents/.memory/
+.agents/*/sessions/
