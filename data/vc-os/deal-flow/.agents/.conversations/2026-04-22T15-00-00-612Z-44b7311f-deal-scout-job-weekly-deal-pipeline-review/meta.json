@@ -1,0 +1,17 @@
+{
+  "id": "2026-04-22T15-00-00-612Z-44b7311f-deal-scout-job-weekly-deal-pipeline-review",
+  "agentSlug": "deal-scout",
+  "cabinetPath": "data/vc-os/deal-flow",
+  "title": "Weekly Deal Pipeline Review",
+  "trigger": "job",
+  "status": "failed",
+  "startedAt": "2026-04-22T15:00:00.612Z",
+  "jobId": "weekly-pipeline-review",
+  "jobName": "Weekly Deal Pipeline Review",
+  "promptPath": "data/vc-os/deal-flow/.agents/.conversations/2026-04-22T15-00-00-612Z-44b7311f-deal-scout-job-weekly-deal-pipeline-review/prompt.md",
+  "transcriptPath": "data/vc-os/deal-flow/.agents/.conversations/2026-04-22T15-00-00-612Z-44b7311f-deal-scout-job-weekly-deal-pipeline-review/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-22T15:00:01.095Z",
+  "exitCode": 1
+}

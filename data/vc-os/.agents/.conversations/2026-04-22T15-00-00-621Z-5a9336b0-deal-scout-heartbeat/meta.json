@@ -1,0 +1,15 @@
+{
+  "id": "2026-04-22T15-00-00-621Z-5a9336b0-deal-scout-heartbeat",
+  "agentSlug": "deal-scout",
+  "cabinetPath": "data/vc-os",
+  "title": "Deal Scout heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-22T15:00:00.621Z",
+  "promptPath": "data/vc-os/.agents/.conversations/2026-04-22T15-00-00-621Z-5a9336b0-deal-scout-heartbeat/prompt.md",
+  "transcriptPath": "data/vc-os/.agents/.conversations/2026-04-22T15-00-00-621Z-5a9336b0-deal-scout-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-22T15:00:01.096Z",
+  "exitCode": 1
+}

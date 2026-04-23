@@ -1,13 +1,15 @@
 "use client";
 
 import { useEffect, useState, useCallback, useRef, useMemo } from "react";
-import { GitBranch, RefreshCw, Check, CloudDownload, Star, X, ArrowRight } from "lucide-react";
+import { GitBranch, RefreshCw, Check, CloudDownload, X, ArrowRight } from "lucide-react";
 import { useCabinetUpdate } from "@/hooks/use-cabinet-update";
 import { useEditorStore } from "@/stores/editor-store";
 import { useTreeStore } from "@/stores/tree-store";
 import { useAppStore } from "@/stores/app-store";
 import { useAIPanelStore } from "@/stores/ai-panel-store";
 import { createConversation } from "@/lib/agents/conversation-client";
+
+// Ocho fork: promo strip (Discord/GitHub/Stars) removed; Sync button kept.
 
 export function StatusBar() {
   const { saveStatus, currentPath } = useEditorStore();
@@ -55,13 +57,18 @@ export function StatusBar() {
       setAiSubmitting(false);
     }
   };
+
   const [uncommitted, setUncommitted] = useState(0);
-  const [pullStatus, setPullStatus] = useState<"idle" | "pulling" | "pulled" | "up-to-date" | "error">("idle");
+  const [pullStatus, setPullStatus] = useState<
+    "idle" | "pulling" | "pulled" | "up-to-date" | "error"
+  >("idle");
   const [pulling, setPulling] = useState(false);
   const didAutoPullRef = useRef(false);
   const [appAlive, setAppAlive] = useState(true);
   const [daemonAlive, setDaemonAlive] = useState(true);
-  const [installKind, setInstallKind] = useState<"source-managed" | "source-custom" | "electron-macos">("source-custom");
+  const [installKind, setInstallKind] = useState<
+    "source-managed" | "source-custom" | "electron-macos"
+  >("source-custom");
   const [showServerPopup, setShowServerPopup] = useState(false);
   const [providerStatuses, setProviderStatuses] = useState<
     { id: string; name: string; available: boolean; authenticated: boolean }[]
@@ -70,20 +77,26 @@ export function StatusBar() {
   const { update } = useCabinetUpdate();
 
   const anyProviderReady = useMemo(
-    () => !providersLoaded || providerStatuses.some((p) => p.available && p.authenticated),
+    () =>
+      !providersLoaded ||
+      providerStatuses.some((p) => p.available && p.authenticated),
     [providersLoaded, providerStatuses],
   );
 
   const fetchProviderStatus = useCallback(async () => {
     try {
-      const res = await fetch("/api/agents/providers/status", { cache: "no-store" });
+      const res = await fetch("/api/agents/providers/status", {
+        cache: "no-store",
+      });
       if (!res.ok) return;
       const data = await res.json();
       if (Array.isArray(data.providers)) {
         setProviderStatuses(data.providers);
         setProvidersLoaded(true);
       }
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
   }, []);
 
   // Poll both server health endpoints
@@ -95,14 +108,19 @@ export function StatusBar() {
         fetch("/api/health/daemon", { cache: "no-store" }),
       ]);
       if (!mounted) return;
-      const appOk = appRes.status === "fulfilled" && appRes.value.ok;
+      const appOk =
+        appRes.status === "fulfilled" && appRes.value.ok;
       setAppAlive(appOk);
-      setDaemonAlive(daemonRes.status === "fulfilled" && daemonRes.value.ok);
+      setDaemonAlive(
+        daemonRes.status === "fulfilled" && daemonRes.value.ok,
+      );
       if (appOk && appRes.status === "fulfilled") {
         try {
           const data = await appRes.value.json();
           if (data.installKind) setInstallKind(data.installKind);
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
       }
     };
     void checkHealth();
@@ -130,18 +148,6 @@ export function StatusBar() {
     }
   };
 
-  const fetchGitHubStats = useCallback(async (signal?: AbortSignal) => {
-    try {
-      const res = await fetch(GITHUB_STATS_URL, {
-        signal,
-        cache: "no-store",
-      });
-      if (!res.ok) return;
-    } catch {
-      // ignore
-    }
-  }, []);
-
   const pullAndRefresh = useCallback(async () => {
     if (pulling) return;
     setPulling(true);
@@ -152,7 +158,6 @@ export function StatusBar() {
         const data = await res.json();
         if (data.pulled) {
           setPullStatus("pulled");
-          // Reload tree to reflect new/changed files
           await loadTree();
         } else {
           setPullStatus("up-to-date");
@@ -164,16 +169,14 @@ export function StatusBar() {
       setPullStatus("error");
     } finally {
       setPulling(false);
-      // Reset status after 3 seconds
       setTimeout(() => setPullStatus("idle"), 3000);
     }
   }, [pulling, loadTree]);
 
-  // Auto-pull on mount (page load)
+  // Auto-pull on mount
   useEffect(() => {
     if (didAutoPullRef.current) return;
     didAutoPullRef.current = true;
-
     const initialPull = window.setTimeout(() => {
       void pullAndRefresh();
     }, 0);
@@ -191,23 +194,6 @@ export function StatusBar() {
       clearInterval(interval);
     };
   }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    const initialFetch = window.setTimeout(() => {
-      void fetchGitHubStats(controller.signal);
-    }, 0);
-    const handleFocus = () => {
-      void fetchGitHubStats();
-    };
-
-    window.addEventListener("focus", handleFocus);
-    return () => {
-      controller.abort();
-      window.clearTimeout(initialFetch);
-      window.removeEventListener("focus", handleFocus);
-    };
-  }, [fetchGitHubStats]);
 
   return (
     <div className="relative flex items-center justify-between px-3 py-1 border-t border-border text-[11px] text-muted-foreground/60 bg-background">
@@ -238,7 +224,9 @@ export function StatusBar() {
           </div>
         </div>
       )}
+
       <div className="flex min-w-0 items-center gap-3">
+        {/* Server status indicator */}
         <div className="relative">
           <button
             onClick={() => {
@@ -285,22 +273,26 @@ export function StatusBar() {
             </span>
           </button>
           {showServerPopup && (
-            <div className={`absolute bottom-full left-0 mb-2 z-50 w-80 rounded-lg border bg-background p-3 shadow-lg ${
-              appAlive && daemonAlive && anyProviderReady
-                ? "border-green-500/30"
-                : !appAlive
-                ? "border-red-500/30"
-                : "border-amber-500/30"
-            }`}>
+            <div
+              className={`absolute bottom-full left-0 mb-2 z-50 w-80 rounded-lg border bg-background p-3 shadow-lg ${
+                appAlive && daemonAlive && anyProviderReady
+                  ? "border-green-500/30"
+                  : !appAlive
+                  ? "border-red-500/30"
+                  : "border-amber-500/30"
+              }`}
+            >
               <div className="flex items-start justify-between gap-2">
                 <div className="flex-1 space-y-2.5">
-                  <p className={`text-xs font-medium ${
-                    appAlive && daemonAlive && anyProviderReady
-                      ? "text-green-500"
-                      : !appAlive
-                      ? "text-red-500"
-                      : "text-amber-500"
-                  }`}>
+                  <p
+                    className={`text-xs font-medium ${
+                      appAlive && daemonAlive && anyProviderReady
+                        ? "text-green-500"
+                        : !appAlive
+                        ? "text-red-500"
+                        : "text-amber-500"
+                    }`}
+                  >
                     {appAlive && daemonAlive && anyProviderReady
                       ? "All Systems Running"
                       : "Service Disruption"}
@@ -309,9 +301,21 @@ export function StatusBar() {
                   {/* App Server */}
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2 text-[11px]">
-                      <span className={`inline-block h-1.5 w-1.5 rounded-full shrink-0 ${appAlive ? "bg-green-500" : "bg-red-500"}`} />
-                      <span className="font-medium text-foreground/80">App Server</span>
-                      <span className={`ml-auto ${appAlive ? "text-green-500" : "text-red-500"}`}>{appAlive ? "Running" : "Down"}</span>
+                      <span
+                        className={`inline-block h-1.5 w-1.5 rounded-full shrink-0 ${
+                          appAlive ? "bg-green-500" : "bg-red-500"
+                        }`}
+                      />
+                      <span className="font-medium text-foreground/80">
+                        App Server
+                      </span>
+                      <span
+                        className={`ml-auto ${
+                          appAlive ? "text-green-500" : "text-red-500"
+                        }`}
+                      >
+                        {appAlive ? "Running" : "Down"}
+                      </span>
                     </div>
                     <p className="text-[10px] text-muted-foreground/70 pl-3.5">
                       {appAlive
@@ -323,9 +327,19 @@ export function StatusBar() {
                   {/* Daemon */}
                   <div className="space-y-0.5">
                     <div className="flex items-center gap-2 text-[11px]">
-                      <span className={`inline-block h-1.5 w-1.5 rounded-full shrink-0 ${daemonAlive ? "bg-green-500" : "bg-red-500"}`} />
+                      <span
+                        className={`inline-block h-1.5 w-1.5 rounded-full shrink-0 ${
+                          daemonAlive ? "bg-green-500" : "bg-red-500"
+                        }`}
+                      />
                       <span className="font-medium text-foreground/80">Daemon</span>
-                      <span className={`ml-auto ${daemonAlive ? "text-green-500" : "text-red-500"}`}>{daemonAlive ? "Running" : "Down"}</span>
+                      <span
+                        className={`ml-auto ${
+                          daemonAlive ? "text-green-500" : "text-red-500"
+                        }`}
+                      >
+                        {daemonAlive ? "Running" : "Down"}
+                      </span>
                     </div>
                     <p className="text-[10px] text-muted-foreground/70 pl-3.5">
                       {daemonAlive
@@ -337,37 +351,61 @@ export function StatusBar() {
                   {/* Agent Providers */}
                   <div className="space-y-1">
                     <div className="flex items-center gap-2 text-[11px]">
-                      <span className={`inline-block h-1.5 w-1.5 rounded-full shrink-0 ${
-                        anyProviderReady ? "bg-green-500" : "bg-red-500"
-                      }`} />
-                      <span className="font-medium text-foreground/80">Agent Providers</span>
-                      <span className={`ml-auto ${anyProviderReady ? "text-green-500" : "text-red-500"}`}>
-                        {!providersLoaded ? "Checking..." : anyProviderReady ? "Available" : "None Ready"}
+                      <span
+                        className={`inline-block h-1.5 w-1.5 rounded-full shrink-0 ${
+                          anyProviderReady ? "bg-green-500" : "bg-red-500"
+                        }`}
+                      />
+                      <span className="font-medium text-foreground/80">
+                        Agent Providers
+                      </span>
+                      <span
+                        className={`ml-auto ${
+                          anyProviderReady ? "text-green-500" : "text-red-500"
+                        }`}
+                      >
+                        {!providersLoaded
+                          ? "Checking..."
+                          : anyProviderReady
+                          ? "Available"
+                          : "None Ready"}
                       </span>
                     </div>
-                    {providersLoaded && providerStatuses.map((p) => (
-                      <div key={p.id} className="flex items-center gap-2 text-[10px] pl-3.5 text-muted-foreground/70">
-                        <span className={`inline-block h-1 w-1 rounded-full shrink-0 ${
-                          p.available && p.authenticated ? "bg-green-500"
-                          : p.available ? "bg-amber-500"
-                          : "bg-red-500/50"
-                        }`} />
-                        <span>{p.name}</span>
-                        <span className="ml-auto">
-                          {p.available && p.authenticated ? "Ready"
-                          : p.available ? "Not logged in"
-                          : "Not installed"}
-                        </span>
-                      </div>
-                    ))}
+                    {providersLoaded &&
+                      providerStatuses.map((p) => (
+                        <div
+                          key={p.id}
+                          className="flex items-center gap-2 text-[10px] pl-3.5 text-muted-foreground/70"
+                        >
+                          <span
+                            className={`inline-block h-1 w-1 rounded-full shrink-0 ${
+                              p.available && p.authenticated
+                                ? "bg-green-500"
+                                : p.available
+                                ? "bg-amber-500"
+                                : "bg-red-500/50"
+                            }`}
+                          />
+                          <span>{p.name}</span>
+                          <span className="ml-auto">
+                            {p.available && p.authenticated
+                              ? "Ready"
+                              : p.available
+                              ? "Not logged in"
+                              : "Not installed"}
+                          </span>
+                        </div>
+                      ))}
                   </div>
 
                   {/* Troubleshooting tips */}
                   {(!appAlive || !daemonAlive || !anyProviderReady) && (
                     <div className="pt-1.5 border-t border-border space-y-1">
-                      <p className="text-[10px] font-medium text-foreground/70">How to fix</p>
-                      {(!appAlive || !daemonAlive) && (
-                        installKind === "electron-macos" ? (
+                      <p className="text-[10px] font-medium text-foreground/70">
+                        How to fix
+                      </p>
+                      {(!appAlive || !daemonAlive) &&
+                        (installKind === "electron-macos" ? (
                           <p className="text-[10px] text-muted-foreground">
                             {!appAlive && !daemonAlive
                               ? "Both servers are down. Try quitting and reopening the Cabinet app."
@@ -378,40 +416,71 @@ export function StatusBar() {
                         ) : installKind === "source-managed" ? (
                           <p className="text-[10px] text-muted-foreground">
                             {!appAlive && !daemonAlive ? (
-                              <>Both servers are down. Restart with:{" "}
-                              <code className="rounded bg-muted px-1 py-0.5 text-[10px]">npx cabinet</code></>
+                              <>
+                                Both servers are down. Restart with:{" "}
+                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
+                                  npx cabinetai run
+                                </code>
+                              </>
                             ) : !appAlive ? (
-                              <>The app server crashed. Restart with:{" "}
-                              <code className="rounded bg-muted px-1 py-0.5 text-[10px]">npx cabinet</code></>
+                              <>
+                                The app server crashed. Restart with:{" "}
+                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
+                                  npx cabinetai run
+                                </code>
+                              </>
                             ) : (
-                              <>The daemon is not running. It should start automatically with{" "}
-                              <code className="rounded bg-muted px-1 py-0.5 text-[10px]">npx cabinet</code>
-                              . Try restarting.</>
+                              <>
+                                The daemon is not running. It should start
+                                automatically with{" "}
+                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
+                                  npx cabinetai run
+                                </code>
+                                . Try restarting.
+                              </>
                             )}
                           </p>
                         ) : (
                           <p className="text-[10px] text-muted-foreground">
                             {!appAlive && !daemonAlive ? (
-                              <>Both servers are down. Start everything with:{" "}
-                              <code className="rounded bg-muted px-1 py-0.5 text-[10px]">npm run dev:all</code></>
+                              <>
+                                Both servers are down. Start everything with:{" "}
+                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
+                                  npm run dev:all
+                                </code>
+                              </>
                             ) : !appAlive ? (
-                              <>The Next.js app server crashed or was stopped. Restart with:{" "}
-                              <code className="rounded bg-muted px-1 py-0.5 text-[10px]">npm run dev</code></>
+                              <>
+                                The Next.js app server crashed or was stopped.
+                                Restart with:{" "}
+                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
+                                  npm run dev
+                                </code>
+                              </>
                             ) : (
-                              <>The daemon is not running. If you started only{" "}
-                              <code className="rounded bg-muted px-1 py-0.5 text-[10px]">npm run dev</code>
-                              , use{" "}
-                              <code className="rounded bg-muted px-1 py-0.5 text-[10px]">npm run dev:all</code>
-                              {" "}instead to start both servers.</>
+                              <>
+                                The daemon is not running. If you started only{" "}
+                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
+                                  npm run dev
+                                </code>
+                                , use{" "}
+                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
+                                  npm run dev:all
+                                </code>
+                                {" "}
+                                instead to start both servers.
+                              </>
                             )}
                           </p>
-                        )
-                      )}
+                        ))}
                       {appAlive && daemonAlive && !anyProviderReady && (
                         <p className="text-[10px] text-muted-foreground">
                           No agent providers are installed or logged in.{" "}
                           <button
-                            onClick={() => { setSection({ type: "settings" }); setShowServerPopup(false); }}
+                            onClick={() => {
+                              setSection({ type: "settings" });
+                              setShowServerPopup(false);
+                            }}
                             className="underline hover:text-foreground transition-colors"
                           >
                             Configure in Settings
@@ -439,6 +508,7 @@ export function StatusBar() {
             </div>
           )}
         </div>
+
         {currentPath && (
           <span>
             {saveStatus === "saving"
@@ -450,6 +520,7 @@ export function StatusBar() {
               : "Ready"}
           </span>
         )}
+
         {pullStatus === "pulling" && (
           <span className="flex items-center gap-1 text-blue-400">
             <CloudDownload className="h-3 w-3 animate-pulse" />
@@ -473,6 +544,7 @@ export function StatusBar() {
             Pull failed
           </span>
         )}
+
         {update?.updateStatus.state === "restart-required" && (
           <button
             onClick={() => setSection({ type: "settings" })}
@@ -483,20 +555,24 @@ export function StatusBar() {
             Restart to finish update
           </button>
         )}
-        {update?.updateAvailable && update?.updateStatus.state !== "restart-required" && update.latest && (
-          <button
-            onClick={() => setSection({ type: "settings" })}
-            className="flex items-center gap-1 rounded-md px-1.5 py-0.5 text-blue-500 hover:bg-muted hover:text-foreground transition-colors"
-            title={`Cabinet ${update.latest.version} is available`}
-          >
-            <CloudDownload className="h-3 w-3" />
-            Update {update.latest.version} available
-          </button>
-        )}
+        {update?.updateAvailable &&
+          update?.updateStatus.state !== "restart-required" &&
+          update.latest && (
+            <button
+              onClick={() => setSection({ type: "settings" })}
+              className="flex items-center gap-1 rounded-md px-1.5 py-0.5 text-blue-500 hover:bg-muted hover:text-foreground transition-colors"
+              title={`Cabinet ${update.latest.version} is available`}
+            >
+              <CloudDownload className="h-3 w-3" />
+              Update {update.latest.version} available
+            </button>
+          )}
+
         <span className="flex items-center gap-1">
           <GitBranch className="h-3 w-3" />
           {uncommitted > 0 ? `${uncommitted} uncommitted` : "All committed"}
         </span>
+
         <button
           onClick={pullAndRefresh}
           disabled={pulling}
@@ -508,6 +584,7 @@ export function StatusBar() {
           Sync
         </button>
       </div>
+      {/* Promo strip removed: no Discord/GitHub/Stars links */}
     </div>
   );
 }
