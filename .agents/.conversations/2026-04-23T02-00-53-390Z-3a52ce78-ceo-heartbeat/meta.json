@@ -1,0 +1,19 @@
+{
+  "id": "2026-04-23T02-00-53-390Z-3a52ce78-ceo-heartbeat",
+  "agentSlug": "ceo",
+  "cabinetPath": ".",
+  "title": "CEO heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-23T02:00:53.390Z",
+  "providerId": "llama-local",
+  "adapterType": "llama_local",
+  "adapterConfig": {},
+  "promptPath": ".agents/.conversations/2026-04-23T02-00-53-390Z-3a52ce78-ceo-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-23T02-00-53-390Z-3a52ce78-ceo-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-23T02:00:53.434Z",
+  "exitCode": 1,
+  "summary": "Failed to create daemon session (401)"
+}

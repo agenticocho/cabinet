@@ -4,9 +4,9 @@ slug: data-analyst
 emoji: "\U0001F4CA"
 type: specialist
 department: analytics
-role: 'Data analysis, dashboards, insights, reporting'
-provider: codex-cli
-heartbeat: 0 8 * * 1-5
+role: Data analysis, dashboards, insights, reporting
+provider: claude-code
+heartbeat: "0 8 * * 1-5"
 budget: 80
 active: true
 workdir: /data

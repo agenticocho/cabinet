@@ -78,6 +78,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
   }
 
   if (body.action === "run") {
+    const source = body.source ?? "manual";
     const persona = await readPersona(slug, cabinetPath);
 
     if (!persona) {
@@ -86,8 +87,6 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
         { status: 404 },
       );
     }
-
-    const source = body.source ?? "manual";
 
     if (
       source !== "manual" &&

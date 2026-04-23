@@ -1,0 +1,18 @@
+{
+  "id": "2026-04-23T01-22-01-461Z-3a52ce78-committee-chair-heartbeat",
+  "agentSlug": "committee-chair",
+  "cabinetPath": ".",
+  "title": "committee-chair heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-23T01:22:01.461Z",
+  "providerId": "llama-local",
+  "adapterType": "llama_local",
+  "promptPath": ".agents/.conversations/2026-04-23T01-22-01-461Z-3a52ce78-committee-chair-heartbeat/prompt.md",
+  "transcriptPath": ".agents/.conversations/2026-04-23T01-22-01-461Z-3a52ce78-committee-chair-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-23T01:22:01.491Z",
+  "exitCode": 1,
+  "summary": "Failed to create daemon session (401)"
+}

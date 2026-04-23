@@ -4,9 +4,9 @@ slug: researcher
 emoji: "\U0001F50D"
 type: specialist
 department: research
-role: 'Market research, competitive analysis, trend reports'
-provider: codex-cli
-heartbeat: '0 9 * * 1,3,5'
+role: Market research, competitive analysis, trend reports
+provider: claude-code
+heartbeat: "0 9 * * 1,3,5"
 budget: 60
 active: true
 workdir: /data

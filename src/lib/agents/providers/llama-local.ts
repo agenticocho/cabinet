@@ -10,7 +10,7 @@ const LLAMA_SERVER_URL =
 export const llamaLocalProvider: AgentProvider = {
   id: "llama-local",
   name: "Llama.cpp Local GGUF",
-  type: "api",
+  type: "local",
   icon: "cpu",
 
   installMessage:

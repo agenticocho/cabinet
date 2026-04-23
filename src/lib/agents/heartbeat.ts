@@ -386,7 +386,10 @@ export async function runHeartbeat(
             providerId: persona.provider,
           }),
         ),
-      adapterConfig: persona.adapterConfig,
+      adapterConfig: {
+        ...(persona.adapterConfig ?? {}),
+        ...(persona.model ? { model: persona.model } : {}),
+      },
       providerId: resolveExecutionProviderId({
         adapterType: persona.adapterType,
         providerId: persona.provider,
@@ -411,7 +414,8 @@ export async function runHeartbeat(
         // NEW: persist raw model output for this session
         if (completion.output && meta?.id) {
           try {
-            const sessionsDir = path.join(DATA_DIR, ".agents", slug, "sessions");
+            const _agentsBase = cabinetPath ? path.join(DATA_DIR, cabinetPath, ".agents") : path.join(DATA_DIR, ".agents");
+        const sessionsDir = path.join(_agentsBase, slug, "sessions");
             await fs.mkdir(sessionsDir, { recursive: true });
 
             const sessionFile = path.join(
