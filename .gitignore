@@ -23,3 +23,4 @@ tmpcabinet*.log
 data/
 toasty_scout/
 .DS_Store
+.cabinet-install.json
