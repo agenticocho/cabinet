@@ -1,0 +1,19 @@
+{
+  "id": "2026-04-24T15-00-00-098Z-d399742f-image-creator-job-daily-trend-scan",
+  "agentSlug": "image-creator",
+  "cabinetPath": "data/example-text-your-mom/marketing/tiktok",
+  "title": "Daily Trend Scan",
+  "trigger": "job",
+  "status": "failed",
+  "startedAt": "2026-04-24T15:00:00.098Z",
+  "jobId": "daily-trend-scan",
+  "jobName": "Daily Trend Scan",
+  "providerId": "llama-local",
+  "adapterType": "llama_local",
+  "promptPath": "data/example-text-your-mom/marketing/tiktok/.agents/.conversations/2026-04-24T15-00-00-098Z-d399742f-image-creator-job-daily-trend-scan/prompt.md",
+  "transcriptPath": "data/example-text-your-mom/marketing/tiktok/.agents/.conversations/2026-04-24T15-00-00-098Z-d399742f-image-creator-job-daily-trend-scan/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-24T15:00:00.155Z",
+  "exitCode": 1
+}

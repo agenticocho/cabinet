@@ -1,0 +1,19 @@
+{
+  "id": "2026-04-24T15-00-00-098Z-cc48113f-researcher-job-subreddit-signal-scan",
+  "agentSlug": "researcher",
+  "cabinetPath": "data/example-text-your-mom/marketing/reddit",
+  "title": "Subreddit Signal Scan",
+  "trigger": "job",
+  "status": "failed",
+  "startedAt": "2026-04-24T15:00:00.098Z",
+  "jobId": "subreddit-signal-scan",
+  "jobName": "Subreddit Signal Scan",
+  "providerId": "llama-local",
+  "adapterType": "llama_local",
+  "promptPath": "data/example-text-your-mom/marketing/reddit/.agents/.conversations/2026-04-24T15-00-00-098Z-cc48113f-researcher-job-subreddit-signal-scan/prompt.md",
+  "transcriptPath": "data/example-text-your-mom/marketing/reddit/.agents/.conversations/2026-04-24T15-00-00-098Z-cc48113f-researcher-job-subreddit-signal-scan/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-24T15:00:00.154Z",
+  "exitCode": 1
+}

@@ -2,7 +2,8 @@ id: comment-opportunity-scan
 name: Comment Opportunity Scan
 enabled: true
 schedule: 0 11 * * 1-5
-provider: codex-cli
+provider: llama-local
+adapterType: llama_local
 ownerAgent: researcher
 agentSlug: researcher
 timeout: 600

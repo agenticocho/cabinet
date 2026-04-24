@@ -2,7 +2,8 @@ id: daily-trend-scan
 name: Daily Trend Scan
 enabled: true
 schedule: 0 8 * * 1-5
-provider: codex-cli
+provider: llama-local
+adapterType: llama_local
 ownerAgent: image-creator
 agentSlug: image-creator
 timeout: 600

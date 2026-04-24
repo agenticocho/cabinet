@@ -2,7 +2,8 @@ id: weekly-reddit-learnings-digest
 name: Weekly Reddit Learnings Digest
 enabled: true
 schedule: 0 9 * * 1
-provider: codex-cli
+provider: llama-local
+adapterType: llama_local
 ownerAgent: researcher
 agentSlug: researcher
 timeout: 600

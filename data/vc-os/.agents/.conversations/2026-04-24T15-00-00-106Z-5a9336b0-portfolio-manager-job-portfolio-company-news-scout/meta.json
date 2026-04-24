@@ -1,0 +1,19 @@
+{
+  "id": "2026-04-24T15-00-00-106Z-5a9336b0-portfolio-manager-job-portfolio-company-news-scout",
+  "agentSlug": "portfolio-manager",
+  "cabinetPath": "data/vc-os",
+  "title": "Portfolio Company News Scout",
+  "trigger": "job",
+  "status": "failed",
+  "startedAt": "2026-04-24T15:00:00.106Z",
+  "jobId": "portfolio-news-scout",
+  "jobName": "Portfolio Company News Scout",
+  "providerId": "llama-local",
+  "adapterType": "llama_local",
+  "promptPath": "data/vc-os/.agents/.conversations/2026-04-24T15-00-00-106Z-5a9336b0-portfolio-manager-job-portfolio-company-news-scout/prompt.md",
+  "transcriptPath": "data/vc-os/.agents/.conversations/2026-04-24T15-00-00-106Z-5a9336b0-portfolio-manager-job-portfolio-company-news-scout/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-24T15:00:00.158Z",
+  "exitCode": 1
+}

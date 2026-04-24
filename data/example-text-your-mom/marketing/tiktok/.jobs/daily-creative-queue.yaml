@@ -2,7 +2,8 @@ id: daily-creative-queue
 name: Daily Creative Queue
 enabled: true
 schedule: 0 10 * * 1-5
-provider: codex-cli
+provider: llama-local
+adapterType: llama_local
 ownerAgent: image-creator
 agentSlug: image-creator
 timeout: 600
