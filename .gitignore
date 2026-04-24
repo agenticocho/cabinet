@@ -20,3 +20,4 @@ node_modules/
 tmpnext.log
 tmpcabinet*.log
 .agents/*.zip
+data/

@@ -1,7 +1,0 @@
-schemaVersion: 1
-id: cows-colluding-root
-name: Cows Colluding
-kind: root
-version: 0.1.0
-description: Self-Governance research
-entry: index.md
