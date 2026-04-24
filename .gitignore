@@ -21,3 +21,4 @@ tmpnext.log
 tmpcabinet*.log
 .agents/*.zip
 data/
+toasty_scout/
