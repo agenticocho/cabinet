@@ -8,7 +8,7 @@ budget: 90
 active: true
 workdir: /data
 focus:
-  - toasty_scout/kb/daily-brief.md
+  - toasty_scout/kb
 tags: []
 emoji: "🔭"
 department: intelligence
