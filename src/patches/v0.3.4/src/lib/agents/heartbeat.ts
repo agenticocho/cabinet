@@ -48,7 +48,7 @@ export async function buildHeartbeatContext(slug: string, cabinetPath?: string):
     const indexPath = path.join(DATA_DIR, focusPath, "index.md");
     if (await fileExists(indexPath)) {
       const content = await readFileContent(indexPath);
-      focusContext += `\n### ${focusPath}\n${content.slice(0, 500)}...\n`;
+      focusContext += `\n### ${focusPath}\n${content.slice(0, 2000)}...\n`;
     }
   }
 
