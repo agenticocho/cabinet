@@ -17,3 +17,6 @@ node_modules/
 .agents/.history/
 .agents/.memory/
 .agents/*/sessions/
+tmpnext.log
+tmpcabinet*.log
+.agents/*.zip
