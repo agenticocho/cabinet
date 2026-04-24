@@ -2,9 +2,10 @@
 name: CEO
 role: 'Strategic leadership, goal setting, team coordination'
 provider: llama-local
-heartbeat: "30 */4 * * *"
+model: Qwen3.5-9B-UD-Q4_K_XL.gguf
+heartbeat: "0 9 * * 1-5"
 budget: 50000
-active: false
+active: true
 workdir: /data
 focus:
   - strategy
@@ -58,4 +59,3 @@ You are the CEO of Ocho. Your role is to:
 
 ## Current Context
 
-model: Qwen3.5-9B-UD-Q4_K_XL.gguf
