@@ -1,0 +1,18 @@
+{
+  "id": "2026-04-24T14-00-00-055Z-5a9336b0-analyst-heartbeat",
+  "agentSlug": "analyst",
+  "cabinetPath": "data/vc-os",
+  "title": "Analyst heartbeat",
+  "trigger": "heartbeat",
+  "status": "failed",
+  "startedAt": "2026-04-24T14:00:00.055Z",
+  "providerId": "llama-local",
+  "adapterType": "llama_local",
+  "adapterConfig": {},
+  "promptPath": "data/vc-os/.agents/.conversations/2026-04-24T14-00-00-055Z-5a9336b0-analyst-heartbeat/prompt.md",
+  "transcriptPath": "data/vc-os/.agents/.conversations/2026-04-24T14-00-00-055Z-5a9336b0-analyst-heartbeat/transcript.txt",
+  "mentionedPaths": [],
+  "artifactPaths": [],
+  "completedAt": "2026-04-24T14:00:00.101Z",
+  "exitCode": 1
+}

@@ -2,7 +2,8 @@ id: competitor-intelligence
 name: Weekly Competitor Intelligence
 enabled: true
 schedule: 0 9 * * 4
-provider: codex-cli
+provider: llama-local
+adapterType: llama_local
 ownerAgent: analyst
 agentSlug: analyst
 timeout: 600

@@ -2,7 +2,8 @@ id: monthly-lp-update
 name: Monthly LP Flash Update Draft
 enabled: true
 schedule: 0 9 * * 1
-provider: codex-cli
+provider: llama-local
+adapterType: llama_local
 ownerAgent: managing-partner
 agentSlug: managing-partner
 timeout: 600

@@ -2,7 +2,8 @@ id: weekly-partner-prep
 name: Weekly Partner Meeting Prep
 enabled: true
 schedule: 0 18 * * 1
-provider: codex-cli
+provider: llama-local
+adapterType: llama_local
 ownerAgent: managing-partner
 agentSlug: managing-partner
 timeout: 600
