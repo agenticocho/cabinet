@@ -22,3 +22,4 @@ tmpcabinet*.log
 .agents/*.zip
 data/
 toasty_scout/
+.DS_Store
