@@ -423,7 +423,7 @@ export async function runHeartbeat(
       }),
       cabinetPath,
       cwd,
-      timeoutSeconds: 600,
+      timeoutSeconds: 900,
       onComplete: async (completion) => {
         if (completion.status === "failed" && !completion.output) {
           await postMessage({
