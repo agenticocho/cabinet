@@ -55,7 +55,7 @@ async function buildHeartbeatContext(slug: string, cabinetPath?: string): Promis
     const indexPath = path.join(dirPath, "index.md");
     if (await fileExists(indexPath)) {
       const content = await readFileContent(indexPath);
-      focusContext += `\n### ${focusPath}\n${content.slice(0, 2000)}...\n`;
+      focusContext += `\n### ${focusPath}\n${content.slice(0, 1500)}...\n`;
     }
 
     // Block 2: glob all other files (independent — NOT nested inside Block 1)
@@ -67,7 +67,7 @@ async function buildHeartbeatContext(slug: string, cabinetPath?: string): Promis
         if (!/\.(md|csv|txt)$/.test(entry)) continue;
         const filePath = path.join(dirPath, entry);
         const content = await readFileContent(filePath);
-        focusContext += `\n### ${focusPath}/${entry}\n${content.slice(0, 2000)}...\n`;
+        focusContext += `\n### ${focusPath}/${entry}\n${content.slice(0, 1500)}...\n`;
       }
     }
   }

@@ -4,7 +4,7 @@ role: Reads monthly rental statements and produces structured financial analysis
 department: finance
 type: analyst
 provider: llama-local
-model: Qwen2.5-Coder-7B-Instruct-Q5_K_M.gguf
+model: Qwen3.5-9B-UD-Q4_K_XL.gguf
 active: true
 heartbeat: "0 9 * * 1,4"
 workspace: workspace
