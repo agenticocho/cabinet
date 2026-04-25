@@ -473,3 +473,205 @@ npm run dev
 ---
 
 *Keep this file at `~/cabinet/docs/Jarvis_Cabinet_Standard_Reference.md`. Update after any session that changes startup procedure, model assignments, agent roster, or source patches.*
+
+The standard is solid — architecture, paths, env, startup/health, persona rules, patches table, debug triage, and git workflow are all well-structured and accurate for Thread 4 state. What it's missing is everything that happened in Threads 5–7: the 20th agent, the daemon port correction, the `.agents/.config.json` org fix, Toasty's full pipeline, the KB scaffold, the `focus` slice patch, and the new Rental Property Analyst agent. A full rewrite would bloat it unnecessarily — an appendix is the right call. [ppl-ai-file-upload.s3.amazonaws](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/240007/b4de9247-51be-4ad1-ab74-d8253dc04306/Jarvis-Standard-23Apr26.md?AWSAccessKeyId=ASIA2F3EMEYEVPYMY5MM&Signature=609hlFVDjSQQ2X3XFWVUpeX%2FG5U%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEND%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJIMEYCIQCKf2WQzJ2QAHnmKXDw%2B2XSA%2FfVb%2Be8I%2FpjswB9guEOPQIhAO3DOoP79IfXneV%2Fh9C%2BMFpYw4%2B1LxSJ6A0tWDsRRugYKvwECJj%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEQARoMNjk5NzUzMzA5NzA1IgwByafcQQC1mLaW6Awq0ASHhbtPl%2FdTA%2FTxDD08%2Bi9dmaGsQlBdFlxQENDof0gg8lr2QL%2FsisMA6z2c15Xqnzl3S0Xp8DeYsKF%2B3cS%2FjcrwE2jfp%2BQDBm5346ruAz2k2uzAKRbCtAXPzd0Pourw5o8LboG7gxIyH5E4F75nr6FtPCod6KWR4T8BldC15DwGB1%2BL1aHVzZKiehn%2F8REfeu%2FVDzsnhteOmEF%2FY77FkzX0Xi0gj3az3Imvt3m5kWUUrwRB62H1kir1YhGgch2mnt%2FRNdLm%2Fg8DU9SJgbTfsYPNMs%2Bi%2B%2FCSQoSUzQeifPDZat4E6yg8PdxiATOlzAWr0C2NNYBjjN5q6Go4gVvgsxGj%2FpB%2FDRkXM6zF7yalAKXz5kqwgbbKhk%2Fo3%2BmBv9SGcEOZMy%2BvIoGKCPYQoiha2XCafJ4UFLrEZET8rMPWBQDMxOHLRVzY1g7hujUSQhksxaKAx79Z6qfm5iWVEHwMP%2BkxwQBAciKrWJki%2Bn5d9AqR%2FWMxZn4Q0ikCRlRSbsKY9g2j5nQwrulu9pctmJwC4Z5aX2ptcLyny0NadjIoRKMIqniGon9aNP6WNxcvpShxDYKvdRUOP1dsn%2FA7A7gXYlcYPXMUlZlN0j01Llun0MkXpLKGZPNrPhassHtKto76HKIupuQhjsbQwdurFhswMmfK2y1nkA6B%2FQB4ZjqX9fMfHT6xCmEc41cg%2BFrHiktxcpcMdbVHOyWUfU5b%2Brr0appY3fARTeDrbNa%2BfwZYrQp9XSnrnhcb9%2BkH0fL3knKiheUaaCJtIUqL24nKBaLfhklHMOOws88GOpcB6XB%2BbbhdKhT2EzoqKbs4P6qYz0s0FdK3Q%2FPC7iAA1N%2BLKRJH03wKzx%2BfjtR3mKZT%2FUGAwDM7t9%2BqJkVDaUNx%2FrMaHnxVLjXs0p7ckMQZYBz2%2Bgu%2BV7Wd9EIbQRHW7r%2Fr1G2%2Fs8MSRN5vpHWEz06JkL2ycNwGzzvqS8sfnsYvzpApj0G98yUDAthGzF3ww43D9%2BTLnNw68w%3D%3D&Expires=1777130723)
+
+Here it is — tack this onto the end of the existing file:
+
+***
+
+````markdown
+---
+
+## Appendix A — Thread 5–7 Changes (25 Apr 2026)
+
+> **Supersedes** the §5.2 roster, §11 SOP agent count, and §12 pending items where they conflict.  
+> All other sections of the base standard remain accurate.
+
+---
+
+### A.1 Agent count correction — 20 agents (not 19)
+
+The base standard was written after Thread 4 (19 agents). Thread 5 confirmed a 20th agent was already present in the repo:
+
+| Slug | Display Name | Model | Heartbeat |
+|---|---|---|---|
+| `technical-feasibility-director` | Technical Feasibility Director | `Qwen3.5-9B-UD-Q4_K_XL.gguf` | `0 */6 * * *` |
+
+Add this row to the §5.2 roster. All references to "19 agents" should read **20 agents**. The sidebar should show 20 Ocho agents on a healthy startup.
+
+**Scheduled jobs count** after reload-schedules:
+```bash
+curl -s http://127.0.0.1:4101/health | jq '.scheduledJobs | length'
+# → 21  (20 Ocho agents + ai-tech-scout on Toasty, if Toasty daemon is up)
+# → 20  (Jarvis-only, Toasty offline)
+```
+
+---
+
+### A.2 Daemon port correction
+
+Thread 5 confirmed the daemon reliably starts on **port 4100**, not 4101. Cabinet falls back from 4101 → 4100 when 4100 is available. In practice on Jarvis, 4100 is always free and that's the live port.
+
+**Update all health check commands to use 4100:**
+```bash
+curl -s http://127.0.0.1:4100/health | jq .status
+curl -sS -X POST http://127.0.0.1:4100/reload-schedules \
+  -H "Authorization: Bearer $(cat ~/cabinet/.agents/.runtime/daemon-token)" | jq .
+```
+
+> The startup SOP's `sleep 5 && curl -s http://127.0.0.1:4101/health` still works as a probe, but use 4100 for all subsequent commands in a session.
+
+---
+
+### A.3 Org name / "Cows Colluding" fix
+
+If the sidebar shows "Cows Colluding" (the upstream demo org) instead of "Ocho", the fix is:
+
+```bash
+cat > ~/cabinet/.agents/.config.json << 'EOF'
+{
+  "orgName": "Ocho",
+  "orgDescription": "Ocho Oversight Committee"
+}
+EOF
+# Restart UI to pick up the change
+pkill -f "next" && npm run dev
+```
+
+This is now committed to master. Do not delete `.agents/.config.json`.
+
+---
+
+### A.4 CEO persona rules (critical)
+
+The CEO persona had two confirmed bugs — both fixed and committed:
+
+1. **`model:` must appear in YAML frontmatter only**, never as a prose line in the body.
+2. **`active:` must be `true`** — the CEO was accidentally set to `active: false`.
+3. **Cron is `0 9 * * 1-5`** (weekdays 9am), not `30 */4 * * *`.
+
+Verify anytime the CEO persona is edited:
+```bash
+grep -n "model:\|active:\|heartbeat:" ~/cabinet/.agents/ceo/persona.md
+# Expected: exactly 1 line each, all in the frontmatter block (lines 1–25)
+```
+
+---
+
+### A.5 heartbeat.ts — additional patch (focus file slice)
+
+In addition to the patches in §9, Thread 5 applied one more change to `heartbeat.ts`:
+
+| File | Change | Why |
+|---|---|---|
+| `src/lib/agents/heartbeat.ts` | `content.slice(0, 500)` → `content.slice(0, 2000)` | Focus-injected files were truncated too aggressively; 500 chars was too short for meaningful KB content |
+
+This change was applied to **both** the live file and the patches copy:
+- `src/lib/agents/heartbeat.ts`
+- `src/patches/v0.3.4/src/lib/agents/heartbeat.ts`
+
+---
+
+### A.6 KB scaffold — directories seeded
+
+The following directories were created and committed:
+
+```
+~/cabinet/
+  oversight-committee/kb/        ← Committee oversight notes, verdicts
+    index.md
+  researcher/kb/                 ← Researcher output
+    ai-scout/                    ← Toasty rsync target (see A.7)
+  data-analyst/kb/               ← Data Analyst output
+  data-analyst/inbox/            ← Drop zone for structured data files
+  script-writer/kb/              ← Script Writer output
+  researcher/queries.md          ← Active research topic queue
+  rentals/statements/            ← Rental Analyst input (gitignored)
+  rentals/kb/                    ← Rental Analyst output (gitignored, except status.md)
+    status.md
+  .jobs/
+    researcher-daily-scan.yaml   ← Recurring researcher job
+```
+
+**gitignore additions** (append to §8.2):
+```
+rentals/statements/
+rentals/kb/[^s]*
+```
+
+---
+
+### A.7 Toasty AI Tech Scout — cross-machine pipeline
+
+**Toasty** is a separate Ubuntu machine (Ryzen 5, 64 GB RAM, RTX 3060 Ti, user `toasty1`) running a single-agent Cabinet installation. It is **not** part of the Ocho org — it's a standalone intelligence cell.
+
+**Toasty pipeline (confirmed operational as of 24 Apr 2026):**
+
+| Stage | Script | Output |
+|---|---|---|
+| 1 | `hf-scout.py` | `toastyscout/raw/hf-YYYY-MM-DD.jsonl` |
+| 2 | `gh-scout.py` | `toastyscout/raw/gh-YYYY-MM-DD.jsonl` |
+| 3 | `arxiv-scout.py` | `toastyscout/raw/arxiv-YYYY-MM-DD.jsonl` |
+| 4 | `ranker.py` | `toastyscout/processed/ranked-YYYY-MM-DD.jsonl` + `state/seen.db` |
+| 5 | `reporter.py` | `toastyscout/reports/ai-scout-YYYY-MM-DD.md` + `toastyscout/kb/index.md` |
+
+- **Cron on Toasty:** `0 5 * * *` (5am daily)
+- **Cabinet heartbeat:** `0 7 * * *` (agent reads `kb/index.md` via `focus: [toastyscoutkb]`)
+- **Delivery to Jarvis:** rsync `toastyscout/kb/` → `mikebird@jarvis:~/cabinet/researcher/kb/ai-scout/` (Thread 6 wiring — confirm SSH key is set up)
+- **Toasty agent:** `ai-tech-scout`, model `SmolLM3-3B-128K-UD-Q4_K_XL.gguf`, CPU-only
+- **Key fix:** Persona uses fill-in-the-blank template (not free-recall) to prevent SmolLM3 hallucination. Do not rewrite the persona body without testing.
+- **Hallucination recovery:** `rm -f ~/cabinet/.agents/ai-tech-scout/sessions/*.txt` on Toasty, then reload + re-fire.
+
+Scripts are committed under `toastyscout/scripts/` using `git add -f` (directory is gitignored for runtime data; scripts are an exception).
+
+---
+
+### A.8 Rental Property Analyst — new agent (Thread 7)
+
+A standalone financial analysis agent was created for external distribution. It is installed on Jarvis for testing and will be packaged for a third-party user.
+
+| Field | Value |
+|---|---|
+| Slug | `rental-property-analyst` |
+| Model | `Qwen2.5-Coder-7B-Instruct-Q5_K_M.gguf` |
+| Heartbeat | `0 9 * * 1,4` (Mon + Thu 9am) |
+| Input | `rentals/statements/*.md` (or `.csv`, `.txt`) |
+| Output | `rentals/kb/<slug>-analysis-<YYYY-MM>.md` |
+| Verdict | `BUY / SELL / HOLD / NEEDS DATA` (bold, top of file) |
+| Metrics | NOI, Cap Rate, Cash Flow, Cash-on-Cash Return, Expense Ratio, Vacancy Rate |
+
+**Install:**
+```bash
+mkdir -p ~/cabinet/.agents/rental-property-analyst
+cp rental-analyst-persona.md ~/cabinet/.agents/rental-property-analyst/persona.md
+mkdir -p ~/cabinet/rentals/statements ~/cabinet/rentals/kb
+```
+
+**Smoke-test expected values** (for `test-unit-apr2026.md` sample statement):
+- NOI: $1,247/mo (`$1,850 − ($148 + $75 + $200 + $180)`)
+- Cap Rate: ~5.25% (`$1,247 × 12 / $285,000`) → **HOLD** verdict expected
+- Cash Flow: $297/mo (`$1,247 − $950`)
+
+This agent is **not part of the Ocho Oversight Committee** — it runs alongside the 20 Ocho agents as an independent specialist. Scheduled jobs count after install: **22** (20 Ocho + ai-tech-scout + rental-property-analyst), or **21** if Toasty is offline.
+
+---
+
+### A.9 Updated §12 Pending Items
+
+| Item | Status |
+|---|---|
+| Pull `DeepSeek-R1-Distill-Qwen-14B-Q4_K_M.gguf` | Still pending. When ready: `sed -i '' "s/^model: .*/model: DeepSeek-R1-Distill-Qwen-14B-Q4_K_M.gguf/" .agents/chief-methodological-officer/persona.md` (and executive-insights-director). Then reload. |
+| UI custom cron input | Deferred to future thread. Edit `persona.md` directly for now. |
+| Toasty → Jarvis rsync | SSH key setup pending (Thread 6 work). Confirm with `ssh mikebird@<JARVIS_LAN_IP> echo ok` from Toasty. |
+| Rental Analyst packaging for Neil | Thread 7 work. Deliver: `rental-analyst-persona.md` + `install-instructions.md` + `sample-statement.md`. |
+| Agent job assignments | Researcher has `researcher-daily-scan.yaml`. All others still running no-op heartbeats. Full job queue assignment is Thread 7+ work. |
+
+---
+
+*Appendix A added 25 Apr 2026 after Threads 5–7. Next revision should roll Appendix A into the main body and re-date the document as `Jarvis-Standard-25Apr26.md`.*
+````
+
+***
+
+**One note:** the base standard still says "19 agents" in the §11 SOP comment and the header status line. The appendix overrides those, but when you next do a full revision, the document should be re-dated `Jarvis-Standard-25Apr26.md` with Appendix A folded in. The appendix is ready to paste as-is until then.
