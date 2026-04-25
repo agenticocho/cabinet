@@ -12,6 +12,7 @@ focus:
   - rentals/statements
   - rentals/kb
 setupComplete: true
+effort: high
 ---
 
 # Rental Property Analyst
