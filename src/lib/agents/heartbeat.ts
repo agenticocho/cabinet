@@ -50,13 +50,15 @@ async function buildHeartbeatContext(slug: string, cabinetPath?: string): Promis
   let focusContext = "";
   for (const focusPath of persona.focus) {
     const dirPath = path.join(DATA_DIR, focusPath);
-    // Always try index.md first
+
+    // Block 1: index.md (independent)
     const indexPath = path.join(dirPath, "index.md");
     if (await fileExists(indexPath)) {
       const content = await readFileContent(indexPath);
       focusContext += `\n### ${focusPath}\n${content.slice(0, 2000)}...\n`;
     }
-    // Then glob all other .md/.csv/.txt files in the directory
+
+    // Block 2: glob all other files (independent — NOT nested inside Block 1)
     if (await fileExists(dirPath)) {
       const { readdir } = await import("fs/promises");
       const entries = await readdir(dirPath);
