@@ -675,3 +675,21 @@ This agent is **not part of the Ocho Oversight Committee** — it runs alongside
 ***
 
 **One note:** the base standard still says "19 agents" in the §11 SOP comment and the header status line. The appendix overrides those, but when you next do a full revision, the document should be re-dated `Jarvis-Standard-25Apr26.md` with Appendix A folded in. The appendix is ready to paste as-is until then.
+## §10 — Rental Property Analyst (added 25 Apr 2026)
+
+### Working llama-server startup
+/opt/homebrew/bin/llama-server \
+  --model /Volumes/SanDisk2TB/SanDisk2TB-Mac/models/llm/inference/Qwen3.5-9B-UD-Q4_K_XL.gguf \
+  --port 8080 --ctx-size 65536 --n-gpu-layers 99 --parallel 1
+
+### Key fixes applied to source (must survive upgrades)
+- llama-local.ts: stream: false + resp.json() (was stream: true + SSE reader → AbortSignal timeout)
+- heartbeat.ts: timeoutSeconds: 900 (line 426)
+- heartbeat.ts: memory injection capped at .slice(0, 2000) per field
+- persona.md: effort: high, active: true (auto-pause resets this after failures)
+
+### Memory bloat prevention
+If prompt balloons back to 90KB+, wipe:
+  ~/cabinet/.agents/.memory/rental-property-analyst/context.md → "# Context\n(reset)"
+  ~/cabinet/.agents/.memory/rental-property-analyst/decisions.md → "# Decisions\n(none)"
+  ~/cabinet/.agents/.memory/rental-property-analyst/learnings.md → "# Learnings\n(none)"

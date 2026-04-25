@@ -103,13 +103,13 @@ async function buildHeartbeatContext(slug: string, cabinetPath?: string): Promis
 ## Your Memory (from previous heartbeats)
 
 ### Recent Context
-${context || "(no previous context)"}
+${(context || "(no previous context)").slice(0, 2000)}
 
 ### Key Decisions
-${decisions || "(no decisions logged yet)"}
+${(decisions || "(no decisions logged yet)").slice(0, 2000)}
 
 ### Learnings
-${learnings || "(no learnings yet)"}
+${(learnings || "(no learnings yet)").slice(0, 2000)}
 
 ---
 
