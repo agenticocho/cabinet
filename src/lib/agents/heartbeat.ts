@@ -261,8 +261,8 @@ async function processHeartbeatOutput(
   const artifactBlockRe = /```artifact:([^\n]+)\n([\s\S]*?)```/g;
   let artifactMatch;
   while ((artifactMatch = artifactBlockRe.exec(output)) !== null) {
-    const relPath = artifactMatch.trim();[4]
-    const content = artifactMatch;[5]
+    const relPath = artifactMatch[1].trim();[4]
+    const content = artifactMatch[2];
     const absPath = path.join(cabinetPath ?? DATA_DIR, relPath);
     await fs.mkdir(path.dirname(absPath), { recursive: true });
     await fs.writeFile(absPath, content, "utf-8");
