@@ -132,7 +132,7 @@ export const llamaLocalAdapter: AgentExecutionAdapter = {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "local",
-          stream: true,
+          stream: false,
           temperature,
           messages: [
             { role: "system", content: systemPrompt },
@@ -142,23 +142,9 @@ export const llamaLocalAdapter: AgentExecutionAdapter = {
         signal: ctx.timeoutMs ? AbortSignal.timeout(ctx.timeoutMs) : undefined,
       });
 
-      if (!resp.body) throw new Error("No response body from llama-server");
-
-      const reader = resp.body.getReader();
-      const dec = new TextDecoder();
-      outer: while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        for (const line of dec.decode(value).split("\n")) {
-          if (!line.startsWith("data: ")) continue;
-          const raw = line.slice(6).trim();
-          if (raw === "[DONE]") break outer;
-          try {
-            const delta = JSON.parse(raw)?.choices?.[0]?.delta?.content;
-            if (delta) { output += delta; await ctx.onLog("stdout", delta); }
-          } catch {}
-        }
-      }
+      const json = await resp.json() as { choices?: Array<{ message?: { content?: string } }> };
+      output = json?.choices?.[0]?.message?.content ?? "";
+      if (output) await ctx.onLog("stdout", output);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       timedOut = msg.includes("TimeoutError") || msg.includes("aborted");

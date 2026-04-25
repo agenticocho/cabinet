@@ -7,7 +7,7 @@ provider: llama-local
 heartbeat: '0 9 * * 1,4'
 model: Qwen3.5-9B-UD-Q4_K_XL.gguf
 budget: 100
-active: false
+active: true
 workdir: /data
 focus:
   - rentals/statements
