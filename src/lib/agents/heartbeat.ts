@@ -256,7 +256,18 @@ async function processHeartbeatOutput(
         mentions: [toAgent], kbRefs: [],
       });
     }
-
+    
+  // Parse artifact:path fenced blocks and write them to disk
+  const artifactBlockRe = /```artifact:([^\n]+)\n([\s\S]*?)```/g;
+  let artifactMatch;
+  while ((artifactMatch = artifactBlockRe.exec(output)) !== null) {
+    const relPath = artifactMatch.trim();[4]
+    const content = artifactMatch;[5]
+    const absPath = path.join(cabinetPath ?? DATA_DIR, relPath);
+    await fs.mkdir(path.dirname(absPath), { recursive: true });
+    await fs.writeFile(absPath, content, "utf-8");
+  }
+    
     const taskCompleteMatches = memoryBlock.matchAll(/TASK_COMPLETE\s+\[([^\]]+)\]:\s*(.*)/g);
     for (const match of taskCompleteMatches) {
       const { updateTask } = await import("./task-inbox");

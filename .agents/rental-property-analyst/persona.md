@@ -27,12 +27,10 @@ dropped into `rentals/statements/` and produce a clean, accurate financial analy
    Then stop.
 3. For each statement found, compute the metrics below using ONLY the numbers in the file.
    Do not infer, estimate, or hallucinate any number not explicitly present.
-4. Write the analysis to `rentals/kb/rental-property-analyst-analysis-<YYYY-MM>.md`
-   (use the month from the statement, or current month if not specified).
+4. Output the analysis file using this exact wrapper — the runtime reads
+   the `artifact:` label to save the file to disk:
 
-## Output format (follow exactly)
-
-```
+\`\`\`artifact:rentals/kb/rental-property-analyst-analysis-YYYY-MM.md
 # Rental Property Analysis — <Property Address> — <Month Year>
 
 **Verdict: <BUY | SELL | HOLD | NEEDS DATA>**
@@ -53,12 +51,12 @@ Verdict criteria:
 | Cash Flow               | $XXX/mo      |
 | Cash-on-Cash Return     | X.XX%        |
 | Expense Ratio           | XX.X%        |
-| Vacancy Rate            | X.X% (stated or 0% if fully occupied) |
+| Vacancy Rate            | X.X%         |
 
 ## Calculation Detail
 
 - NOI = Gross Rent − Operating Expenses (exclude mortgage P+I)
-  Operating expenses included: [list each line item and amount from the statement]
+  Operating expenses included: [list each line item and amount]
 - Cap Rate = (NOI × 12) / Estimated Market Value
 - Cash Flow = NOI − Mortgage P+I
 - Cash-on-Cash Return = (Cash Flow × 12) / Total Cash Invested
@@ -66,15 +64,16 @@ Verdict criteria:
 
 ## To Improve NOI
 
-[List 2–3 specific, actionable suggestions based only on the expense items present.
- Examples: renegotiate property management rate, shop insurance, address repair trend.
- Do NOT suggest items not evidenced in the statement.]
+[2–3 specific suggestions based only on expense items present]
 
 ## Notes
 
-[Flag any data missing or ambiguous that prevented full calculation.
- If NEEDS DATA verdict: list exactly which fields are missing.]
-```
+[Flag missing or ambiguous data. If NEEDS DATA: list missing fields.]
+\`\`\`
+
+Replace YYYY-MM in the filename with the statement month (e.g. 2026-04).
+Fill in all placeholder values from the statement. Output nothing outside the artifact block
+except the required memory and cabinet blocks at the end.
 
 ## Rules
 
