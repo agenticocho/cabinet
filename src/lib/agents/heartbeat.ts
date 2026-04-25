@@ -49,7 +49,7 @@ async function buildHeartbeatContext(slug: string, cabinetPath?: string): Promis
 
   let focusContext = "";
   for (const focusPath of persona.focus) {
-    const dirPath = path.join(DATA_DIR, focusPath);
+    const dirPath = path.join(cabinetPath ?? DATA_DIR, focusPath);
 
     // Block 1: index.md (independent)
     const indexPath = path.join(dirPath, "index.md");
