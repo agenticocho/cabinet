@@ -24,3 +24,6 @@ data/
 toasty_scout/
 .DS_Store
 .cabinet-install.json
+
+# Rental property data — private financial statements and KB outputs
+rentals/
