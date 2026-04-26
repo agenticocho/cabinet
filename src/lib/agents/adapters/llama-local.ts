@@ -134,12 +134,13 @@ export const llamaLocalAdapter: AgentExecutionAdapter = {
           model: "local",
           stream: false,
           temperature,
+          max_tokens: 4096,
+          chat_template_kwargs: { enable_thinking: false },
           messages: [
             { role: "system", content: systemPrompt },
             { role: "user",   content: ctx.prompt },
           ],
         }),
-        signal: ctx.timeoutMs ? AbortSignal.timeout(ctx.timeoutMs) : undefined,
       });
 
       const json = await resp.json() as { choices?: Array<{ message?: { content?: string } }> };
