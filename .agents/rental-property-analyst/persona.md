@@ -5,7 +5,7 @@ role: >-
   with a buy/sell/hold verdict
 provider: llama-local
 heartbeat: '0 9 * * 1,4'
-model: Qwen3.5-9B-UD-Q4_K_XL.gguf
+model: Qwen3.5-4B-UD-Q4_K_XL.gguf
 budget: 100
 active: true
 workdir: /data
