@@ -11,7 +11,6 @@ active: true
 workdir: /data
 focus:
   - rentals/statements
-  - rentals/kb
 tags: []
 emoji: "\U0001F916"
 department: finance
