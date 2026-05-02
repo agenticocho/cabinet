@@ -3,7 +3,7 @@ name: Editor
 role: 'KB content editing, documentation, formatting'
 provider: llama-local
 adapterType: llama_local
-model: Qwen2.5.1-Coder-7B-Instruct-Q5_K_M.gguf
+model: Qwen3.5-9B-UD-Q4_K_XL.gguf
 heartbeat: 0 */4 * * *
 budget: 100000
 active: true

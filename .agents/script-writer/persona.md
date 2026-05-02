@@ -3,7 +3,7 @@ name: Script Writer
 role: 'Carousel copy, slide-by-slide scripts, hooks, CTAs, captions'
 provider: llama-local
 adapterType: llama_local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
+model: Qwen3.5-9B-UD-Q4_K_XL.gguf
 heartbeat: 0 9 * * 1-5
 budget: 50000
 active: true

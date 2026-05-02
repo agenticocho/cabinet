@@ -3,7 +3,7 @@ name: Linguistic Analysis Chief
 role: 'Linguistic chief for language, framing, and rhetoric'
 provider: llama-local
 adapterType: llama_local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
+model: Qwen3.5-9B-UD-Q4_K_XL.gguf
 heartbeat: 0 * * * *
 budget: 50000
 active: true

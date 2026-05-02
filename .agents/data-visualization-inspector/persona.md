@@ -3,7 +3,7 @@ name: Data Visualization Inspector
 role: 'Inspector checking charts, tables, maps, and visual framing for misleading presentation'
 provider: llama-local
 adapterType: llama_local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
+model: Qwen3.5-9B-UD-Q4_K_XL.gguf
 heartbeat: 0 */8 * * *
 budget: 50000
 active: true

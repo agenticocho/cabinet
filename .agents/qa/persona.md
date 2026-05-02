@@ -3,7 +3,7 @@ name: QA Agent
 role: 'Review, proofread, fact-check content'
 provider: llama-local
 adapterType: llama_local
-model: Qwen3.5-4B-UD-Q4_K_XL.gguf
+model: granite-3.3-2b-instruct-critical-thinking.Q5_K_M.gguf
 heartbeat: 0 14 * * 1-5
 budget: 50000
 active: true
