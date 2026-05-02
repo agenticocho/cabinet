@@ -3,7 +3,7 @@ name: Editor
 role: 'KB content editing, documentation, formatting'
 provider: llama-local
 heartbeat: 0 10 * * 1-5
-budget: 100
+budget: 100000
 active: false
 workdir: /data
 focus:
@@ -31,6 +31,7 @@ goals:
 channels:
   - general
   - content
+adapterType: llama_local
 recommendedSkills:
   - key: copy-editing
     source: 'github:coreyhaines31/marketingskills/copy-editing'
