@@ -3,10 +3,11 @@ name: Editor
 role: 'KB content editing, documentation, formatting'
 provider: llama-local
 adapterType: llama_local
-model: Qwen3.5-9B-UD-Q4_K_XL.gguf
+model: Qwen3.5-4B-UD-Q4_K_XL.gguf
 heartbeat: 0 */4 * * *
 budget: 100000
 active: true
+setupComplete: true
 workdir: /data
 focus:
   - content-editing
@@ -19,20 +20,8 @@ tags:
   - content
   - editing
   - cabinet
-emoji: "\U0001F4DD"
-department: oversight
-type: specialist
-workspace: workspace
-setupComplete: true
-goals:
-  - metric: pages_updated
-    target: 20
-    current: 0
-    unit: pages
-    period: weekly
-channels:
-  - general
-  - content
+slug: editor
+canDispatch: true
 ---
 # Editor Agent
 

@@ -21,7 +21,7 @@ emoji: "\U0001F916"
 department: general
 type: specialist
 workspace: workspace
-setupComplete: false
+setupComplete: true
 channels:
   - general
 adapterType: llama_local
