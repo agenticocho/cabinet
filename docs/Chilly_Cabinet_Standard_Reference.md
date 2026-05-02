@@ -479,3 +479,146 @@ Using the `cabinet`-relative token (not the `v0.3.4`-relative one) keeps daemon 
    and `provider:` point to a confirmed-present GGUF and `llama-local`.
 4. **Do NOT re-verify**: adapter wiring, daemon import of `agentAdapterRegistry`, `adapterType` casing
    (`llama_local`), `supportsDetachedRuns`, or editor heartbeat — all confirmed good.
+
+Addendum – 21Apr26 Chilly Cabinet Thread (Oversight Expansion & Heartbeat Behavior)
+This addendum captures what was learned while adding the remaining Oversight Committee agents and stabilizing their heartbeats on Chilly’s llama‑local stack. It assumes the main standard is already in place (daemon on 4100, llama‑local adapter, GGUF via llama-server).
+
+A. Daemon lifecycle, ports, and wrappers
+Single owner for the daemon. Run either npx cabinetai run (which starts both the Next.js app on 4000 and the daemon on 4100) or npx tsx server/cabinet-daemon.ts directly, but not both at the same time. Competing processes can cause the daemon to start and then immediately shut down.
+
+Port expectations. The app server always talks to the daemon on 4100. If the daemon starts on 4101 (or any other port), the UI will show the daemon as down or heartbeats as failing, even if the daemon itself is otherwise healthy. Fix by killing anything bound to 4100 and restarting the daemon so it binds to 4100.
+
+Standard startup (recommended).
+
+bash
+cd /home/chilly1/cabinet
+export CABINET_DATA_DIR=/home/chilly1/cabinet
+npx cabinetai run
+This wrapper takes care of starting the Next.js app on 4000 and the daemon on 4100 with the correct DATA_DIR.
+
+B. Tokens, env, and data‑dir invariants
+Token file. The daemon and UI must share the same token from
+/home/chilly1/cabinet/.agents/.runtime/daemon-token.
+The daemon should receive this via CABINET_DAEMON_TOKEN, and all manual API calls should read from the same file.
+
+Shared data directory. CABINET_DATA_DIR must be set to /home/chilly1/cabinet for both the daemon and the app, so they see the same .agents/ tree, KB files, and runtime metadata.
+
+Llama‑local env.
+
+bash
+export LLAMA_MODELS_DIR=/home/chilly1/moltbook_pipeline/models
+export LLAMA_SERVER_BIN=/home/chilly1/llama.cpp/build/bin/llama-server
+These must be set in the environment where the daemon runs; the llama‑local adapter expects them and was validated with the Qwen/Granite/Llama GGUFs listed there.
+
+C. New Oversight personas (Ocho)
+During this thread, the remaining Oversight roles were added under .agents/ using llama‑local and following the standard persona pattern. Each agent is oversight‑only: they read KB, flag issues, and route concrete work back to Editor/QA/Chair/Script rather than rewriting content.
+
+New agents and their canonical slugs:
+
+Chief Methodological Officer – chief-methodological-officer
+
+Executive Insights Director – executive-insights-director
+
+Strategic Intelligence Officer – strategic-intelligence-officer
+
+Pattern Recognition Director – pattern-recognition-director
+
+Data Visualization Inspector – data-visualization-inspector
+
+Consumer Behavior Verification Officer – consumer-behavior-verification-officer
+
+Technical Feasibility Director – technical-feasibility-director
+
+Cross-Industry Intelligence Coordinator – cross-industry-intelligence-coordinator
+
+Innovation Assessment Director – innovation-assessment-director
+
+Strategic Motivation Analyst – strategic-motivation-analyst
+
+Key persona conventions confirmed in this thread:
+
+Each persona uses either persona.md with a single YAML frontmatter block or the split persona.yaml+body.md pattern, but never multiple frontmatter blocks.
+
+model: must live in YAML frontmatter only (never in the body). There are no duplicate model: lines and no model: text in persona prose.
+
+Default Oversight model is Qwen3.5-4B-UD-Q4_K_XL.gguf (llama‑local provider). Executive Insights Director may optionally use Qwen2.5-7B-Instruct-1M-Q4_K_M.gguf when longer context is needed and the model is confirmed on disk.
+
+All new Oversight agents write to oversight-committee/kb/… paths appropriate to their role (e.g., methodology-flags.md, pattern-flags.md, visualization-flags.md, etc.), and always log short notes with explicit document references.
+
+D. Heartbeat behavior and “red vs green” semantics
+This thread clarified how to interpret heartbeat status in the UI versus daemon health.
+
+Green heartbeat with no transcript.
+A run can complete successfully (green) while showing “No transcript captured” for both transcript panes. This typically means:
+
+The agent ran, found no inbox items or tasks, and returned a metadata‑only “no-op” result.
+
+The system did not store token‑level output for that run.
+This is not an error; the Result box will still show a normal summary such as “No actions were taken this heartbeat…” and the daemon logs will show exitCode: 0 with non‑empty output.
+
+Red heartbeat with daemonFetch timeout after 180000ms.
+This error string comes from the Next.js app, not the daemon. It means:
+
+The frontend waited 180 000 ms (3 minutes) for the daemon’s HTTP response for that run.
+
+The response didn’t arrive in time (e.g., model queued behind other agents), so the UI aborted the fetch and marked the run as failed.
+The daemon and llama-local adapter can still be healthy; health checks will continue to return 200 and other runs (especially manual ones) may succeed immediately afterward.
+
+Pill color reflects the latest run, not overall health.
+An agent’s icon (green vs red) is based on its most recent heartbeat/job:
+
+Manual heartbeat completes quickly → pill turns green.
+
+Later scheduled heartbeat times out or fails → pill flips back to red, even if the previous run was fine.
+When investigating a “red” agent, always open the latest run, check the Result message, and consult daemon logs for exitCode and outputLength rather than assuming a persistent failure.
+
+Scheduled vs manual heartbeats.
+With many agents on staggered cron schedules a single llama-local backend can occasionally get congested. In this thread, the daemon stayed healthy on 4100 while:
+
+Manual Editor / Oversight heartbeats routinely completed successfully.
+
+Some scheduled heartbeats (especially from newly added agents) timed out at the UI.
+Mitigation levers:
+
+Temporarily set non-critical Oversight personas to active: false during heavy debugging.
+
+Or reduce their heartbeat frequency (for example, move some from every 4–6 hours to a nightly cron) to cut down on bursts.
+
+E. Operational checklist for future threads
+When anything about agent status looks odd, apply this fast path before touching adapter code or personas again:
+
+Check the status panel.
+
+App Server: Running
+
+Daemon: Running
+
+Llama.cpp (Local GGUF): Ready
+If these are all green, the problem is almost always per‑run (timeout, persona) rather than infrastructure.
+
+Confirm daemon port and data dir.
+
+Startup log must say Cabinet Daemon running on port 4100.
+
+DATA_DIR: /home/chilly1/cabinet.
+
+Run a single manual heartbeat on Editor.
+
+Use the UI or:
+
+bash
+TOKEN=$(cat /home/chilly1/cabinet/.agents/.runtime/daemon-token)
+curl -s -X PUT http://localhost:4000/api/agents/personas/editor \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"action":"run","source":"manual"}' | jq .
+Check daemon logs: createAdapterSession … llama-local, exitCode: 0, outputLength > 0.
+A clean Editor run means the pipeline is intact; focus any further debugging on the specific persona or on timeout behavior, not on global wiring.
+
+Interpret red runs carefully.
+
+If the Result shows daemonFetch timeout after 180000ms and health checks are green, treat as a transient timeout.
+
+Only if the Result or daemon log shows a different error (e.g., “No model configured”, spawn error, parse error) should adapter code, env vars, or persona YAML be modified.
+
+
