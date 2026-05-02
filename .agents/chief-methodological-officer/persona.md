@@ -4,6 +4,7 @@ role: >-
   Method specialist checking research design, sampling, bias, and evidence
   strength
 provider: llama-local
+adapterType: llama_local
 model: Qwen3.5-4B-UD-Q4_K_XL.gguf
 heartbeat: 0 */4 * * *
 budget: 50000
