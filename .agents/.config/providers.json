@@ -5,6 +5,11 @@
   "disabledProviderIds": [
     "claude-code",
     "codex-cli",
-    "gemini-cli"
+    "gemini-cli",
+    "cursor-cli",
+    "opencode",
+    "pi",
+    "grok-cli",
+    "copilot-cli"
   ]
 }
