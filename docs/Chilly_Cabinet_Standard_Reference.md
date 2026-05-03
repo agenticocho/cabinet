@@ -1,6 +1,6 @@
-# Chilly + Cabinet Standard Reference (02May26 — Thread 14)
+# Chilly + Cabinet Standard Reference (02May26 — Thread 15)
 
-> **Last updated:** Thread 14 (02 May 2026). Supersedes all prior versions.
+> **Last updated:** Thread 15 (02 May 2026). Supersedes all prior versions.
 > Keep this file at `~/cabinet/docs/Chilly_Cabinet_Standard_Reference.md`.
 > After every thread: edit on disk, commit from `~/cabinet`, push.
 
@@ -53,8 +53,9 @@
 
 | Filename | Assigned to |
 |---|---|
-| `Qwen2.5-Coder-7B-Instruct-Q5_K_M.gguf` | Editor ✅ |
-| `Qwen3.5-4B-UD-Q4_K_XL.gguf` | CEO, Script Writer, Oversight |
+| `Qwen2.5-Coder-7B-Instruct-Q5_K_M.gguf` | Available (not currently assigned) |
+| `Qwen3.5-4B-UD-Q4_K_XL.gguf` | Editor ✅, CEO ✅, Script Writer, Oversight |
+| `Qwen3.5-9B-UD-Q4_K_XL.gguf` | **Do not use** — exceeds VRAM with Xorg running (~6.5GB needed, ~4GB free after Xorg/Chromium) |
 | `granite-3.3-2b-instruct-critical-thinking.Q5_K_M.gguf` | QA |
 
 > Always verify before assigning: `ls -lh /home/chilly1/moltbook_pipeline/models/*.gguf`
@@ -103,7 +104,7 @@ Expected output:
 Cabinet Daemon running on port 4100
 DATA_DIR: /home/chilly1/cabinet
 Default provider: llama-local
-Discovered 1 cabinet(s). Scheduled 0 jobs and 16 heartbeats.
+Discovered 1 cabinet(s). Scheduled 0 jobs and 17 heartbeats.
 ```
 
 ### 4.3. Start the UI (terminal 2)
@@ -117,6 +118,8 @@ npm run dev
 UI available at `http://localhost:4000`. Workspace must say **Ocho**.
 
 > **NEVER** run `npx cabinetai run` — runs the upstream binary, wipes all source patches, shows Cows Colluding demo org.
+
+> **START ORDER**: llama-server must be running **before** `npm run dev`. If llama-server is down when the UI starts, the first heartbeat fires immediately, throws an unhandled fetch rejection, and kills the Next.js process within ~10 seconds.
 
 ### 4.4. Health checks
 
@@ -162,14 +165,14 @@ active: true
 
 ---
 
-## 6. Ocho agents (16 scheduled heartbeats)
+## 6. Ocho agents (17 scheduled heartbeats)
 
 ### 6.1. Core agents
 
 | Agent | Slug | Model | Cron |
 |---|---|---|---|
-| Editor | `editor` | `Qwen2.5-Coder-7B-Instruct-Q5_K_M.gguf` | `0 */4 * * *` |
-| CEO | `ceo` | `Qwen3.5-4B-UD-Q4_K_XL.gguf` | `0 9 * * 1-5` |
+| Editor | `editor` | `Qwen3.5-4B-UD-Q4_K_XL.gguf` | `50 */4 * * *` |
+| CEO | `ceo` | `Qwen3.5-4B-UD-Q4_K_XL.gguf` | `0 */4 * * *` |
 | QA | `qa` | `granite-3.3-2b-instruct-critical-thinking.Q5_K_M.gguf` | `0 14 * * 1-5` |
 | Script Writer | `script-writer` | `Qwen3.5-4B-UD-Q4_K_XL.gguf` | `0 9 * * 1-5` |
 
@@ -216,6 +219,7 @@ Healthy daemon log: `exitCode: 0` AND `outputLength > 0`.
 2. `curl http://127.0.0.1:4100/health` → `"ok"`?
 3. Editor canary → `exitCode: 0, outputLength > 0`?
 4. If Editor green but others red → per-persona issue (frontmatter, model path, budget).
+5. **Auto-pause**: after every run the daemon writes `active: false` to persona.md. Before any manual canary run: `sed -i 's/active: false/active: true/' ~/cabinet/.agents/<slug>/persona.md` then reload schedules.
 5. `daemonFetch timeout 180000ms` with green health = transient congestion, retry. **Do NOT touch adapter code.**
 
 ### 7.3. Common failure modes
@@ -228,6 +232,8 @@ Healthy daemon log: `exitCode: 0` AND `outputLength > 0`.
 | Daemon on 4101/4102 | Stale process holding 4100 | `pkill -9 -f "cabinet-daemon"`, restart |
 | "Cows Colluding" org | Missing `CABINET_DATA_DIR` | Set env before starting UI |
 | `daemonFetch timeout` | Model queue congestion | Retry; reduce Oversight cron frequency |
+| `"Agent inactive or over budget"` after successful run | Auto-pause: daemon writes `active: false` post-run | `sed -i 's/active: false/active: true/'` persona.md + reload |
+| `exitCode: 1, outputLength: 0` (CEO) | Duplicate `model:` lines in frontmatter → YAML parse fails | Remove duplicate `model:` line; keep exactly one |
 | `/api/agents/providers 500` | Daemon not running | Start daemon first, then UI |
 
 ---
@@ -271,7 +277,7 @@ Remote: `git@github.com:agenticocho/cabinet.git`
 
 ---
 
-## 10. Known-good snapshot (02 May 2026 — end of Thread 14)
+## 10. Known-good snapshot (02 May 2026 — end of Thread 15)
 
 | Item | Value |
 |---|---|
@@ -282,18 +288,22 @@ Remote: `git@github.com:agenticocho/cabinet.git`
 | UI port | 4000 |
 | llama-server port | 8080 |
 | Daemon token | `~/cabinet/.agents/.runtime/daemon-token` (rotated Thread 14) |
-| Editor heartbeat | ✅ Green |
-| Scheduled heartbeats | 16 |
+| Editor heartbeat | ✅ Green (Qwen3.5-4B) |
+| CEO heartbeat | ✅ Green (outputLength: 1820 — mission planning) |
+| Scheduled heartbeats | 17 |
+| Cron collision fix | `*/4` agents staggered by 10min offsets (0,10,20,30,40,50 min) |
+| linguistic-analysis-chief | Fixed from `0 * * * *` (hourly) → `0 */6 * * *` |
 
 ---
 
-## 11. Thread 15 starting checklist
+## 11. Thread 16 starting checklist
 
 1. Kill stale processes (§4.1).
 2. Start daemon from `~/.cabinet/app/v0.3.4` (§4.2) — confirm port 4100 and `DATA_DIR: /home/chilly1/cabinet`.
 3. Start UI from `cabinet_src` (§4.3) — confirm Ocho workspace.
 4. Health checks (§4.4) — both 4000 and 4100 green.
 5. Editor canary (§7.1) — `exitCode: 0, outputLength > 0`.
-6. Canary CEO, QA, Script Writer in turn.
+6. Canary remaining unverified agents: QA (Granite), Script Writer, and spot-check Oversight agents.
+7. Consider patching heartbeat.ts to skip auto-pause (`active: false` write) for llama-local adapter — prevents manual canary friction.
 7. Fix any red agents (frontmatter, model file, adapterType).
 8. Edit this file on disk, commit from `~/cabinet`, push.
