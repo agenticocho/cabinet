@@ -2,7 +2,7 @@
 name: Linguistic Analysis Chief
 role: 'Linguistic chief for language, framing, and rhetoric'
 provider: llama-local
-heartbeat: 0 * * * *
+heartbeat: "0 */6 * * *"
 budget: 50000
 active: false
 workdir: /data

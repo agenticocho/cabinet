@@ -4,7 +4,7 @@ role: 'Committee chair for governance, verdicts, and synthesis of complex cases'
 provider: llama-local
 adapterType: llama_local
 model: Qwen3.5-9B-UD-Q4_K_XL.gguf
-heartbeat: 0 */4 * * *
+heartbeat: "20 */4 * * *"
 budget: 50000
 active: true
 workdir: /data

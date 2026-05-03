@@ -4,7 +4,7 @@ role: 'Officer validating incentives, costs, and feasibility'
 provider: llama-local
 adapterType: llama_local
 model: granite-3.3-2b-instruct-critical-thinking.Q5_K_M.gguf
-heartbeat: 0 */4 * * *
+heartbeat: "30 */4 * * *"
 budget: 50000
 active: true
 workdir: /data
