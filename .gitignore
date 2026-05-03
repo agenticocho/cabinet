@@ -10,3 +10,13 @@
 # Optionally ignore stats (changes every heartbeat)
 # .agents/.memory/*/stats.json
 # .agents/*/memory/stats.json
+
+# Runtime state — never track
+.agents/.slack/
+.agents/.history/
+.agents/.memory/
+.agents/.runtime/
+.agents/*/sessions/
+.global-agents/.history/
+.global-agents/.memory/
+.cabinet-state/

@@ -1,3 +1,0 @@
-{"agentSlug":"linguistic-analysis-chief","timestamp":"2026-05-02T21:00:46.031Z","duration":45819,"status":"failed","summary":"llama-local: llama-server not ready after 45000ms","cabinetPath":"."}
-{"agentSlug":"linguistic-analysis-chief","timestamp":"2026-05-02T22:00:45.583Z","duration":45472,"status":"failed","summary":"llama-local: llama-server not ready after 45000ms","cabinetPath":"."}
-{"agentSlug":"linguistic-analysis-chief","timestamp":"2026-05-03T01:01:30.634Z","duration":90480,"status":"failed","summary":"llama-local: llama-server not ready after 90000ms","cabinetPath":"."}
