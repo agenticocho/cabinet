@@ -11,3 +11,4 @@
 {"agentSlug":"editor","timestamp":"2026-05-02T22:01:39.652Z","duration":45956,"status":"failed","summary":"llama-local: llama-server not ready after 45000ms"}
 {"agentSlug":"editor","timestamp":"2026-05-02T22:22:24.627Z","duration":37,"status":"failed","summary":""}
 {"agentSlug":"editor","timestamp":"2026-05-02T22:27:54.105Z","duration":136,"status":"failed","summary":""}
+{"agentSlug":"editor","timestamp":"2026-05-03T01:06:01.476Z","duration":90571,"status":"failed","summary":"llama-local: llama-server not ready after 90000ms","cabinetPath":"."}
