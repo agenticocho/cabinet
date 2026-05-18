@@ -16,7 +16,7 @@
  */
 
 export interface ProviderTypeInfo {
-  type: "cli" | "api" | "local";
+  type: "cli" | "api";
 }
 
 /**
@@ -26,5 +26,5 @@ export interface ProviderTypeInfo {
  * gating (enabled / available / authenticated) compose with `isProviderReady`.
  */
 export function isAgentProviderSelectable(provider: ProviderTypeInfo): boolean {
-  return provider.type === "cli" || provider.type === "local";
+  return provider.type === "cli";
 }
