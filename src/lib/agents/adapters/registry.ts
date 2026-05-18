@@ -10,7 +10,6 @@ import { codexLocalAdapter } from "./codex-local";
 import { providerStatusToEnvironmentTest } from "./environment";
 import { geminiLocalAdapter } from "./gemini-local";
 import { llamaLocalAdapter } from "./llama-local";
-import { llamaLocalAdapter } from "./llama-local";
 
 export const LEGACY_ADAPTER_BY_PROVIDER_ID: Record<string, string> = {
   "claude-code": "claude_code_legacy",
@@ -24,12 +23,12 @@ export const DEFAULT_ADAPTER_BY_PROVIDER_ID: Record<string, string> = {
   "llama-local": llamaLocalAdapter.type,
 };
 
-export const LEGACY_PROVIDER_ID_BY_ADAPTER: Record<string, string> = Object.fromEntries(
-  Object.entries(LEGACY_ADAPTER_BY_PROVIDER_ID).map(([providerId, adapterType]) => [
-    adapterType,
-    providerId,
-  ])
-);
+export const LEGACY_PROVIDER_ID_BY_ADAPTER: Record<string, string> =
+  Object.fromEntries(
+    Object.entries(LEGACY_ADAPTER_BY_PROVIDER_ID).map(
+      ([providerId, adapterType]) => [adapterType, providerId]
+    )
+  );
 
 function buildLegacyCliAdapter(input: {
   type: string;
@@ -39,7 +38,9 @@ function buildLegacyCliAdapter(input: {
 }): AgentExecutionAdapter {
   const provider = providerRegistry.get(input.providerId);
   if (!provider) {
-    throw new Error(`Cannot build legacy adapter for missing provider: ${input.providerId}`);
+    throw new Error(
+      `Cannot build legacy adapter for missing provider: ${input.providerId}`
+    );
   }
 
   return {
@@ -105,10 +106,9 @@ export const agentAdapterRegistry = new AgentAdapterRegistry();
 agentAdapterRegistry.register(claudeLocalAdapter);
 agentAdapterRegistry.register(codexLocalAdapter);
 agentAdapterRegistry.register(geminiLocalAdapter);
+agentAdapterRegistry.register(llamaLocalAdapter);
 agentAdapterRegistry.register(legacyClaudeCodeAdapter);
 agentAdapterRegistry.register(legacyCodexCliAdapter);
-agentAdapterRegistry.register(llamaLocalAdapter);
-agentAdapterRegistry.register(llamaLocalAdapter);
 
 export function defaultAdapterTypeForProvider(
   providerId?: string | null
@@ -120,8 +120,7 @@ export function defaultAdapterTypeForProvider(
   const defaultProviderId = providerRegistry.defaultProvider;
   return (
     DEFAULT_ADAPTER_BY_PROVIDER_ID[defaultProviderId] ||
-    agentAdapterRegistry.defaultAdapterType,
-    "llama-local": llamaLocalAdapter.type
+    agentAdapterRegistry.defaultAdapterType
   );
 }
 
@@ -141,7 +140,9 @@ export function resolveLegacyExecutionProviderId(input: {
   providerId?: string | null;
   defaultProviderId?: string;
 }): string {
-  const mappedProviderId = resolveLegacyProviderIdForAdapterType(input.adapterType);
+  const mappedProviderId = resolveLegacyProviderIdForAdapterType(
+    input.adapterType
+  );
   if (mappedProviderId) {
     return mappedProviderId;
   }
