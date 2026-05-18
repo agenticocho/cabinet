@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState, useCallback, useRef, useMemo } from "react";
-import { GitBranch, RefreshCw, Check, CloudDownload, X, ArrowRight } from "lucide-react";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { GitBranch, CloudDownload, X, ArrowRight, Check, RefreshCw } from "lucide-react";
 import { useCabinetUpdate } from "@/hooks/use-cabinet-update";
 import { useEditorStore } from "@/stores/editor-store";
 import { useTreeStore } from "@/stores/tree-store";
@@ -9,7 +9,8 @@ import { useAppStore } from "@/stores/app-store";
 import { useAIPanelStore } from "@/stores/ai-panel-store";
 import { createConversation } from "@/lib/agents/conversation-client";
 
-// Ocho fork: promo strip (Discord/GitHub/Stars) removed; Sync button kept.
+// Ocho fork: promo strip removed, Sync removed, Agent Providers panel removed.
+// llama-local is always available so anyProviderReady is always true.
 
 export function StatusBar() {
   const { saveStatus, currentPath } = useEditorStore();
@@ -70,34 +71,10 @@ export function StatusBar() {
     "source-managed" | "source-custom" | "electron-macos"
   >("source-custom");
   const [showServerPopup, setShowServerPopup] = useState(false);
-  const [providerStatuses, setProviderStatuses] = useState<
-    { id: string; name: string; available: boolean; authenticated: boolean }[]
-  >([]);
-  const [providersLoaded, setProvidersLoaded] = useState(false);
   const { update } = useCabinetUpdate();
 
-  const anyProviderReady = useMemo(
-    () =>
-      !providersLoaded ||
-      providerStatuses.some((p) => p.available && p.authenticated),
-    [providersLoaded, providerStatuses],
-  );
-
-  const fetchProviderStatus = useCallback(async () => {
-    try {
-      const res = await fetch("/api/agents/providers/status", {
-        cache: "no-store",
-      });
-      if (!res.ok) return;
-      const data = await res.json();
-      if (Array.isArray(data.providers)) {
-        setProviderStatuses(data.providers);
-        setProvidersLoaded(true);
-      }
-    } catch {
-      /* ignore */
-    }
-  }, []);
+  // llama-local is always the provider on this fork — treat as always ready.
+  const anyProviderReady = true;
 
   // Poll both server health endpoints
   useEffect(() => {
@@ -108,8 +85,7 @@ export function StatusBar() {
         fetch("/api/health/daemon", { cache: "no-store" }),
       ]);
       if (!mounted) return;
-      const appOk =
-        appRes.status === "fulfilled" && appRes.value.ok;
+      const appOk = appRes.status === "fulfilled" && appRes.value.ok;
       setAppAlive(appOk);
       setDaemonAlive(
         daemonRes.status === "fulfilled" && daemonRes.value.ok,
@@ -130,11 +106,6 @@ export function StatusBar() {
       clearInterval(interval);
     };
   }, []);
-
-  // Fetch provider status once on mount
-  useEffect(() => {
-    void fetchProviderStatus();
-  }, [fetchProviderStatus]);
 
   const fetchGitStatus = async () => {
     try {
@@ -229,35 +200,26 @@ export function StatusBar() {
         {/* Server status indicator */}
         <div className="relative">
           <button
-            onClick={() => {
-              setShowServerPopup((v) => {
-                if (!v) void fetchProviderStatus();
-                return !v;
-              });
-            }}
+            onClick={() => setShowServerPopup((v) => !v)}
             className={`flex items-center gap-1.5 rounded-md px-1.5 py-0.5 transition-colors cursor-pointer ${
-              appAlive && daemonAlive && anyProviderReady
+              appAlive && daemonAlive
                 ? "text-green-500 hover:bg-green-500/10"
                 : !appAlive
                 ? "text-red-500 hover:bg-red-500/10"
                 : "text-amber-500 hover:bg-amber-500/10"
             }`}
             title={
-              appAlive && daemonAlive && anyProviderReady
+              appAlive && daemonAlive
                 ? "All systems running"
                 : !appAlive
                 ? "App server is not responding"
-                : !daemonAlive && !anyProviderReady
-                ? "Daemon is not responding; no agent providers available"
-                : !daemonAlive
-                ? "Daemon is not responding"
-                : "No agent providers available"
+                : "Daemon is not responding"
             }
             aria-label="Server status — click for details"
           >
             <span
               className={`inline-block h-2 w-2 rounded-full ${
-                appAlive && daemonAlive && anyProviderReady
+                appAlive && daemonAlive
                   ? "bg-green-500"
                   : !appAlive
                   ? "bg-red-500 animate-pulse"
@@ -265,7 +227,7 @@ export function StatusBar() {
               }`}
             />
             <span>
-              {appAlive && daemonAlive && anyProviderReady
+              {appAlive && daemonAlive
                 ? "Online"
                 : !appAlive
                 ? "Offline"
@@ -274,8 +236,8 @@ export function StatusBar() {
           </button>
           {showServerPopup && (
             <div
-              className={`absolute bottom-full left-0 mb-2 z-50 w-80 rounded-lg border bg-background p-3 shadow-lg ${
-                appAlive && daemonAlive && anyProviderReady
+              className={`absolute bottom-full left-0 mb-2 z-50 w-72 rounded-lg border bg-background p-3 shadow-lg ${
+                appAlive && daemonAlive
                   ? "border-green-500/30"
                   : !appAlive
                   ? "border-red-500/30"
@@ -286,14 +248,14 @@ export function StatusBar() {
                 <div className="flex-1 space-y-2.5">
                   <p
                     className={`text-xs font-medium ${
-                      appAlive && daemonAlive && anyProviderReady
+                      appAlive && daemonAlive
                         ? "text-green-500"
                         : !appAlive
                         ? "text-red-500"
                         : "text-amber-500"
                     }`}
                   >
-                    {appAlive && daemonAlive && anyProviderReady
+                    {appAlive && daemonAlive
                       ? "All Systems Running"
                       : "Service Disruption"}
                   </p>
@@ -306,14 +268,8 @@ export function StatusBar() {
                           appAlive ? "bg-green-500" : "bg-red-500"
                         }`}
                       />
-                      <span className="font-medium text-foreground/80">
-                        App Server
-                      </span>
-                      <span
-                        className={`ml-auto ${
-                          appAlive ? "text-green-500" : "text-red-500"
-                        }`}
-                      >
+                      <span className="font-medium text-foreground/80">App Server</span>
+                      <span className={`ml-auto ${appAlive ? "text-green-500" : "text-red-500"}`}>
                         {appAlive ? "Running" : "Down"}
                       </span>
                     </div>
@@ -333,11 +289,7 @@ export function StatusBar() {
                         }`}
                       />
                       <span className="font-medium text-foreground/80">Daemon</span>
-                      <span
-                        className={`ml-auto ${
-                          daemonAlive ? "text-green-500" : "text-red-500"
-                        }`}
-                      >
+                      <span className={`ml-auto ${daemonAlive ? "text-green-500" : "text-red-500"}`}>
                         {daemonAlive ? "Running" : "Down"}
                       </span>
                     </div>
@@ -348,150 +300,33 @@ export function StatusBar() {
                     </p>
                   </div>
 
-                  {/* Agent Providers */}
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2 text-[11px]">
-                      <span
-                        className={`inline-block h-1.5 w-1.5 rounded-full shrink-0 ${
-                          anyProviderReady ? "bg-green-500" : "bg-red-500"
-                        }`}
-                      />
-                      <span className="font-medium text-foreground/80">
-                        Agent Providers
-                      </span>
-                      <span
-                        className={`ml-auto ${
-                          anyProviderReady ? "text-green-500" : "text-red-500"
-                        }`}
-                      >
-                        {!providersLoaded
-                          ? "Checking..."
-                          : anyProviderReady
-                          ? "Available"
-                          : "None Ready"}
-                      </span>
-                    </div>
-                    {providersLoaded &&
-                      providerStatuses.map((p) => (
-                        <div
-                          key={p.id}
-                          className="flex items-center gap-2 text-[10px] pl-3.5 text-muted-foreground/70"
-                        >
-                          <span
-                            className={`inline-block h-1 w-1 rounded-full shrink-0 ${
-                              p.available && p.authenticated
-                                ? "bg-green-500"
-                                : p.available
-                                ? "bg-amber-500"
-                                : "bg-red-500/50"
-                            }`}
-                          />
-                          <span>{p.name}</span>
-                          <span className="ml-auto">
-                            {p.available && p.authenticated
-                              ? "Ready"
-                              : p.available
-                              ? "Not logged in"
-                              : "Not installed"}
-                          </span>
-                        </div>
-                      ))}
-                  </div>
-
                   {/* Troubleshooting tips */}
-                  {(!appAlive || !daemonAlive || !anyProviderReady) && (
+                  {(!appAlive || !daemonAlive) && (
                     <div className="pt-1.5 border-t border-border space-y-1">
-                      <p className="text-[10px] font-medium text-foreground/70">
-                        How to fix
-                      </p>
-                      {(!appAlive || !daemonAlive) &&
-                        (installKind === "electron-macos" ? (
-                          <p className="text-[10px] text-muted-foreground">
-                            {!appAlive && !daemonAlive
-                              ? "Both servers are down. Try quitting and reopening the Cabinet app."
-                              : !appAlive
-                              ? "The app server is not responding. Try quitting and reopening the Cabinet app."
-                              : "The background daemon is not running. Try quitting and reopening the Cabinet app. If the issue persists, check Activity Monitor for stuck Cabinet processes."}
-                          </p>
-                        ) : installKind === "source-managed" ? (
-                          <p className="text-[10px] text-muted-foreground">
-                            {!appAlive && !daemonAlive ? (
-                              <>
-                                Both servers are down. Restart with:{" "}
-                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
-                                  npx cabinetai run
-                                </code>
-                              </>
-                            ) : !appAlive ? (
-                              <>
-                                The app server crashed. Restart with:{" "}
-                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
-                                  npx cabinetai run
-                                </code>
-                              </>
-                            ) : (
-                              <>
-                                The daemon is not running. It should start
-                                automatically with{" "}
-                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
-                                  npx cabinetai run
-                                </code>
-                                . Try restarting.
-                              </>
-                            )}
-                          </p>
+                      <p className="text-[10px] font-medium text-foreground/70">How to fix</p>
+                      <p className="text-[10px] text-muted-foreground">
+                        {!appAlive && !daemonAlive ? (
+                          <>
+                            Both servers are down. Start everything with:{" "}
+                            <code className="rounded bg-muted px-1 py-0.5 text-[10px]">npm run dev:all</code>
+                          </>
+                        ) : !appAlive ? (
+                          <>
+                            The Next.js app server crashed. Restart with:{" "}
+                            <code className="rounded bg-muted px-1 py-0.5 text-[10px]">npm run dev</code>
+                          </>
                         ) : (
-                          <p className="text-[10px] text-muted-foreground">
-                            {!appAlive && !daemonAlive ? (
-                              <>
-                                Both servers are down. Start everything with:{" "}
-                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
-                                  npm run dev:all
-                                </code>
-                              </>
-                            ) : !appAlive ? (
-                              <>
-                                The Next.js app server crashed or was stopped.
-                                Restart with:{" "}
-                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
-                                  npm run dev
-                                </code>
-                              </>
-                            ) : (
-                              <>
-                                The daemon is not running. If you started only{" "}
-                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
-                                  npm run dev
-                                </code>
-                                , use{" "}
-                                <code className="rounded bg-muted px-1 py-0.5 text-[10px]">
-                                  npm run dev:all
-                                </code>
-                                {" "}
-                                instead to start both servers.
-                              </>
-                            )}
-                          </p>
-                        ))}
-                      {appAlive && daemonAlive && !anyProviderReady && (
-                        <p className="text-[10px] text-muted-foreground">
-                          No agent providers are installed or logged in.{" "}
-                          <button
-                            onClick={() => {
-                              setSection({ type: "settings" });
-                              setShowServerPopup(false);
-                            }}
-                            className="underline hover:text-foreground transition-colors"
-                          >
-                            Configure in Settings
-                          </button>
-                        </p>
-                      )}
+                          <>
+                            The daemon is not running. Start with:{" "}
+                            <code className="rounded bg-muted px-1 py-0.5 text-[10px]">npm run dev:daemon</code>
+                          </>
+                        )}
+                      </p>
                     </div>
                   )}
 
                   {/* All good state */}
-                  {appAlive && daemonAlive && anyProviderReady && (
+                  {appAlive && daemonAlive && (
                     <p className="text-[10px] text-muted-foreground/60 pt-1 border-t border-border">
                       Cabinet is fully operational. All features are available.
                     </p>
@@ -540,9 +375,7 @@ export function StatusBar() {
           </span>
         )}
         {pullStatus === "error" && (
-          <span className="flex items-center gap-1 text-red-400">
-            Pull failed
-          </span>
+          <span className="flex items-center gap-1 text-red-400">Pull failed</span>
         )}
 
         {update?.updateStatus.state === "restart-required" && (
@@ -572,19 +405,9 @@ export function StatusBar() {
           <GitBranch className="h-3 w-3" />
           {uncommitted > 0 ? `${uncommitted} uncommitted` : "All committed"}
         </span>
-
-        <button
-          onClick={pullAndRefresh}
-          disabled={pulling}
-          aria-label="Pull latest changes from GitHub and refresh"
-          className="flex items-center gap-1 rounded-md px-1.5 py-0.5 hover:bg-muted hover:text-foreground transition-colors disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-1"
-          title="Pull latest from GitHub & refresh"
-        >
-          <RefreshCw className={`h-3 w-3 ${pulling ? "animate-spin" : ""}`} />
-          Sync
-        </button>
+        {/* Sync button removed — Ocho fork uses manual git workflow */}
       </div>
-      {/* Promo strip removed: no Discord/GitHub/Stars links */}
+      {/* Promo strip removed — no Discord/GitHub/Stars/Help links */}
     </div>
   );
 }
