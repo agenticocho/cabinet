@@ -20,3 +20,4 @@
 .global-agents/.history/
 .global-agents/.memory/
 .cabinet-state/
+.next/
